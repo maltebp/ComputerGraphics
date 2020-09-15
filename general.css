@@ -1,0 +1,42 @@
+
+
+@import url(https://fonts.googleapis.com/css?family=Roboto+Mono);
+
+
+:root {
+    --color_primary: #23242D;
+    --color_secondary: #333540;
+    --color_accent: #ff8878;
+}
+
+
+body {
+    font-family: 'Roboto Mono';
+    text-align: center;
+    align-content: center;
+    font-size: 15px;
+    color: white;
+    background-color: var(--color_primary);
+}
+
+
+
+.description {
+    margin: auto;
+    margin-top: 1%;
+    width: 50%;
+    text-align: center;
+}
+
+/* Generic link style */
+a {
+    font-size: 18px;
+    display: inline-block;
+    margin-top: 10px;
+    color: var(--color_accent);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
