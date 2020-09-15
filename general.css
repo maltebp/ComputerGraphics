@@ -5,6 +5,7 @@
 
 :root {
     --color_primary: #23242D;
+    --color_primary_dark: #1e1e27;
     --color_secondary: #333540;
     --color_accent: #ff8878;
 }
@@ -21,11 +22,50 @@ body {
 
 
 
+.seperator {
+    margin: 2%;
+    margin-right: auto;
+    margin-left: auto;
+    width: 40%;
+    border-top: dashed;
+    border-width: 2.5px;
+    opacity: 30%;
+    border-color: white;
+}
+
+
 .description {
     margin: auto;
     margin-top: 1%;
+    margin-bottom: 5%;
     width: 50%;
     text-align: center;
+    
+}
+
+
+.toolbox {
+    margin: 1%;
+    margin-left: auto;
+    margin-right: auto;
+    display: table;
+}
+
+
+.toolbox-row {
+    display: table-row;
+}
+
+.toolbox-cell {
+    padding-left: 5%;
+    padding-right: 5%;
+    border-right: solid;
+    border-color: var(--color_primary_dark);
+    display: table-cell;
+}
+
+.toolbox-row .toolbox-cell:last-child {
+    border-right: none;
 }
 
 /* Generic link style */

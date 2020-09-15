@@ -33,23 +33,19 @@
 
     <div class="toolbox">
         <div class="toolbox-row">
-            <div class="toolbox-cell" style="width: 300px;">
-                <p><b>Hotkeys</b></p>
-                <i>D:</i> Clear selected layer
-
-            </div>
+         
 
             <div class="toolbox-cell">
                 <p><b>Layers</b></p>
                 <div id="layer_menu_list"></div><br>
                 <button id="layer_menu_create">Create</button>
-                <button id="layer_menu_delete">Delete</button>
+                <button id="layer_menu_delete">Delete [D]</button>
             </div>
 
             <div id="draw-options" class="toolbox-cell">
                 <p><b>Point size</b></p>
                 1 - 300
-                <input id="point-size" type="range" min="1" max="100" value = "20">
+                <input id="point-size" type="range" min="1" max="100">
 
                
             </div>
@@ -59,10 +55,8 @@
 
     
     <div class="seperator"></div>
-    <p class="description">
-        Small drawing program, where you can square points on the screen.
-        Also includes drawing layers, which are handled by using the depth-buffer.
-    </p>
+
+    <p class="description">Just drawing a simple background in an opengl canvas</p>
 
     
     <script src="pointrenderer/PointRenderer.js"></script>
