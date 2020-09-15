@@ -1,10 +1,15 @@
 class PointRenderer {
     
-    constructor(gl){
+    constructor(gl, camera){
         if( gl == null )
             throw "GL context cannot be null";
+        if( camera == null )
+            throw "Camera cannot be null";
 
         this._gl = gl;
+
+        this._camera = camera;
+
         this._vertexBuffer = new VertexBuffer(gl, 256);
         this._vertexBuffer.addAttribute("a_Position", 2);
         this._vertexBuffer.addAttribute("a_ZIndex", 1);
@@ -19,10 +24,10 @@ class PointRenderer {
 
 
 
-    drawPoint(pos, zIndex, size, color){
+    drawPoint(pos, depthIndex, size, color){
         this._vertexBuffer.push(
             pos,  // x, y
-            0.5,    // Single value
+            depthIndex,    // Single value
             size, // single value
             color // rgba
         );
@@ -32,7 +37,11 @@ class PointRenderer {
 
     flush() {
         console.log(this._vertexBuffer._data);
+
         this._gl.useProgram(this._program);
+
+        var uTransform = gl.getUniformLocation(this._program, "u_Transform");
+        gl.uniformMatrix4fv(uTransform, false, this._camera.getTransform());
 
         this._vertexBuffer.bind(this._program);
 
