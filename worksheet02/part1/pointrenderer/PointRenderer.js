@@ -36,8 +36,7 @@ class PointRenderer {
 
 
     flush() {
-        console.log(this._vertexBuffer._data);
-
+        if( this._points == 0 ) return;
         this._gl.useProgram(this._program);
 
         var uTransform = gl.getUniformLocation(this._program, "u_Transform");

@@ -1,22 +1,55 @@
 
 
-var gl = appendGLCanvas("container", 512, 512);
+
+
+function createLayer(){
+    var layer = new Layer(gl, canvasSize);
+    layerMenu.pushLayer(layer);
+    layers.push(layer);
+}
+
+
+function update(){
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    layers.forEach( layer => {
+        layer.update();
+    });
+
+    requestAnimationFrame(update);
+}
+
+
+
+// Setup ------------------------------------------------------------------------
+
+const canvasSize = [1080, 720];
+
+var canvas = document.getElementById("canvas");
+var gl = setupGLCanvas("canvas", canvasSize[0], canvasSize[1]);
 
 gl.clearColor(0.3921, 0.5843, 0.9294, 1.0); 
-gl.clear(gl.COLOR_BUFFER_BIT);
-
 gl.enable(gl.DEPTH_TEST);
 
 
-var layer = new Layer(gl, [512, 512]);
+var layerMenu = new LayerMenu(document.getElementById("layer_menu"));
+var layers = [];
 
-layer.addPoint([100, 100], 40, [1.0, 1,0, 1.0, 1.0]);
+createLayer();
+createLayer();
 
-layer.update();
+canvas.onmousedown = e => {
+    layerMenu.getSelectedLayer().addPoint([e.offsetX, canvasSize[1]-e.offsetY], 40, [1.0, 1.0, 1.0, 1.0]);
+};
 
 
-// pointRenderer.drawPoint([0,0], 0, 40, [0.5, 0.5, 0.0, 1.0]);
-// pointRenderer.drawPoint([0.1,0.1], 0, 40, [0, 0, 0.0, 1.0]);
-// pointRenderer.flush();
+document.onkeypress = e => {
+    console.log(e.code);
+    if( e.code == 'KeyD' ){
+        var layer = layerMenu.getSelectedLayer();
+        layer.clear();
+    }
+}
 
+update();
 
