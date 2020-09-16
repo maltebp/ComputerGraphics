@@ -70,7 +70,7 @@ function setup(){
     }
 
     vertexBuffer.compress();
-    vertexBuffer.bind();
+    vertexBuffer.bind(program);
 
 
     // Setup space press event

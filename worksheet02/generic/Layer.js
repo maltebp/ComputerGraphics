@@ -5,7 +5,7 @@ class Layer {
         this._drawables = [];
         this._gl = gl;
         this._nextDepthIndex = 0;
-        this._hidden = false;
+        this.hidden = false;
 
         this._camera = new Camera(screenSize);
 
@@ -14,7 +14,7 @@ class Layer {
 
 
     update(){
-        if( this._hidden )
+        if( this.hidden )
             return;
 
         this._gl.clear(gl.DEPTH_BUFFER_BIT);

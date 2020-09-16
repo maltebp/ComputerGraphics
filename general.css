@@ -41,32 +41,57 @@ body {
     width: 50%;
     text-align: center;
     
+}   
+
+
+
+
+
+
+.program-container {
+    margin: auto;
+    width: 80%;
+}
+
+.program-container td {
+    padding: 1%;
 }
 
 
 .toolbox {
-    margin: 1%;
-    margin-left: auto;
+    width: 250px;
+
+    /* Without the row border doesn't work*/ 
+    border-collapse: collapse; 
+    /* margin-left: auto;
     margin-right: auto;
-    display: table;
+    display: table; */
+}
+
+.toolbox td {
+    padding: 10%;
 }
 
 
 .toolbox-row {
-    display: table-row;
-}
-
-.toolbox-cell {
-    padding-left: 5%;
-    padding-right: 5%;
-    border-right: solid;
+    border-bottom: solid;
     border-color: var(--color_primary_dark);
-    display: table-cell;
 }
 
-.toolbox-row .toolbox-cell:last-child {
-    border-right: none;
+.toolbox .toolbox-row:last-child {
+    border-bottom: none;
 }
+
+
+.radio-list {
+    width: 150px;
+    height: 100px;
+    background-color: var(--color_secondary);
+    margin: auto;
+    overflow: auto;
+    
+}
+
 
 /* Generic link style */
 a {

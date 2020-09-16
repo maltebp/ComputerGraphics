@@ -15,10 +15,14 @@ function createLayer(){
     layers.push(layer);
 }
 
+function toggleLayerVisibility(){
+    layerMenu.toggleHidden(layerMenu.getSelectedLayer());
+}
+
 function deleteSelectedLayer(){
     var layer = layerMenu.getSelectedLayer();
     layers.splice(layers.indexOf(layer), 1);
-    layerMenu.delete(layer);
+    layerMenu.deleteLayer(layer);
 }
 
 
@@ -58,6 +62,7 @@ createLayer();
 // ------------------------------------------------------------------------------------------------
 // EVENTS 
 canvas.onmousedown = e => {
+
     var layer = layerMenu.getSelectedLayer();
     var pointSize = pointSizeSlider.value;
 
@@ -76,6 +81,9 @@ document.onkeypress = e => {
             break;
         case 'KeyC':
             clearAll();
+            break;
+        case 'KeyH':
+            toggleLayerVisibility();
             break;
     }    
 }

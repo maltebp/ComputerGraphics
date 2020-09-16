@@ -29,32 +29,91 @@
     <br>
 
 
-    <canvas id="canvas" class="canvas"></canvas>
+    <table class="program-container">
+        <tr>
+            <td>
+                <table class="toolbox">
+                    <tr><td>
+                        <p><b>Hotkeys</b></p>
+                        <i>D:</i> Clear selected layer<br><br>
+                        <i>H:</i> Show/hide selected layer
+                    </td></tr>
+                </table>
+                
+                
+            </td>
 
-    <div class="toolbox">
-        <div class="toolbox-row">
-            <div class="toolbox-cell" style="width: 300px;">
-                <p><b>Hotkeys</b></p>
-                <i>D:</i> Clear selected layer
+            <td>
+                <canvas id="canvas"></canvas>
+            </td>
+            
+            <td>
+                <table class="toolbox">
+                    <tr class="toolbox-row"><td>
+                        <p><b>Layers</b></p>
+                        <div id="layer_menu_list" class="radio-list"></div><br>
+                        <button id="layer_menu_create">Create</button>
+                        <button id="layer_menu_delete">Delete</button>
+                    </td></tr>
 
-            </div>
-
-            <div class="toolbox-cell">
-                <p><b>Layers</b></p>
-                <div id="layer_menu_list"></div><br>
-                <button id="layer_menu_create">Create</button>
-                <button id="layer_menu_delete">Delete</button>
-            </div>
-
-            <div id="draw-options" class="toolbox-cell">
-                <p><b>Point size</b></p>
-                1 - 300
-                <input id="point-size" type="range" min="1" max="100" value = "20">
-
+                    <tr class="toolbox-row"><td>
+                        <div id="draw-options" class="toolbox-cell">
+                            <p><b>Point size</b></p>
+                            1 - 300<br> 
+                            <input id="point-size" type="range" min="1" max="100" value="20">
+                        </div>
+                    </td></tr>
+                </table>
                
+            </td>
+        </tr>
+    </table>
+
+ 
+<!-- 
+            <div class="program-container-cell">
+                <div class="toolbox">
+                    <div class="toolbox-row">
+                        <div class="toolbox-cell">
+                            <p><b>Hotkeys</b></p>
+                            <i>D:</i> Clear selected layer
+            
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="program-container-cell">
+                    <canvas id="canvas" class="canvas toolbox-cell"></canvas>
+            </div>
+
+            <div class="program-container-cell">
+                <div class="toolbox">
+
+                    <div class="toolbox-row">
+                        <div class="toolbox-cell">
+                            <p><b>Layers</b></p>
+                            <div id="layer_menu_list"></div><br>
+                            <button id="layer_menu_create">Create</button>
+                            <button id="layer_menu_delete">Delete</button>
+                        </div>
+                    </div>
+                   
+        
+                    <div id="draw-options" class="toolbox-cell">
+                        <p><b>Point size</b></p>
+                        1 - 300
+                        <input id="point-size" type="range" min="1" max="100" value = "20">
+    
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+
+
+    </div> -->
+
     
 
     
@@ -65,11 +124,11 @@
     </p>
 
     
-    <script src="pointrenderer/PointRenderer.js"></script>
-    <script src="Drawables.js"></script>
-    <script src="Layer.js"></script>
-    <script src="Camera.js"></script>
-    <script src="LayerMenu.js"></script>
+    <script src="../generic/pointrenderer/PointRenderer.js"></script>
+    <script src="../generic/Drawables.js"></script>
+    <script src="../generic/Layer.js"></script>
+    <script src="../generic/Camera.js"></script>
+    <script src="../generic/LayerMenu.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

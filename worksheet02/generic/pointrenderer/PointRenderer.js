@@ -16,7 +16,7 @@ class PointRenderer {
         this._vertexBuffer.addAttribute("a_Size", 1);
         this._vertexBuffer.addAttribute("a_Color", 4);
 
-        this._program = initShaders(gl, "pointrenderer/vertex.shader", "generic_fragment.shader");
+        this._program = initShaders(gl, "/worksheet02/generic/pointrenderer/vertex.shader", "/worksheet02/generic/generic_fragment.shader");
     
         this._vertexSize = 8; // Floats
         this._points = 0;
