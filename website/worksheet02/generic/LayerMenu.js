@@ -7,12 +7,7 @@ class LayerMenu {
         this._nextIndex = 1;
         this._onLayerChangeCallback = null;
         this._selectedButton = null;
-
-        // document.getElementById('layer_menu_list').onclick = event => {
-        //     console.log("Layer changed");
-        //     // TODO: Fix this
-        //     clearDrawState();
-        // };
+        
     }
 
     pushLayer(layer){

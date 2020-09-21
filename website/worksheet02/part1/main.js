@@ -40,7 +40,7 @@ function update(){
 
 // Setup ------------------------------------------------------------------------
 
-const CANVAS_SIZE = [1080, 720];
+const CANVAS_SIZE = [720, 480];
 
 var canvas = document.getElementById("canvas");
 var gl = setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);

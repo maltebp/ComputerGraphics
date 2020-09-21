@@ -5,6 +5,7 @@ function setDrawMode(newDrawMode){
 
     document.getElementById("draw-mode-point").checked = (newDrawMode == DrawModes.POINT);
     document.getElementById("draw-mode-triangle").checked = (newDrawMode == DrawModes.TRIANGLE);
+    document.getElementById("draw-mode-circle").checked = (newDrawMode == DrawModes.CIRCLE);
     
     pointSizeSlider.disabled = newDrawMode != DrawModes.POINT;
     
@@ -41,13 +42,9 @@ function toggleLayerVisibility(){
 }
 
 function deleteSelectedLayer(){
-    clearDrawState();
-
     
-
     var layer = layerMenu.getSelectedLayer();
-    console.log(layer);
-
+    clearDrawState(layer);
     layers.splice(layers.indexOf(layer), 1);
     layerMenu.deleteLayer(layer);
 }
@@ -68,14 +65,31 @@ function drawTriangle(layer, x, y, color){
 }
 
 
-function clearTrianglePoints(layer){
+function drawCircle(layer, x, y, color){
+    var newPoint = layer.addPoint([x,y], 5, color);
+    circlePoints.push(newPoint);
 
-    var layer = layer;
+    if( circlePoints.length == 2 ){
+        layer.addCircle(new Circle.Point(circlePoints[0]._pos, circlePoints[0]._color), new Circle.Point(circlePoints[1]._pos, circlePoints[1]._color));
+        clearCirclePoints(layer);
+    }
+}
+
+
+function clearTrianglePoints(layer){
     trianglePoints.forEach( point => {
         layer.removeDrawable(point);
     });
     trianglePoints = [];
 }
+
+function clearCirclePoints(layer){
+    circlePoints.forEach( point => {
+        layer.removeDrawable(point);
+    });
+    circlePoints = [];
+}
+
 
 
 /**
@@ -83,6 +97,7 @@ function clearTrianglePoints(layer){
  */
 function clearDrawState(layer){
     clearTrianglePoints(layer);
+    clearCirclePoints(layer);
 }
 
 
@@ -101,6 +116,9 @@ function draw(layer, x, y){
             break;
         case DrawModes.TRIANGLE:
             drawTriangle(layer, x, y, color);
+            break;
+        case DrawModes.CIRCLE:
+            drawCircle(layer, x, y, color);
             break;
         default:
             alert("Unknown draw mode!");
@@ -125,7 +143,8 @@ function update(){
 
 const DrawModes = {
     POINT: "point",
-    TRIANGLE: "triangle"
+    TRIANGLE: "triangle",
+    CIRCLE: "circle"
 };
 
 const CANVAS_SIZE = [720, 480];
@@ -136,12 +155,11 @@ var gl = setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
 gl.enable(gl.DEPTH_TEST);
 
 var trianglePoints = [];
+var circlePoints = [];
 
 
 // Slider which determines point size
 var pointSizeSlider = document.getElementById("point-size");
-
-
 
 // Setup layer menu, and create initial layer
 var layerMenu = new LayerMenu(document.getElementById("layer_menu_list"));
@@ -200,6 +218,7 @@ document.getElementById('layer_menu_create').onclick = event => {
 };
 
 document.getElementById('layer_menu_delete').onclick = event => {
+    
     deleteSelectedLayer();
 };
 
@@ -216,6 +235,10 @@ document.getElementById('draw-mode-point').onclick = event => {
 
 document.getElementById('draw-mode-triangle').onclick = event => {
     setDrawMode(DrawModes.TRIANGLE);
+};
+
+document.getElementById('draw-mode-circle').onclick = event => {
+    setDrawMode(DrawModes.CIRCLE);
 };
 
 // ------------------------------------------------------------------------------------------------

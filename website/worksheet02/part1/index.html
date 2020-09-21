@@ -67,64 +67,22 @@
                
             </td>
         </tr>
-    </table>
-
- 
-<!-- 
-            <div class="program-container-cell">
-                <div class="toolbox">
-                    <div class="toolbox-row">
-                        <div class="toolbox-cell">
-                            <p><b>Hotkeys</b></p>
-                            <i>D:</i> Clear selected layer
-            
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-
-            <div class="program-container-cell">
-                    <canvas id="canvas" class="canvas toolbox-cell"></canvas>
-            </div>
-
-            <div class="program-container-cell">
-                <div class="toolbox">
-
-                    <div class="toolbox-row">
-                        <div class="toolbox-cell">
-                            <p><b>Layers</b></p>
-                            <div id="layer_menu_list"></div><br>
-                            <button id="layer_menu_create">Create</button>
-                            <button id="layer_menu_delete">Delete</button>
-                        </div>
-                    </div>
-                   
-        
-                    <div id="draw-options" class="toolbox-cell">
-                        <p><b>Point size</b></p>
-                        1 - 300
-                        <input id="point-size" type="range" min="1" max="100" value = "20">
-    
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-    </div> -->
-
-    
+    </table>    
 
     
     <div class="seperator"></div>
     <p class="description">
-        Small drawing program, where you can square points on the screen.
-        Also includes drawing layers, which are handled by using the depth-buffer.
+        Small drawing program, where you can square points on the screen.<br>
+        An additional feature for this entire worksheet is the use of "layers". A layer contains its own renderes (point, circle and triangle),
+        and the layers are rendered from bottom to top, so the topmost layer will overwrite all the others.<br>
+        The layer features (hiding, creating and deleting) are possible because all objects are stored and redrawn every frame. This allows us to
+        dynamically edit objects (in this case its only used for layers).
     </p>
 
-    
+
     <script src="../generic/pointrenderer/PointRenderer.js"></script>
+    <script src="../generic/trianglerenderer/TriangleRenderer.js"></script>
+    <script src="../generic/circlerenderer/CircleRenderer.js"></script>
     <script src="../generic/Drawables.js"></script>
     <script src="../generic/Layer.js"></script>
     <script src="../generic/Camera.js"></script>
