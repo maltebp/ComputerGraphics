@@ -1,0 +1,98 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <script src="/lib/initShaders.js"></script> -->
+    <script src="/lib/initShaders2.js"></script>
+    <script src="/lib/MV.js"></script>
+    <script src="/lib/webgl-utils.js"></script>
+    <script src="/utility.js"></script>
+    <script src="/VertexBuffer.js"></script>
+
+    <!-- General stylesheet -->
+    <link rel="stylesheet" href="/general.css">
+
+    <title>Worksheet 2 - Part 2
+    </title>
+</head>
+<body>
+
+    <!-- Navigation / information -->
+    <h2>Worksheet 2 - Part 2</h2>   
+    <a href="../">Back to worksheet</a>
+    <br>
+    <a href="../part1 ">Previous part</a><br>
+    <a href="../part3">Next part</a>
+    <br>
+    <br>
+
+    <!-- Contains the "program (canvas and options/buttons etcs) " -->
+    <table class="program-container">
+        <tr>
+            <!-- Left toolbox -->
+            <td><table class="toolbox">
+                <tr><td>
+                    <p><b>Hotkeys</b></p>
+                    <i>C:</i> Clear the entire canvas with the given color<br><br>
+                    <i>D:</i> Clear selected layer<br><br>
+                    <i>H:</i> Show/hide selected layer
+                </td></tr>
+            </table></td>
+
+            <!-- Our drawing canvas -->
+            <td><canvas id="canvas"></canvas></td>
+            
+            <!-- Right toolbox -->
+            <td><table class="toolbox">
+                <!-- Clear canvas -->
+                <tr class="toolbox-row"><td>
+                    <div id="draw-options" class="toolbox-cell">
+                        <button id="clear-canvas">Clear canvas</button><br>
+                        <br>Clear color<br>
+                        <input id="clear-color" type="color"> 
+                    </div>
+                </td></tr>
+
+                <!-- Layer menu -->
+                <tr class="toolbox-row"><td>
+                    <p><b>Layers</b></p>
+                    <div id="layer_menu_list" class="radio-list"></div><br>
+                    <button id="layer_menu_create">Create</button>
+                    <button id="layer_menu_delete">Delete</button>
+                </td></tr>
+
+                <!-- Point size  -->
+                <tr class="toolbox-row"><td>
+                    
+                    <br>Draw color<br>
+                    <input id="draw-color" type="color" value="#ffffff"> 
+
+                    <div id="draw-options" class="toolbox-cell">
+                        <br>Point size<br>
+                        1 - 300<br> 
+                        <input id="point-size" type="range" min="1" max="100" value="20">
+                    </div>
+                </td></tr>
+            </table></td>
+        </tr>
+    </table>    
+
+    <!-- Description of this particular program / part -->
+    <div class="seperator"></div>
+    <p class="description">
+        Small drawing program, where you can square points on the screen.
+        Also includes drawing layers, which are handled by using the depth-buffer.
+    </p>
+
+    
+    <script src="../generic/pointrenderer/PointRenderer.js"></script>
+    <script src="../generic/Drawables.js"></script>
+    <script src="../generic/Layer.js"></script>
+    <script src="../generic/Camera.js"></script>
+    <script src="../generic/LayerMenu.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

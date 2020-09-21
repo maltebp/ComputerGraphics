@@ -5,7 +5,7 @@
 
 :root {
     --color_primary: #23242D;
-    --color_primary_dark: #1e1e27;
+    --color_primary_dark: #2d2d3b;
     --color_secondary: #333540;
     --color_accent: #ff8878;
 }
@@ -21,15 +21,14 @@ body {
 }
 
 
-
 .seperator {
-    margin: 2%;
+    margin: 1%;
     margin-right: auto;
     margin-left: auto;
-    width: 40%;
+    width: 60%;
     border-top: dashed;
-    border-width: 2.5px;
-    opacity: 30%;
+    border-width: 1.75px;
+    opacity: 50%;
     border-color: white;
 }
 
@@ -38,14 +37,16 @@ body {
     margin: auto;
     margin-top: 1%;
     margin-bottom: 5%;
-    width: 50%;
+    width: 55%;
+    min-width: 700px;
     text-align: center;
     
 }   
 
 
-
-
+.canvas {
+    margin: 0% auto;
+}
 
 
 .program-container {
@@ -54,12 +55,16 @@ body {
 }
 
 .program-container td {
-    padding: 1%;
+    padding: 0%;
+    vertical-align: top;
+    height: 100%;
 }
 
 
+
 .toolbox {
-    width: 250px;
+    width: 200px;
+    margin: auto; /* Center in cell */
 
     /* Without the row border doesn't work*/ 
     border-collapse: collapse; 
@@ -68,18 +73,21 @@ body {
     display: table; */
 }
 
-.toolbox td {
-    padding: 10%;
-}
-
 
 .toolbox-row {
     border-bottom: solid;
     border-color: var(--color_primary_dark);
 }
 
+.toolbox-row td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
 .toolbox .toolbox-row:last-child {
     border-bottom: none;
+    padding-bottom: 0px;
 }
 
 
@@ -90,6 +98,12 @@ body {
     margin: auto;
     overflow: auto;
     
+}
+
+/* I.e. used to label options in toolbox */
+.label {
+    margin: 0% auto 8px auto;
+    font-weight: bold;
 }
 
 
@@ -104,4 +118,39 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+
+
+
+button {
+
+    height: 25px;
+
+    font-family: "Roboto Mono";
+    color: var(--color_primary);
+
+    background-color: white;
+
+    border: none;
+    padding: 3px 5px;
+
+    border-radius: 5px;
+    /* border-color: unset; */
+
+    
+    outline: none;
+}
+
+
+
+button:hover {
+    color: white;
+    background-color: var(--color_accent);
+    transition: transform 0.15s;
+}
+
+button:active {
+    transform: scale(0.95);
+    transition: transform 0.15s;
 }

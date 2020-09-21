@@ -10,7 +10,7 @@ function clearSelectedLayer(){
 }
 
 function createLayer(){
-    var layer = new Layer(gl, canvasSize);
+    var layer = new Layer(gl, CANVAS_SIZE);
     layerMenu.pushLayer(layer);
     layers.push(layer);
 }
@@ -40,10 +40,10 @@ function update(){
 
 // Setup ------------------------------------------------------------------------
 
-const canvasSize = [1080, 720];
+const CANVAS_SIZE = [1080, 720];
 
 var canvas = document.getElementById("canvas");
-var gl = setupGLCanvas("canvas", canvasSize[0], canvasSize[1]);
+var gl = setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
 
 gl.clearColor(0.3921, 0.5843, 0.9294, 1.0); 
 gl.enable(gl.DEPTH_TEST);
@@ -67,7 +67,7 @@ canvas.onmousedown = e => {
     var pointSize = pointSizeSlider.value;
 
     if( layer == null ) alert("No layer is selected");
-    else layer.addPoint([e.offsetX, canvasSize[1]-e.offsetY], pointSize, [1.0, 1.0, 1.0, 1.0]);
+    else layer.addPoint([e.offsetX, CANVAS_SIZE[1]-e.offsetY], pointSize, [1.0, 1.0, 1.0, 1.0]);
 
     
 };

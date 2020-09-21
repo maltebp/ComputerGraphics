@@ -10,6 +10,7 @@ class Layer {
         this._camera = new Camera(screenSize);
 
         this._pointRenderer = new PointRenderer(this._gl, this._camera);
+        this._triangleRenderer = new TriangleRenderer(this._gl, this._camera);
     }
 
 
@@ -26,12 +27,30 @@ class Layer {
         });
 
         this._pointRenderer.flush();
+        this._triangleRenderer.flush();
     }
 
 
     addPoint( pos, size, color ){
-        this._drawables.push(new Point(pos, size, color, this._pointRenderer));
+        var point = new Point(pos, size, color, this._pointRenderer);
+        this._drawables.push(point);
+        return point;
     }
+
+
+    addTriangle( points ){
+        console.log("Adding triangle");
+        console.log(points); 
+        var triangle = new Triangle(points, this._triangleRenderer);
+        this._drawables.push(triangle);
+        return triangle;
+    }
+
+    removeDrawable(drawable){
+        this._drawables.splice(this._drawables.indexOf(drawable), 1);
+    }
+
+   
 
 
     clear(){

@@ -37,4 +37,23 @@ function hexToRgb(hex) {
       g: parseInt(result[2], 16),
       b: parseInt(result[3], 16)
     } : null;
-  }
+}
+
+
+/**
+ * Source: https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+ * @param {*} hex 
+ */
+function _componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+  
+/**
+ * Source: https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+ * @param {*} hex 
+ */
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+  
