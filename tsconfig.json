@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "ES2015",
+    "outDir": "out"
+  },
+  "include": [
+      "website/**/*.ts", "**/*.d.ts"
+  ]
+}   
