@@ -11,15 +11,12 @@ class CubeRenderer {
         // @ts-ignore
         this.program = initShaders(gl, "/worksheet03/generic/cuberenderer/vertex.shader", "/worksheet03/generic/cuberenderer/fragment.shader");
     }
-    drawModel() {
-        // TODO: Implement in part 2
-    }
     drawWireFrame(cube, camera) {
-        gl.useProgram(this.program);
-        var uViewProjection = gl.getUniformLocation(this.program, "u_ViewProjection");
+        this.gl.useProgram(this.program);
+        var uViewProjection = this.gl.getUniformLocation(this.program, "u_ViewProjection");
         // @ts-ignore
         gl.uniformMatrix4fv(uViewProjection, false, flatten(camera.getViewProjectionMatrix()));
-        var uModel = gl.getUniformLocation(this.program, "u_Model");
+        var uModel = this.gl.getUniformLocation(this.program, "u_Model");
         // @ts-ignore
         gl.uniformMatrix4fv(uModel, false, flatten(cube.getModelMatrix()));
         this.vertexBuffer.clear();

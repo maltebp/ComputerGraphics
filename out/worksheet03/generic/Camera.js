@@ -59,7 +59,6 @@ class LookAtCamera extends Camera {
         this.target = target;
         this.dirty = true;
     }
-    // TODO: Remove this if it's not used
     /**
      * Rotates the camera's position around the target's y axis
      * @param angle  Radians to rotate around the y axis

@@ -1,5 +1,5 @@
 
-namespace Sheet3.Part1 {
+namespace Sheet3.Part2 {
     declare var gl;
     declare var cubeRenderer;
     declare var rotateCamera;
@@ -53,7 +53,7 @@ namespace Sheet3.Part1 {
 
 
 // ------------------------------------------------------------------------------------------------
-Sheet3.Part1.start();
+Sheet3.Part2.start();
 
 
 

@@ -1,7 +1,7 @@
 var Sheet3;
 (function (Sheet3) {
-    var Part1;
-    (function (Part1) {
+    var Part2;
+    (function (Part2) {
         function update() {
             gl.clear(gl.COLOR_BUFFER_BIT);
             if (rotateCamera)
@@ -34,9 +34,9 @@ var Sheet3;
             setup();
             update();
         }
-        Part1.start = start;
-    })(Part1 = Sheet3.Part1 || (Sheet3.Part1 = {}));
+        Part2.start = start;
+    })(Part2 = Sheet3.Part2 || (Sheet3.Part2 = {}));
 })(Sheet3 || (Sheet3 = {}));
 // Setup ------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
-Sheet3.Part1.start();
+Sheet3.Part2.start();
