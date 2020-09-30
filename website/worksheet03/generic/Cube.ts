@@ -68,7 +68,7 @@ class Cube {
         // ]);
 
 
-        // // Vertex positions
+        // Vertex positions
         Cube.vertices = new Float32Array([
             // Position         // Color
             -0.5, -0.5, -0.5,   0, 0, 0, 1,

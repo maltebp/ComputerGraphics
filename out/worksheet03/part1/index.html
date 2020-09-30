@@ -32,22 +32,35 @@
 
     <table class="program-container">
         <tr>
-            <td>                
-            </td>
+            <!-- Right toolbox -->
+            <td><table class="toolbox">
+                
+            </table></td>
 
             <td>
                 <canvas id="canvas"></canvas>
             </td>
             
-            <td>             
-            </td>
+            <!-- Right toolbox -->
+            <td><table class="toolbox">
+                <!-- Clear canvas -->
+                <tr class="toolbox-row"><td>
+                    <div class="toolbox-cell">
+                        <input type="checkbox" id="rotate" name="rotate"> Rotate
+                    </div>
+
+                    <br>Cube size<br> 
+                    <input id="cube-size" class="slider" type="range" min="10" max="500" value="200">
+                </td></tr>
+            </table></td>
         </tr>
     </table>    
 
     
     <div class="seperator"></div>
     <p class="description">
-        
+        Drawing a wireframe cube in orthographic view using. Default view is in isometric view.<br>
+        The program makes use of model, view and projection matrices to change size, rotate and get correct aspect ratio within the canvas.
     </p>
 
 

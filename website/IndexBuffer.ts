@@ -42,11 +42,9 @@ class IndexBuffer{
 
     push(...elements: (number|number[]|Uint16Array)[]) {
         elements.forEach((element) => {
-            console.log(element);
 
             // Recursively adding arrays
             if( element instanceof Array || element instanceof Uint16Array ){
-                console.log(element);
                 element.forEach((subElement: number) => {
                     this.push(subElement)
                 });

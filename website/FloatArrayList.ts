@@ -17,18 +17,14 @@ class FloatArrayList {
 
     push(...elements: (number|number[]|Float32Array)[]) {
         elements.forEach((element) => {
-            console.log(element);
 
             // Recursively adding arrays
             if( element instanceof Array || element instanceof Float32Array ){
-                console.log(element);
                 element.forEach((subElement: number) => {
                     this.push(subElement)
                 });
                 return;
             }
-
-
 
             var currentLength = this.list.length;
             if( currentLength == this.numElements ){
