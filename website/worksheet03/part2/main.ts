@@ -21,7 +21,7 @@ namespace Sheet3.Part2 {
         
         gl.clearColor(0.3921, 0.5843, 0.9294, 1.0); 
         
-        camera = new LookAtCamera(CANVAS_SIZE, [-100,100,-100], [0,0,0]);
+        camera = new PerspectiveCamera(CANVAS_SIZE, [-100,100,-100], [0,0,0]);
         rotateCamera = false;
         cubeRenderer = new CubeRenderer(gl, camera);
         
