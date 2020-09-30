@@ -1,11 +1,10 @@
 var Sheet3;
 (function (Sheet3) {
     class CubeRenderer {
-        constructor(gl, camera) {
+        constructor(gl) {
             if (gl == null)
                 throw "GL context cannot be null";
             this.gl = gl;
-            this.camera = camera;
             this.vertexBuffer = new VertexBuffer(gl, 256);
             this.vertexBuffer.addAttribute("a_Position", 3);
             this.vertexBuffer.addAttribute("a_Color", 4);
@@ -17,10 +16,10 @@ var Sheet3;
             this.gl.useProgram(this.program);
             var uViewProjection = this.gl.getUniformLocation(this.program, "u_ViewProjection");
             // @ts-ignore
-            gl.uniformMatrix4fv(uViewProjection, false, flatten(camera.getViewProjectionMatrix()));
+            this.gl.uniformMatrix4fv(uViewProjection, false, flatten(camera.getViewProjectionMatrix()));
             var uModel = this.gl.getUniformLocation(this.program, "u_Model");
             // @ts-ignore
-            gl.uniformMatrix4fv(uModel, false, flatten(cube.getModelMatrix()));
+            this.gl.uniformMatrix4fv(uModel, false, flatten(cube.getModelMatrix()));
             this.vertexBuffer.clear();
             this.vertexBuffer.push(cube.getVertices());
             this.indexBuffer.clear();

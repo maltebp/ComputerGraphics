@@ -23,7 +23,7 @@ namespace Sheet3.Part1 {
         
         camera = new OrthographicCamera(CANVAS_SIZE, [-100,100,-100], [0,0,0]);
         rotateCamera = false;
-        cubeRenderer = new CubeRenderer(gl, camera);
+        cubeRenderer = new CubeRenderer(gl);
         
         gl.clear(gl.COLOR_BUFFER_BIT);
         cube = new Cube();
@@ -33,13 +33,21 @@ namespace Sheet3.Part1 {
         document.getElementById("rotate").onchange =  (e) => {
             rotateCamera = !rotateCamera;
         };
+
+        // Camera height (lookat eye y component)
+        let cameraSlider = <HTMLInputElement>document.getElementById("camera-height");
+        cameraSlider.oninput =  (e) => {
+            camera.setY(cameraSlider.valueAsNumber);
+        };
+        cube.setSize(cameraSlider.valueAsNumber);
         
         // Cube size slider
         let sizeSlider = <HTMLInputElement>document.getElementById("cube-size");
         sizeSlider.oninput =  (e) => {
             cube.setSize(sizeSlider.valueAsNumber);
         };
-        cube.setSize(sizeSlider.valueAsNumber);            
+        cube.setSize(sizeSlider.valueAsNumber);
+                    
     }
 
     export function start(){

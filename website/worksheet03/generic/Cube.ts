@@ -11,8 +11,12 @@ class Cube {
     private position: Array<number> = [0, 0, 0];
     private size = 1.0;;
 
-    // Yaw, pitch, roll?
-    
+
+    constructor(pos: number[] = [0,0,0], size: number = 1.){
+        this.position = pos;
+        this.size = size;
+    }
+
     setSize(size: number){
         this.size = size;
         this.dirty = true;

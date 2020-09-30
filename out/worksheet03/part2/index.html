@@ -38,19 +38,17 @@
             </table></td>
 
             <td>
-                <canvas id="canvas"></canvas>
+                <canvas id="canvas1"></canvas>
+                <canvas id="canvas2"></canvas>
+                <canvas id="canvas3"></canvas>
             </td>
             
             <!-- Right toolbox -->
             <td><table class="toolbox">
                 <!-- Clear canvas -->
                 <tr class="toolbox-row"><td>
-                    <div class="toolbox-cell">
-                        <input type="checkbox" id="rotate" name="rotate"> Rotate
-                    </div>
-
                     <br>Cube size<br> 
-                    <input id="cube-size" class="slider" type="range" min="10" max="500" value="200">
+                    <input id="cube-size" class="slider" type="range" min="10" max="100" value="20">
                 </td></tr>
             </table></td>
         </tr>
@@ -59,6 +57,8 @@
     
     <div class="seperator"></div>
     <p class="description">
+        3 cubes view through perspective cameras with varying number of vanishing points (from left to right: 1, 2, 3).<br>
+        Each cube is rendered in its own GL-context and canvas.
     </p>
 
 

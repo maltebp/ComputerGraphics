@@ -3,32 +3,48 @@ var Sheet3;
     var Part2;
     (function (Part2) {
         function update() {
-            gl.clear(gl.COLOR_BUFFER_BIT);
-            if (rotateCamera)
-                camera.rotateY(0.01);
-            cubeRenderer.drawWireFrame(cube, camera);
+            for (var i = 0; i < 3; i++) {
+                gl[i].clear(gl[i].COLOR_BUFFER_BIT);
+                cubeRenderer[i].drawWireFrame(cubes[i], cameras[i]);
+            }
             requestAnimationFrame(update);
         }
         function setup() {
-            const CANVAS_SIZE = [720, 480];
-            // @ts-ignore
-            gl = setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
-            gl.clearColor(0.3921, 0.5843, 0.9294, 1.0);
-            camera = new Sheet3.PerspectiveCamera(CANVAS_SIZE, [-100, 100, -100], [0, 0, 0]);
-            rotateCamera = false;
-            cubeRenderer = new Sheet3.CubeRenderer(gl, camera);
-            gl.clear(gl.COLOR_BUFFER_BIT);
-            cube = new Cube();
-            // Rotation Check box
-            document.getElementById("rotate").onchange = (e) => {
-                rotateCamera = !rotateCamera;
-            };
+            const CANVAS_SIZE = [300, 480];
+            gl = [
+                // @ts-ignore
+                setupGLCanvas("canvas1", CANVAS_SIZE[0], CANVAS_SIZE[1]),
+                // @ts-ignore
+                setupGLCanvas("canvas2", CANVAS_SIZE[0], CANVAS_SIZE[1]),
+                // @ts-ignore
+                setupGLCanvas("canvas3", CANVAS_SIZE[0], CANVAS_SIZE[1])
+            ];
+            gl[0].clearColor(0.3921, 0.5843, 0.9294, 1.0);
+            gl[1].clearColor(0.3921, 0.5843, 0.9294, 1.0);
+            gl[2].clearColor(0.3921, 0.5843, 0.9294, 1.0);
+            cameras = [
+                new Sheet3.PerspectiveCamera(CANVAS_SIZE, [0, 0, -100], [0, 0, 0], 45),
+                new Sheet3.PerspectiveCamera(CANVAS_SIZE, [-100, 0, -100], [0, 0, 0], 45),
+                new Sheet3.PerspectiveCamera(CANVAS_SIZE, [-90, 75, -100], [0, 0, 0], 45)
+            ];
+            cubes = [
+                new Cube([0, 0, 0], 20),
+                new Cube([0, 0, 0], 20),
+                new Cube([0, 0, 0], 20)
+            ];
+            cubeRenderer = [
+                new Sheet3.CubeRenderer(gl[0]),
+                new Sheet3.CubeRenderer(gl[1]),
+                new Sheet3.CubeRenderer(gl[2]),
+            ];
             // Cube size slider
             let sizeSlider = document.getElementById("cube-size");
             sizeSlider.oninput = (e) => {
-                cube.setSize(sizeSlider.valueAsNumber);
+                for (var i = 0; i < 3; i++)
+                    cubes[i].setSize(sizeSlider.valueAsNumber);
             };
-            cube.setSize(sizeSlider.valueAsNumber);
+            for (var i = 0; i < 3; i++)
+                cubes[i].setSize(sizeSlider.valueAsNumber);
         }
         function start() {
             setup();

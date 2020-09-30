@@ -1,5 +1,8 @@
 var Sheet3;
 (function (Sheet3) {
+    /**
+     * Abstract generic Camera class, defining methods to get View and Projection matrices
+     */
     class Camera {
         constructor() {
             this.dirty = true;
@@ -52,6 +55,10 @@ var Sheet3;
             this.target = target;
             this.dirty = true;
         }
+        setY(y) {
+            this.pos[1] = y;
+            this.dirty = true;
+        }
         /**
          * Rotates the camera's position around the target's y axis
          * @param angle  Radians to rotate around the y axis
@@ -79,9 +86,17 @@ var Sheet3;
     }
     Sheet3.OrthographicCamera = OrthographicCamera;
     class PerspectiveCamera extends LookAtCamera {
+        constructor(screenSize, pos, target, fov) {
+            super(screenSize, pos, target);
+            this.fov = fov;
+        }
+        setFOV(fov) {
+            this.fov = fov;
+            this.dirty = true;
+        }
         createProjectionMatrix() {
             // @ts-ignore
-            this.projectionMatrix = ortho(-this.screensize[0] / 2.0, this.screensize[0] / 2.0, -this.screensize[1] / 2.0, this.screensize[1] / 2.0, -10000, 10000);
+            this.projectionMatrix = perspective(this.fov, this.screensize[0] / this.screensize[1], 0.01, 10000);
         }
         ;
     }

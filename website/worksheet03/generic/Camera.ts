@@ -2,6 +2,10 @@
 
 namespace Sheet3 {
         
+
+    /**
+     * Abstract generic Camera class, defining methods to get View and Projection matrices
+     */
     export abstract class Camera {
 
         protected dirty: boolean = true;
@@ -62,6 +66,7 @@ namespace Sheet3 {
             this.dirty= true;
         }
 
+        
         createViewMatrix() {
             // @ts-ignore
             this.viewMatrix = lookAt(vec3(this.pos), vec3(this.target), vec3(0, 1, 0));
@@ -72,6 +77,12 @@ namespace Sheet3 {
             if( target.length != 3)
                 throw "Target must be number vector of length 3";
             this.target = target;
+            this.dirty = true;
+        }
+
+        
+        setY(y: number){
+            this.pos[1] = y;
             this.dirty = true;
         }
         
@@ -100,7 +111,7 @@ namespace Sheet3 {
 
     
     export class OrthographicCamera extends LookAtCamera {
-        
+
         createProjectionMatrix(){
             // @ts-ignore
             this.projectionMatrix = ortho(-this.screensize[0]/2.0, this.screensize[0]/2.0, -this.screensize[1]/2.0, this.screensize[1]/2.0, -10000,  10000);
@@ -110,10 +121,24 @@ namespace Sheet3 {
 
 
     export class PerspectiveCamera extends LookAtCamera {
+        protected fov: number;
+
+
+        constructor(screenSize: number[], pos: number[], target: number[], fov: number){
+            super(screenSize, pos, target);
+            this.fov = fov;
+        }
+        
+
+        setFOV(fov: number){
+            this.fov = fov;
+            this.dirty = true;
+        }
+
 
         createProjectionMatrix(){
             // @ts-ignore
-            this.projectionMatrix = ortho(-this.screensize[0]/2.0, this.screensize[0]/2.0, -this.screensize[1]/2.0, this.screensize[1]/2.0, -10000,  10000);
+            this.projectionMatrix = perspective(this.fov, this.screensize[0]/this.screensize[1], 0.01, 10000);
         };
     }
 

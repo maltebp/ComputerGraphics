@@ -1,13 +1,14 @@
 class Cube {
-    constructor() {
+    constructor(pos = [0, 0, 0], size = 1.) {
         //@ts-ignore
         this.modelMatrix = mat4();
         this.dirty = true;
         this.position = [0, 0, 0];
         this.size = 1.0;
+        this.position = pos;
+        this.size = size;
     }
     ;
-    // Yaw, pitch, roll?
     setSize(size) {
         this.size = size;
         this.dirty = true;

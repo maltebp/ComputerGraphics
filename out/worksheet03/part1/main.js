@@ -16,13 +16,19 @@ var Sheet3;
             gl.clearColor(0.3921, 0.5843, 0.9294, 1.0);
             camera = new Sheet3.OrthographicCamera(CANVAS_SIZE, [-100, 100, -100], [0, 0, 0]);
             rotateCamera = false;
-            cubeRenderer = new Sheet3.CubeRenderer(gl, camera);
+            cubeRenderer = new Sheet3.CubeRenderer(gl);
             gl.clear(gl.COLOR_BUFFER_BIT);
             cube = new Cube();
             // Rotation Check box
             document.getElementById("rotate").onchange = (e) => {
                 rotateCamera = !rotateCamera;
             };
+            // Camera height (lookat eye y component)
+            let cameraSlider = document.getElementById("camera-height");
+            cameraSlider.oninput = (e) => {
+                camera.setY(cameraSlider.valueAsNumber);
+            };
+            cube.setSize(cameraSlider.valueAsNumber);
             // Cube size slider
             let sizeSlider = document.getElementById("cube-size");
             sizeSlider.oninput = (e) => {
@@ -37,6 +43,4 @@ var Sheet3;
         Part1.start = start;
     })(Part1 = Sheet3.Part1 || (Sheet3.Part1 = {}));
 })(Sheet3 || (Sheet3 = {}));
-// Setup ------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------
 Sheet3.Part1.start();
