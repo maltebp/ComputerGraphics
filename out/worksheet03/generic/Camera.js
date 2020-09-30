@@ -80,7 +80,7 @@ var Sheet3;
     class OrthographicCamera extends LookAtCamera {
         createProjectionMatrix() {
             // @ts-ignore
-            this.projectionMatrix = ortho(-this.screensize[0] / 2.0, this.screensize[0] / 2.0, -this.screensize[1] / 2.0, this.screensize[1] / 2.0, -10000, 10000);
+            this.projectionMatrix = ortho(-this.screensize[0] / 2.0, this.screensize[0] / 2.0, -this.screensize[1] / 2.0, this.screensize[1] / 2.0, 0, 10000);
         }
         ;
     }

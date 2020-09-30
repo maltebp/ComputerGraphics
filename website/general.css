@@ -8,6 +8,7 @@
     --color_primary_dark: #2d2d3b;
     --color_secondary: #333540;
     --color_accent: #ff8878;
+    --color_code: #dad1a2;
 }
 
 
@@ -153,4 +154,14 @@ button:hover {
 button:active {
     transform: scale(0.95);
     transition: transform 0.15s;
+}
+
+
+
+strong {
+    display: block;
+    margin: 20px;
+    font-weight: normal;
+    font-style: italic;
+    color: var(--color_code); 
 }

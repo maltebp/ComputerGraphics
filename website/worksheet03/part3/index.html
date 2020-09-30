@@ -20,17 +20,51 @@
     </title>
 </head>
 <body>
-
     <h2>Worksheet 3 - Part 3</h2>   
     <a href="../">Back to worksheet</a>
     <br>
-    <a href="../part2">Next part</a>
+    <a href="../part2">Previous part</a><br>
     <br>
     <br>
 
     <p class="description">
-        3 cubes view through perspective cameras with varying number of vanishing points (from left to right: 1, 2, 3).<br>
-        Each cube is rendered in its own GL-context and canvas.
+        In both part 1 and 2 all cubes are rendered to the screen by using model, view and projection matrices.<br>
+        
+        <br><br>
+        <b>Model</b><br>
+        In both parts, the model matrix for each cube is created by using the Cube's size and position. The matrix is created from these values by using the following expression:
+        <strong>mult(translate(position), scalem(size, size, size))</strong>
+        Which basically means that a scaling matrix <i>S</i> and translation matrix <i>T</i> are multiplied as:
+        <strong>M = T * S</strong>
+
+        <br><br>
+        <b>View</b><br>
+        In each part each cube is drawed using an instance of the LookAtCamera class. This class defines a View matrix as a lookat matrix, which translates a world coordinates to view coordinates
+        using a camera target (look at) and camera eye.
+        Thus the view matrix is created using the <i>MV.js</i> lookAt function:
+        <strong>V = lookAt(pos, target, up)</strong>
+        The camera orientation towards the cube is changed in each cube rendering by primarily changing the position of the camera (pos).
+
+        <br><br><br>
+        <b>Projection</b><br>
+        The projection matrix differs between Part 1 and 2, and is defined by two different "camere" classes deriving from the LookAtCamera class.
+        <br>In the Part 1 the projection matrix is an orthogonal matrix, which is created by: 
+        <strong>P = ortho(-width/2, width/2, -height/2, height/2.0, 0, 10000)</strong>
+
+        This matrix moves the origin of the view to the center of the screen (so the look at target is centered), and clips everything below the 0'th z coordinate (in view space).
+        <br><br>
+        In Part 2 the projection matrix is a perspective matrix instead, which is defined by:
+        <strong>P = perspective(fov, width/height, 0.01, 10000);</strong>
+        This adds perspective to the view.
+
+        
+        <br><br><br>
+        <b>Total matrix</b><br>
+        Each cube is rendered by multiplying the cube vertices by the concatination of the above mentioned matrices as follows:
+
+        <strong>transformedVertex = P * V * M * vertex</strong>
+
+
     </p>
-</body>
+</body> 
 </html>
