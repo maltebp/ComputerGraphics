@@ -11,10 +11,12 @@ var canvas = document.getElementById("canvas");
 var gl = setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
 gl.clearColor(0.3921, 0.5843, 0.9294, 1.0);
 // gl.enable(gl.DEPTH_TEST);
-var camera = new LookAtCamera(CANVAS_SIZE, [0.1, 0.1, 0.1], [0, 0, 0]);
+var camera = new LookAtCamera(CANVAS_SIZE, [0, 50, -100], [0, 0, 0]);
 var cubeRenderer = new CubeRenderer(gl, camera);
 gl.clear(gl.COLOR_BUFFER_BIT);
 var cube = new Cube();
+// cube.setPosition(100, 100, 100);
+cube.setSize(200);
 // ------------------------------------------------------------------------------------------------
 // EVENTS 
 document.onkeypress = e => {

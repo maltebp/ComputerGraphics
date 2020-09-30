@@ -34,9 +34,13 @@ class CubeRenderer {
     drawWireFrame(cube: Cube, camera: Camera){
         gl.useProgram(this.program);
 
-        var uTransform = gl.getUniformLocation(this.program, "u_Camera");
+        var uViewProjection = gl.getUniformLocation(this.program, "u_ViewProjection");
         // @ts-ignore
-        gl.uniformMatrix4fv(uTransform, false, camera.getViewMatrix());
+        gl.uniformMatrix4fv(uViewProjection, false, flatten(camera.getViewProjectionMatrix()));
+
+        var uModel = gl.getUniformLocation(this.program, "u_Model");
+        // @ts-ignore
+        gl.uniformMatrix4fv(uModel, false, flatten(cube.getModelMatrix()));
 
         this.vertexBuffer.clear();
         this.vertexBuffer.push(cube.getVertices());

@@ -7,18 +7,38 @@ abstract class Camera {
 
     protected dirty: boolean = true;
     protected viewMatrix: Float32Array = null;
-    protected screensize: Array<number> = null;
+    protected projectionMatrix: Float32Array = null;
+    protected viewProjectionMatrix: Float32Array = null;
+    protected screensize: number[] = null;
 
     constructor(screenSize: Array<number>){
         this.screensize = screenSize;
     }
 
 
-    protected abstract createViewMatrix();
+    protected abstract createMatrices();
+
+
+    getViewProjectionMatrix(){
+        if( this.dirty ){
+            this.createMatrices();
+            this.dirty = false;
+        }
+        return this.viewProjectionMatrix;
+    }
+
+    getProjectionMatrix(){
+        if( this.dirty ){
+            this.createMatrices();
+            this.dirty = false;
+        }
+        return this.projectionMatrix;
+    }
+
 
     getViewMatrix(){
         if( this.dirty ){
-            this.createViewMatrix();
+            this.createMatrices();
             this.dirty = false;
         }
         return this.viewMatrix;
@@ -46,9 +66,15 @@ class LookAtCamera extends Camera {
     }
 
 
-    createViewMatrix() {
+    createMatrices() {
         // @ts-ignore
-        this.viewMatrix = flatten(lookAt(vec3(this.pos), vec3(this.target), vec3(0, 1, 0)));
+        this.viewMatrix = lookAt(vec3(this.pos), vec3(this.target), vec3(0, 1, 0));
+
+        // @ts-ignore
+        this.projectionMatrix = ortho(-this.screensize[0]/2.0, this.screensize[0]/2.0, -this.screensize[1]/2.0, this.screensize[1]/2.0, -10000,  10000);
+
+        // @ts-ignore
+        this.viewProjectionMatrix = mult(this.projectionMatrix, this.viewMatrix);
     }
 
 
@@ -59,6 +85,7 @@ class LookAtCamera extends Camera {
         this.dirty = true;
     }
     
+    // TODO: Remove this if it's not used
     /**
      * Rotates the camera's position around the target's y axis
      * @param angle  Radians to rotate around the y axis

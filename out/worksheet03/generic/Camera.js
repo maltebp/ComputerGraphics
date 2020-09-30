@@ -5,12 +5,28 @@ class Camera {
     constructor(screenSize) {
         this.dirty = true;
         this.viewMatrix = null;
+        this.projectionMatrix = null;
+        this.viewProjectionMatrix = null;
         this.screensize = null;
         this.screensize = screenSize;
     }
+    getViewProjectionMatrix() {
+        if (this.dirty) {
+            this.createMatrices();
+            this.dirty = false;
+        }
+        return this.viewProjectionMatrix;
+    }
+    getProjectionMatrix() {
+        if (this.dirty) {
+            this.createMatrices();
+            this.dirty = false;
+        }
+        return this.projectionMatrix;
+    }
     getViewMatrix() {
         if (this.dirty) {
-            this.createViewMatrix();
+            this.createMatrices();
             this.dirty = false;
         }
         return this.viewMatrix;
@@ -29,9 +45,13 @@ class LookAtCamera extends Camera {
         this.target = target;
         this.dirty = true;
     }
-    createViewMatrix() {
+    createMatrices() {
         // @ts-ignore
-        this.viewMatrix = flatten(lookAt(vec3(this.pos), vec3(this.target), vec3(0, 1, 0)));
+        this.viewMatrix = lookAt(vec3(this.pos), vec3(this.target), vec3(0, 1, 0));
+        // @ts-ignore
+        this.projectionMatrix = ortho(-this.screensize[0] / 2.0, this.screensize[0] / 2.0, -this.screensize[1] / 2.0, this.screensize[1] / 2.0, -10000, 10000);
+        // @ts-ignore
+        this.viewProjectionMatrix = mult(this.projectionMatrix, this.viewMatrix);
     }
     setTarget(target) {
         if (target.length != 3)
@@ -39,6 +59,7 @@ class LookAtCamera extends Camera {
         this.target = target;
         this.dirty = true;
     }
+    // TODO: Remove this if it's not used
     /**
      * Rotates the camera's position around the target's y axis
      * @param angle  Radians to rotate around the y axis

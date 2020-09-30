@@ -10,27 +10,17 @@ class IndexBuffer {
         this.gl = gl;
         this.buffer = gl.createBuffer();
         this.list = new Uint16Array(startSize);
-        this.dirty = false;
+        this.dirty = true;
         this.reserve(startSize);
     }
     bind() {
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.buffer);
-        console.log(this.asUInt16());
-        this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, this.asUInt16(), this.gl.STATIC_DRAW);
         if (this.dirty) {
+            // we have changed the size/location of the buffer, so we must rebind
+            this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, 
+            //@ts-ignore
+            this.list, this.gl.STATIC_DRAW);
         }
-    }
-    /**
-     * Apparently, indices has to be 16-bits in ES2.0, so
-     * this is just a small hack to convert the Float32Array
-     * into an array of Uint16.
-     */
-    asUInt16() {
-        var uInt16List = new Uint16Array(this.length());
-        for (var i = 0; i < this.length(); i++) {
-            uInt16List[i] = this.list[i];
-        }
-        return uInt16List;
     }
     push(...elements) {
         elements.forEach((element) => {

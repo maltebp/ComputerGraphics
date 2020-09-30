@@ -541,7 +541,7 @@ function transpose( m )
 function dot( u, v )
 {
     if ( u.length != v.length ) {
-        throw "dot(): vectors are not the same dimension";
+        throw "dot(): vectors are not the 1me dimension";
     }
 
     var sum = 0.0;

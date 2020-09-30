@@ -5,6 +5,10 @@ class Cube {
     private static indices: Uint16Array = null;
     private static wireframeIndices: Uint16Array = null;
     
+    //@ts-ignore
+    private modelMatrix: number [] = mat4();
+    private dirty: boolean = true;
+
     private position: Array<number> = [0, 0, 0];
     private size = 1.0;;
 
@@ -12,10 +16,12 @@ class Cube {
     
     setSize(size: number){
         this.size = size;
+        this.dirty = true;
     }
 
     setPosition(x: number, y: number, z: number ){
         this.position = [x, y, z];
+        this.dirty = true;
     }
 
     getVertices(){
@@ -36,14 +42,19 @@ class Cube {
     
 
     getModelMatrix(){
-        // TODO: Create correct model matrix from size, rotation, etc
+        if( this.dirty ){
+            //@ts-ignore
+            this.modelMatrix = mult(translate(this.position), scalem(this.size, this.size, this.size));  
+            this.dirty = true;
+        }   
+        return this.modelMatrix;              
     }
 
 
     private static setupVertices(){
         if( Cube.vertices != null ) return;
         
-        // // Vertex positions
+        // Vertex positions
         // Cube.vertices = new Float32Array([
         //     // Position         // Color
         //      0.0,  0.0,  0.0,   0, 0, 0, 1,
@@ -56,7 +67,8 @@ class Cube {
         //      1.0,  0.0,  1.0,   0, 0, 0, 1
         // ]);
 
-        // Vertex positions
+
+        // // Vertex positions
         Cube.vertices = new Float32Array([
             // Position         // Color
             -0.5, -0.5, -0.5,   0, 0, 0, 1,
@@ -67,22 +79,21 @@ class Cube {
             -0.5,  0.5,  0.5,   0, 0, 0, 1,
              0.5,  0.5,  0.5,   0, 0, 0, 1,
              0.5, -0.5,  0.5,   0, 0, 0, 1
-        ]);
-    
-        
-        // TODO: Implement in part 2
-        Cube.indices = new Uint16Array([
-            
-        ]);
+        ]);   
+       
 
         // Wireframe indices
         Cube.wireframeIndices = new Uint16Array([
             0,1, 1,2, 2,3, 3,0, // Front lines
             0,4, 1,5, 2,6, 3,7, // Middle lines
             4,5, 5,6, 6,7, 7,4  // Back lines
-            // TODO: Add correct indices
         ]);
         
+         
+        // TODO: Implement in part 2
+        Cube.indices = new Uint16Array([
+            
+        ]);
     }
 
 }
