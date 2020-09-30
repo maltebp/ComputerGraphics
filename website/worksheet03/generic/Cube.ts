@@ -2,7 +2,6 @@
 class Cube {
 
     private static vertices: Float32Array = null;
-    private static indices: Uint16Array = null;
     private static wireframeIndices: Uint16Array = null;
     
     //@ts-ignore
@@ -29,12 +28,6 @@ class Cube {
         return Cube.vertices;
     }
 
-    getIndices(){
-        Cube.setupVertices();
-        return Cube.indices;
-    }
-
-
     getWireframeIndices(){
         Cube.setupVertices();
         return Cube.wireframeIndices;
@@ -53,20 +46,6 @@ class Cube {
 
     private static setupVertices(){
         if( Cube.vertices != null ) return;
-        
-        // Vertex positions
-        // Cube.vertices = new Float32Array([
-        //     // Position         // Color
-        //      0.0,  0.0,  0.0,   0, 0, 0, 1,
-        //      0.0,  1.0,  0.0,   0, 0, 0, 1,
-        //      1.0,  1.0,  0.0,   0, 0, 0, 1,
-        //      1.0,  0.0,  0.0,   0, 0, 0, 1,
-        //      0.0,  0.0,  1.0,   0, 0, 0, 1,
-        //      0.0,  1.0,  1.0,   0, 0, 0, 1,
-        //      1.0,  1.0,  1.0,   0, 0, 0, 1,
-        //      1.0,  0.0,  1.0,   0, 0, 0, 1
-        // ]);
-
 
         // Vertex positions
         Cube.vertices = new Float32Array([
@@ -81,18 +60,11 @@ class Cube {
              0.5, -0.5,  0.5,   0, 0, 0, 1
         ]);   
        
-
         // Wireframe indices
         Cube.wireframeIndices = new Uint16Array([
             0,1, 1,2, 2,3, 3,0, // Front lines
             0,4, 1,5, 2,6, 3,7, // Middle lines
             4,5, 5,6, 6,7, 7,4  // Back lines
-        ]);
-        
-         
-        // TODO: Implement in part 2
-        Cube.indices = new Uint16Array([
-            
         ]);
     }
 

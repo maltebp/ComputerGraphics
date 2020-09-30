@@ -24,12 +24,7 @@ class CubeRenderer {
         // @ts-ignore
         this.program = initShaders(gl, "/worksheet03/generic/cuberenderer/vertex.shader", "/worksheet03/generic/cuberenderer/fragment.shader");
     }
-
-
-    drawModel(){
-        // TODO: Implement in part 2
-    }
-
+    
 
     drawWireFrame(cube: Cube, camera: Camera){
         gl.useProgram(this.program);
