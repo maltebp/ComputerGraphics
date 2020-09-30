@@ -47,11 +47,10 @@ abstract class Camera {
 }
 
 
+
 class LookAtCamera extends Camera {
-    
     private pos: number[] = [0, 0, 0];
     private target: number[] = [0, 0, 0];
-
 
     constructor(screenSize: number[], pos: number[], target: number[]){
         super(screenSize);
@@ -85,7 +84,7 @@ class LookAtCamera extends Camera {
         this.dirty = true;
     }
     
-    // TODO: Remove this if it's not used
+
     /**
      * Rotates the camera's position around the target's y axis
      * @param angle  Radians to rotate around the y axis
