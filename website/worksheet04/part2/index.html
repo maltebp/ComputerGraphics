@@ -12,20 +12,21 @@
     <script src="/utility.js"></script>
     <script src="/FloatArrayList.js"></script>
     <script src="/VertexBuffer.js"></script>
+    <script src="/FPS.js"></script>
 
     <!-- General stylesheet -->
     <link rel="stylesheet" href="/general.css">
 
-    <title>Worksheet 3 - Part 2
+    <title>Worksheet 4 - Part 2
     </title>
 </head>
 <body>
 
-    <h2>Worksheet 3 - Part 2</h2>   
+    <h2>Worksheet 4 - Part 2</h2>   
     <a href="../">Back to worksheet</a>
     <br>
-    <a href="../part3">Next part</a><br>
-    <a href="../part1 ">Previous part</a>
+    <a href="../part1 ">Previous part</a><br>
+    <a href="../part3">Next part</a>
     <br>
     <br>
 
@@ -38,34 +39,43 @@
             </table></td>
 
             <td>
-                <canvas id="canvas1"></canvas>
-                <canvas id="canvas2"></canvas>
-                <canvas id="canvas3"></canvas>
+                <canvas id="canvas"></canvas>
             </td>
             
             <!-- Right toolbox -->
             <td><table class="toolbox">
-                <!-- Clear canvas -->
+                 <!-- Rotation Checkbox -->
+                 <tr class="toolbox-row"><td>
+                    <input type="checkbox" id="rotate" name="rotate"> Rotate
+                </td></tr>
+                
+                <!-- Camera Height Slider -->
                 <tr class="toolbox-row"><td>
-                    <br>Cube size<br> 
-                    <input id="cube-size" class="slider" type="range" min="10" max="100" value="20">
+                    <br>Camera Height<br> 
+                    <input id="camera-height" class="slider" type="range" min="-500" max="500" value="0">
+                </td></tr>
+
+                <!-- Subdivisions Slider -->
+                <tr class="toolbox-row"><td>
+                    <br>Subdivisions<br> 
+                    <input id="subdivisions" class="slider" type="range" min="0" max="8" value="0">
                 </td></tr>
             </table></td>
         </tr>
-    </table>    
+    </table>
+    
+    <p id="fps-text" class="fps-text">FPS: ?</p>
 
     
     <div class="seperator"></div>
     <p class="description">
-        3 cubes view through perspective cameras with varying number of vanishing points (from left to right: 1, 2, 3).<br>
-        Each cube is rendered in its own GL-context and canvas.
+       Rendering of subdivided sphere, where we use backface-culling. Comparing with part 1 we gain a small FPS boost.<br>
+       Color rendering and depth testing was already added in previous part.
     </p>
 
-
-    <script src="/IndexBuffer.js"></script>
     <script src="../generic/Camera.js"></script>
-    <script src="../generic/Cube.js"></script>
-    <script src="../generic/CubeRenderer/CubeRenderer.js"></script>
+    <script src="../generic/Sphere.js"></script>
+    <script src="../generic/sphererenderer/SphereRenderer.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

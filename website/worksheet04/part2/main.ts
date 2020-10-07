@@ -1,75 +1,68 @@
 
-// namespace Sheet3.Part2 {
-//     declare var gl: any[];
-//     declare var cubeRenderer: any[];
-//     declare var rotateCamera;
+namespace Sheet4.Part2 {
+    declare var gl;
+    declare var sphereRenderer: SphereRenderer;
+    declare var rotateCamera: boolean;
+    declare var camera: PerspectiveCamera;
+    declare var sphere: Sphere;
 
-//     declare var cameras: PerspectiveCamera[];
-//     declare var cubes: Cube[];
+    function update(){
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        if( rotateCamera) camera.rotateY(0.01);
+        sphereRenderer.draw(sphere, camera);
+        FPS.registerFrame();
+        requestAnimationFrame(update);
+    }
 
-//     function update(){
-//         for( var i=0; i<3; i++){
-//             gl[i].clear(gl[i].COLOR_BUFFER_BIT);
-//             cubeRenderer[i].drawWireFrame(cubes[i], cameras[i]);
-//         }
-//         requestAnimationFrame(update);
-//     }
-
-//     function setup(){
-//         const CANVAS_SIZE = [300, 480];
+    function setup(){
+        const CANVAS_SIZE = [720, 480];
         
-//         gl = [
-//             // @ts-ignore
-//             setupGLCanvas("canvas1", CANVAS_SIZE[0], CANVAS_SIZE[1]),
-//             // @ts-ignore
-//             setupGLCanvas("canvas2", CANVAS_SIZE[0], CANVAS_SIZE[1]),
-//             // @ts-ignore
-//             setupGLCanvas("canvas3", CANVAS_SIZE[0], CANVAS_SIZE[1])
-//         ];
+        // @ts-ignore
+        gl = setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
+        gl.enable(gl.DEPTH_TEST);
+        gl.enable(gl.CULL_FACE);
+        gl.clearColor(0.3921, 0.5843, 0.9294, 1.0); 
         
-//         gl[0].clearColor(0.3921, 0.5843, 0.9294, 1.0); 
-//         gl[1].clearColor(0.3921, 0.5843, 0.9294, 1.0); 
-//         gl[2].clearColor(0.3921, 0.5843, 0.9294, 1.0); 
+        camera = new PerspectiveCamera(CANVAS_SIZE, [-150, 0, -150], [0,0,0], 45);
+        // rotateCamera = false;
+        sphereRenderer = new SphereRenderer(gl);
         
-//         cameras = [
-//             new PerspectiveCamera(CANVAS_SIZE, [0, 0, -100], [0,0,0], 45),
-//             new PerspectiveCamera(CANVAS_SIZE, [-100, 0, -100], [0,0,0], 45),
-//             new PerspectiveCamera(CANVAS_SIZE, [-90, 75, -100], [0,0,0], 45)
-//         ]
-
-//         cubes = [
-//             new Cube([0,0,0], 20),
-//             new Cube([0,0,0], 20),
-//             new Cube([0,0,0], 20)
-//         ];
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        sphere = new Sphere([0,0,0], 50, 2);
         
+        rotateCamera = false;
 
-//         cubeRenderer = [
-//              new CubeRenderer(gl[0]),
-//              new CubeRenderer(gl[1]),
-//              new CubeRenderer(gl[2]),
-//         ];
+        // FPS
+        FPS.textElement = <HTMLParagraphElement> document.getElementById("fps-text");
         
-//         // Cube size slider
-//         let sizeSlider = <HTMLInputElement>document.getElementById("cube-size");
-//         sizeSlider.oninput =  (e) => {
-//             for( var i=0; i<3; i++) cubes[i].setSize(sizeSlider.valueAsNumber);
-//         };
-//         for( var i=0; i<3; i++) cubes[i].setSize(sizeSlider.valueAsNumber);
-//     }
+        // Rotation Check box
+        document.getElementById("rotate").onchange =  (e) => {
+            rotateCamera = !rotateCamera;
+        };
 
-//     export function start(){
-//         setup();
-//         update();
-//     }
-// }
+        // Camera height (lookat eye y component)
+        let cameraSlider = <HTMLInputElement>document.getElementById("camera-height");
+        cameraSlider.oninput =  (e) => {
+            camera.setY(cameraSlider.valueAsNumber);
+        };
+        camera.setY(cameraSlider.valueAsNumber);
+        
+        // Cube size slider
+        let subdivisionsSlider = <HTMLInputElement>document.getElementById("subdivisions");
+        subdivisionsSlider.oninput =  (e) => {
+            sphere.setSubdivisions(subdivisionsSlider.valueAsNumber);
+        };
+        sphere.setSubdivisions(subdivisionsSlider.valueAsNumber);
+                    
+    }
 
-// // Setup ------------------------------------------------------------------------
+    export function start(){
+        setup();
+        update();
+    }
+}
 
-
-
-// // ------------------------------------------------------------------------------------------------
-// Sheet3.Part2.start();
+Sheet4.Part2.start();
 
 
 
