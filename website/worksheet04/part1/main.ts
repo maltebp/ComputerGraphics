@@ -10,6 +10,7 @@ namespace Sheet4.Part1 {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         if( rotateCamera) camera.rotateY(0.01);
         sphereRenderer.draw(sphere, camera);
+        FPS.registerFrame();
         requestAnimationFrame(update);
     }
 
@@ -29,6 +30,9 @@ namespace Sheet4.Part1 {
         sphere = new Sphere([0,0,0], 50, 2);
         
         rotateCamera = false;
+
+        // FPS
+        FPS.textElement = <HTMLParagraphElement> document.getElementById("fps-text");
         
         // Rotation Check box
         document.getElementById("rotate").onchange =  (e) => {

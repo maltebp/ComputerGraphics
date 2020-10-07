@@ -165,3 +165,8 @@ strong {
     font-style: italic;
     color: var(--color_code); 
 }
+
+
+p.fps-text {
+    color: greenyellow;
+}

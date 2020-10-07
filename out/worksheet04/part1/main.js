@@ -7,6 +7,7 @@ var Sheet4;
             if (rotateCamera)
                 camera.rotateY(0.01);
             sphereRenderer.draw(sphere, camera);
+            FPS.registerFrame();
             requestAnimationFrame(update);
         }
         function setup() {
@@ -21,6 +22,8 @@ var Sheet4;
             gl.clear(gl.COLOR_BUFFER_BIT);
             sphere = new Sheet4.Sphere([0, 0, 0], 50, 2);
             rotateCamera = false;
+            // FPS
+            FPS.textElement = document.getElementById("fps-text");
             // Rotation Check box
             document.getElementById("rotate").onchange = (e) => {
                 rotateCamera = !rotateCamera;
