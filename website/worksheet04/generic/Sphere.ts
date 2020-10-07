@@ -127,7 +127,7 @@ namespace Sheet4 {
                 // @ts-ignore
                 let edge2 = subtract(vertex3, vertex1);
                 // @ts-ignore
-                let triangleColor = add(vec4(0.5,0.5,0.5,0.5), scale(0.5, vec4( normalize( cross(edge1, edge2)))));
+                let triangleColor = scale(0.5, add(vec4(1.0, 1.0, 1.0, 1.0), vec4( normalize( cross(edge1, edge2)))));
                  
 
                 coloredVertices.push(
