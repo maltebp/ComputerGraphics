@@ -86,5 +86,10 @@ class FloatArrayList {
         return this.numElements;
     }
 
+
+    getData() {
+        return this.list;
+    }
+
     
 }

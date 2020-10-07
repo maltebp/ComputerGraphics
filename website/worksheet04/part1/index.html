@@ -1,0 +1,78 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <script src="/lib/initShaders.js"></script> -->
+    <script src="/lib/initShaders2.js"></script>
+    <script src="/lib/MV.js"></script>
+    <script src="/lib/webgl-utils.js"></script>
+    <script src="/utility.js"></script>
+    <script src="/FloatArrayList.js"></script>
+    <script src="/VertexBuffer.js"></script>
+
+    <!-- General stylesheet -->
+    <link rel="stylesheet" href="/general.css">
+
+    <title>Worksheet 4 - Part 1
+    </title>
+</head>
+<body>
+
+    <h2>Worksheet 4 - Part 1</h2>   
+    <a href="../">Back to worksheet</a>
+    <br>
+    <!-- <a href="../part1 ">Previous part</a><br> -->
+    <a href="../part2">Next part</a>
+    <br>
+    <br>
+
+
+    <table class="program-container">
+        <tr>
+            <!-- Right toolbox -->
+            <td><table class="toolbox">
+                
+            </table></td>
+
+            <td>
+                <canvas id="canvas"></canvas>
+            </td>
+            
+            <!-- Right toolbox -->
+            <td><table class="toolbox">
+                 <!-- Rotation Checkbox -->
+                 <tr class="toolbox-row"><td>
+                    <input type="checkbox" id="rotate" name="rotate"> Rotate
+                </td></tr>
+                
+                <!-- Camera Height Slider -->
+                <tr class="toolbox-row"><td>
+                    <br>Camera Height<br> 
+                    <input id="camera-height" class="slider" type="range" min="-500" max="500" value="0">
+                </td></tr>
+
+                <!-- Subdivisions Slider -->
+                <tr class="toolbox-row"><td>
+                    <br>Subdivisions<br> 
+                    <input id="subdivisions" class="slider" type="range" min="0" max="8" value="0">
+                </td></tr>
+            </table></td>
+        </tr>
+    </table>    
+
+    
+    <div class="seperator"></div>
+    <p class="description">
+        Drawing a wireframe cube in orthographic view using. Default view is in isometric view.<br>
+        The program makes use of model, view and projection matrices to change size, rotate and get correct aspect ratio within the canvas.
+    </p>
+
+    <script src="../generic/Camera.js"></script>
+    <script src="../generic/Sphere.js"></script>
+    <script src="../generic/sphererenderer/SphereRenderer.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
