@@ -18,7 +18,7 @@ var Sheet4;
             gl.clearColor(0.3921, 0.5843, 0.9294, 1.0);
             camera = new Sheet4.PerspectiveCamera(CANVAS_SIZE, [-150, 0, -150], [0, 0, 0], 45);
             // rotateCamera = false;
-            sphereRenderer = new Sheet4.SphereRenderer(gl);
+            sphereRenderer = new Part1.SphereRenderer(gl);
             gl.clear(gl.COLOR_BUFFER_BIT);
             sphere = new Sheet4.Sphere([0, 0, 0], 50, 2);
             rotateCamera = false;

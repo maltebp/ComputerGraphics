@@ -1,13 +1,19 @@
 var Sheet4;
 (function (Sheet4) {
     class Sphere {
-        constructor(pos, size, subdivisionLevel) {
+        /**
+         *
+         * @param color If the color is null (default value) the circle's triangles will be colored based on their surface normals
+         */
+        constructor(pos, size, subdivisionLevel, color = null) {
             this.vertices = null;
             //@ts-ignore
             this.modelMatrix = mat4();
             this.dirty = true;
             this.position = pos;
             this.size = size;
+            // @ts-ignore
+            this.color = color == null ? null : vec4(color);
             this.subdivisionLevel = subdivisionLevel;
         }
         setSize(size) {
@@ -84,17 +90,18 @@ var Sheet4;
                 let vertex1 = currentVertices[triangleIndex + 0];
                 let vertex2 = currentVertices[triangleIndex + 1];
                 let vertex3 = currentVertices[triangleIndex + 2];
-                // Build color as the surface normal of the triangle
-                // @ts-ignore
-                let edge1 = subtract(vertex2, vertex1);
-                // @ts-ignore
-                let edge2 = subtract(vertex3, vertex1);
-                // @ts-ignore
-                let triangleColor = scale(0.5, add(vec4(1.0, 1.0, 1.0, 1.0), vec4(normalize(cross(edge1, edge2)))));
+                var triangleColor = this.color;
+                if (triangleColor == null) {
+                    // This color calculation is damn slow
+                    // Build color as the surface normal of the triangle
+                    // @ts-ignore
+                    let edge1 = subtract(vertex2, vertex1);
+                    // @ts-ignore
+                    let edge2 = subtract(vertex3, vertex1);
+                    // @ts-ignore
+                    triangleColor = scale(0.5, add(vec4(1.0, 1.0, 1.0, 1.0), vec4(normalize(cross(edge1, edge2)))));
+                }
                 coloredVertices.push(vertex1, triangleColor, vertex2, triangleColor, vertex3, triangleColor);
-                console.log(vertex1);
-                console.log(vertex2);
-                console.log(vertex3);
             }
             // @ts-ignore
             var vertexList = new FloatArrayList();

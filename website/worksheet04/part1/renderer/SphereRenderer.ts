@@ -1,6 +1,6 @@
 
 
-namespace Sheet4 {
+namespace Sheet4.Part1 {
 
     export class SphereRenderer {
 
@@ -19,7 +19,7 @@ namespace Sheet4 {
             this.vertexBuffer.addAttribute("a_Color", 4);
         
             // @ts-ignore
-            this.program = initShaders(gl, "/worksheet04/generic/sphererenderer/vertex.shader", "/worksheet04/generic/sphererenderer/fragment.shader");
+            this.program = initShaders(gl, "renderer/vertex.shader", "renderer/fragment.shader");
         }
         
     
@@ -33,7 +33,7 @@ namespace Sheet4 {
             var uModel = this.gl.getUniformLocation(this.program, "u_Model");
             // @ts-ignore
             this.gl.uniformMatrix4fv(uModel, false, flatten(sphere.getModelMatrix()));
-    
+            
             let vertices = sphere.getVertices(); 
             this.vertexBuffer.clear();
             this.vertexBuffer.push(vertices);

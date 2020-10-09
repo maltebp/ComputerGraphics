@@ -1,7 +1,7 @@
 var Sheet4;
 (function (Sheet4) {
-    var Part2;
-    (function (Part2) {
+    var Part3;
+    (function (Part3) {
         function update() {
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
             if (rotateCamera)
@@ -19,9 +19,10 @@ var Sheet4;
             gl.clearColor(0.3921, 0.5843, 0.9294, 1.0);
             camera = new Sheet4.PerspectiveCamera(CANVAS_SIZE, [-150, 0, -150], [0, 0, 0], 45);
             // rotateCamera = false;
-            sphereRenderer = new Part2.SphereRenderer(gl);
+            sphereRenderer = new Part3.SphereRenderer(gl);
+            sphereRenderer.setDirectionalLight(0, 0, -100);
             gl.clear(gl.COLOR_BUFFER_BIT);
-            sphere = new Sheet4.Sphere([0, 0, 0], 50, 0);
+            sphere = new Sheet4.Sphere([0, 0, 0], 50, 2);
             rotateCamera = false;
             // FPS
             FPS.textElement = document.getElementById("fps-text");
@@ -46,7 +47,7 @@ var Sheet4;
             setup();
             update();
         }
-        Part2.start = start;
-    })(Part2 = Sheet4.Part2 || (Sheet4.Part2 = {}));
+        Part3.start = start;
+    })(Part3 = Sheet4.Part3 || (Sheet4.Part3 = {}));
 })(Sheet4 || (Sheet4 = {}));
-Sheet4.Part2.start();
+Sheet4.Part3.start();

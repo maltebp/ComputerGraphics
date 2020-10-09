@@ -1,5 +1,5 @@
 
-namespace Sheet4.Part2 {
+namespace Sheet4.Part3 {
     declare var gl;
     declare var sphereRenderer: SphereRenderer;
     declare var rotateCamera: boolean;
@@ -26,9 +26,10 @@ namespace Sheet4.Part2 {
         camera = new PerspectiveCamera(CANVAS_SIZE, [-150, 0, -150], [0,0,0], 45);
         // rotateCamera = false;
         sphereRenderer = new SphereRenderer(gl);
+        sphereRenderer.setDirectionalLight(0, 0, -100);   
         
         gl.clear(gl.COLOR_BUFFER_BIT);
-        sphere = new Sphere([0,0,0], 50, 0);
+        sphere = new Sphere([0,0,0], 50, 2);
         
         rotateCamera = false;
 
@@ -62,7 +63,7 @@ namespace Sheet4.Part2 {
     }
 }
 
-Sheet4.Part2.start();
+Sheet4.Part3.start();
 
 
 

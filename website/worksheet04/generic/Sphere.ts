@@ -6,7 +6,7 @@ namespace Sheet4 {
         private position: number[];
         private size: number;
         private subdivisionLevel: number;
-
+        private color: number[];
         private vertices: Float32Array = null;
 
         //@ts-ignore
@@ -14,9 +14,15 @@ namespace Sheet4 {
         private dirty: boolean = true;
         
 
-        constructor(pos: number[], size: number, subdivisionLevel: number){
+        /**
+         * 
+         * @param color If the color is null (default value) the circle's triangles will be colored based on their surface normals
+         */
+        constructor(pos: number[], size: number, subdivisionLevel: number, color: number[] = null){
             this.position = pos;
             this.size = size;
+            // @ts-ignore
+            this.color = color == null ? null : vec4(color);
             this.subdivisionLevel = subdivisionLevel;
         }
 
@@ -121,24 +127,26 @@ namespace Sheet4 {
                 let vertex2 = currentVertices[triangleIndex+1]; 
                 let vertex3 = currentVertices[triangleIndex+2]; 
                 
-                // Build color as the surface normal of the triangle
-                // @ts-ignore
-                let edge1 = subtract(vertex2, vertex1);
-                // @ts-ignore
-                let edge2 = subtract(vertex3, vertex1);
-                // @ts-ignore
-                let triangleColor = scale(0.5, add(vec4(1.0, 1.0, 1.0, 1.0), vec4( normalize( cross(edge1, edge2)))));
-                 
 
+                var triangleColor = this.color;
+                if( triangleColor == null ){
+                    // This color calculation is damn slow
+
+                    // Build color as the surface normal of the triangle
+                    // @ts-ignore
+                    let edge1 = subtract(vertex2, vertex1);
+                    // @ts-ignore
+                    let edge2 = subtract(vertex3, vertex1);
+                    // @ts-ignore
+                    triangleColor = scale(0.5, add(vec4(1.0, 1.0, 1.0, 1.0), vec4( normalize( cross(edge1, edge2)))));
+                    
+                }
+                
                 coloredVertices.push(
                     vertex1, triangleColor,
                     vertex2, triangleColor,
                     vertex3, triangleColor,
                 )
-                
-                console.log(vertex1);
-                console.log(vertex2);
-                console.log(vertex3);
             }
 
             // @ts-ignore
