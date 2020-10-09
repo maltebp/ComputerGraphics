@@ -1,0 +1,57 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <script src="/lib/initShaders.js"></script> -->
+    <script src="/lib/initShaders2.js"></script>
+    <script src="/lib/MV.js"></script>
+    <script src="/lib/webgl-utils.js"></script>
+    <script src="/utility.js"></script>
+    
+    <script src="/FPS.js"></script>
+    <script src="/FloatArrayList.js"></script>
+    <script src="/VertexBuffer.js"></script>
+
+
+    <!-- General stylesheet -->
+    <link rel="stylesheet" href="/general.css">
+
+    <title>Project
+    </title>
+</head>
+<body>
+
+    <h2>Project</h2>   
+    <a href="../">Back to overview</a>
+
+
+    
+    <table class="program-container">
+        <tr>
+            <!-- Left toolbox -->
+            <td><table class="toolbox">
+            </table></td>
+
+            <td>
+                <canvas id="canvas"></canvas>
+            </td>
+            
+            <!-- Right toolbox -->
+            <td><table class="toolbox">
+            </table></td>
+        </tr>
+    </table>
+
+    <p id="fps-text" class="fps-text">FPS: ?</p>
+
+    <p class="description">Just drawing a simple background in an opengl canvas</p>
+
+
+    <script src="Square.js"></script>
+    <script src="rendering.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
