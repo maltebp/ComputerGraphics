@@ -25,15 +25,15 @@ namespace Project {
 
         squares = [];
         squares.push(new Square(75, 75, 10, 100, [0.0, 0.75, 0.5, 1.0]));
-        squares.push(new Square(0, 0, 0.0, 100, [1.0, 0.5, 0.5, 1.0]));
+        squares.push(new Square(0, 0, 20, 100, [1.0, 0.5, 0.5, 1.0]));
 
         Rendering.initialize(gl);
     }
 
 
     function update(){
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        Rendering.drawSquares(squares);
+        Rendering.flush();
+        squares.forEach( square => {Rendering.drawSquare(square)});
         FPS.registerFrame();
         requestAnimationFrame(update);
     }
