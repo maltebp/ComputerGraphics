@@ -6,8 +6,14 @@ var Project;
             gl = glContext;
             numSquares = 0;
             // Create frame texture
-            frameTexture = gl.createTexture();
-            gl.bindTexture(gl.TEXTURE_2D, frameTexture);
+            frameColor = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, frameColor);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 720, 480, 0, gl.RGB, gl.UNSIGNED_BYTE, null);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            // Create frame texture
+            frameDepth = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, frameDepth);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 720, 480, 0, gl.RGB, gl.UNSIGNED_BYTE, null);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -19,7 +25,12 @@ var Project;
             // Create and bind new frame buffer
             frameBuffer = gl.createFramebuffer();
             gl.bindFramebuffer(gl.FRAMEBUFFER, frameBuffer);
-            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, frameTexture, 0);
+            // TODO: Can't figure out whether this is necessary
+            gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1]);
+            gl.bindTexture(gl.TEXTURE_2D, frameColor);
+            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, frameColor, 0);
+            gl.bindTexture(gl.TEXTURE_2D, frameDepth);
+            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT1, gl.TEXTURE_2D, frameDepth, 0);
             gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderBuffer);
             // Rebind to default framebuffer
             gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -70,7 +81,16 @@ var Project;
             gl.clear(gl.COLOR_BUFFER_BIT);
             gl.useProgram(flushShader);
             gl.disable(gl.DEPTH_TEST);
-            gl.bindTexture(gl.TEXTURE_2D, frameTexture);
+            // lookup the sampler locations.
+            var u_image0Location = gl.getUniformLocation(flushShader, "u_Sampler0");
+            var u_image1Location = gl.getUniformLocation(flushShader, "u_Sampler1");
+            // set which texture units to render with.
+            gl.uniform1i(u_image0Location, 0); // texture unit 0
+            gl.uniform1i(u_image1Location, 1); // texture unit 1
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, frameColor);
+            gl.activeTexture(gl.TEXTURE1);
+            gl.bindTexture(gl.TEXTURE_2D, frameDepth);
             flushVertices.bind(flushShader);
             gl.drawArrays(gl.TRIANGLES, 0, 6);
             numSquares = 0;

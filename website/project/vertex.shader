@@ -1,11 +1,14 @@
+#version 300 es
+
+
 precision mediump float;
 
 uniform mat4 u_ViewProjection;
 
-attribute vec3 a_Position;
-attribute vec4 a_Color;
+in vec3 a_Position;
+in vec4 a_Color;
 
-varying vec4 o_Color;
+out vec4 o_Color;
 
 void main() {
 
