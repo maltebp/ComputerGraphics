@@ -20,7 +20,7 @@ function setupGLCanvas(canvasId, width, height){
     var canvas = document.getElementById(canvasId);
     canvas.width = width;
     canvas.height = height;
-    var gl = WebGLUtils.setupWebGL(canvas);
+    var gl = WebGLUtils.setupWebGL(canvas, {alpha: false});
     return gl;
 }
 

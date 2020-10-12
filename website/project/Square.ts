@@ -31,7 +31,7 @@ namespace Project {
 
                 this.x-halfSize, this.y+halfSize, this.z, this.color[0], this.color[1], this.color[2], this.color[3],
                 this.x+halfSize, this.y-halfSize, this.z, this.color[0], this.color[1], this.color[2], this.color[3],
-                this.x+halfSize, this.y+halfSize, this.z, this.color[0], this.color[1], this.color[2], this.color[3],
+                this.x+halfSize, this.y+halfSize, this.z, this.color[0], this.color[1], this.color[2], this.color[3]
             ];
         }
 
