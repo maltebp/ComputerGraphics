@@ -7,8 +7,9 @@ var Project;
         // FPS
         FPS.textElement = document.getElementById("fps-text");
         squares = [];
-        squares.push(new Project.Square(0, 0, 20, 100, [1.0, 0.0, 0.0, 1.0]));
-        squares.push(new Project.Square(75, 75, 10, 100, [0, 0.0, 1.0, 0.5]));
+        squares.push(new Project.Square(0, 0, 10, 100, [1.0, 0.0, 0.0, 1.0]));
+        squares.push(new Project.Square(75, 75, 30, 100, [0, 0.0, 1.0, 1.0]));
+        squares.push(new Project.Square(-75, 75, 50, 100, [0, 1.0, 0.0, 0.5]));
         Project.Rendering.initialize(gl);
     }
     function update() {

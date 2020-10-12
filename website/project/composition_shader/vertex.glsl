@@ -1,9 +1,11 @@
+#version 300 es
+
 precision mediump float;
 
-attribute vec2 a_Position;
-attribute vec2 a_TexCoords;
+in vec2 a_Position;
+in vec2 a_TexCoords;
 
-varying vec2 o_TexCoords;
+out vec2 o_TexCoords;
 
 void main() {
 

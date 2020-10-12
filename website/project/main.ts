@@ -17,8 +17,9 @@ namespace Project {
         FPS.textElement = <HTMLParagraphElement> document.getElementById("fps-text");
 
         squares = [];
-        squares.push(new Square(0, 0,   20, 100, [1.0, 0.0, 0.0, 1.0]));
-        squares.push(new Square(75, 75, 10, 100, [0, 0.0, 1.0, 0.5]));
+        squares.push(new Square(0, 0,     10, 100, [1.0, 0.0, 0.0, 1.0]));
+        squares.push(new Square(75, 75,   30, 100, [0, 0.0, 1.0, 1.0]));
+        squares.push(new Square(-75, 75,  50, 100, [0, 1.0, 0.0, 0.5]));
 
         Rendering.initialize(gl);
     }
