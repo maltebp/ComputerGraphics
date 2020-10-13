@@ -7,7 +7,11 @@ namespace Sheet4.Part3 {
         private gl;
         private vertexBuffer: VertexBuffer;
         private program;
-        private directionalLight: number[] = null;
+
+        private lightDirection: number[] = null;
+        private lightColor: number[] = null;
+        private ambientColor: number[] = [0.20,0.20,0.20];
+
         
         constructor(gl){
             if( gl == null )
@@ -20,12 +24,18 @@ namespace Sheet4.Part3 {
             this.vertexBuffer.addAttribute("a_Color", 4);
         
             // @ts-ignore
-            this.program = initShaders(gl, "renderer/vertex.shader", "renderer/fragment.shader");
+            this.program = initShaders(gl, "renderer/vertex.glsl", "renderer/fragment.glsl");
         }
 
 
-        setDirectionalLight(x: number, y: number, z:number ){
-            this.directionalLight = [x, y, z];
+        setDirectionalLight(direction: number[], color: number[] ){
+            this.lightDirection = direction;
+            this.lightColor = color;
+        }
+
+
+        setAmbientColor( color: number[] ){
+            this.ambientColor = color;
         }
         
     
@@ -40,11 +50,21 @@ namespace Sheet4.Part3 {
             // @ts-ignore
             this.gl.uniformMatrix4fv(uModel, false, flatten(sphere.getModelMatrix()));
 
-            if( this.directionalLight != null ){
-                var uLight = this.gl.getUniformLocation(this.program, "u_DirectionalLight");
+            if( this.lightDirection != null ){
+                var uLightDirection = this.gl.getUniformLocation(this.program, "u_LightDirection");
                 // @ts-ignore
-                this.gl.uniform3fv(uLight, flatten(this.directionalLight));
+                var flattened = flatten(this.lightDirection);
+                this.gl.uniform3fv(uLightDirection, flattened);
+
+                var uLightColor = this.gl.getUniformLocation(this.program, "u_LightColor");
+                // @ts-ignore
+                this.gl.uniform3fv(uLightColor, flatten(this.lightColor));
             }
+
+            var uAmbientColor = this.gl.getUniformLocation(this.program, "u_AmbientColor");
+            // @ts-ignore
+            this.gl.uniform3fv(uAmbientColor, flatten(this.ambientColor));
+
             
             let vertices = sphere.getVertices(); 
             this.vertexBuffer.clear();

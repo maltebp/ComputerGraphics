@@ -4,7 +4,9 @@ var Sheet4;
     (function (Part3) {
         class SphereRenderer {
             constructor(gl) {
-                this.directionalLight = null;
+                this.lightDirection = null;
+                this.lightColor = null;
+                this.ambientColor = [0.20, 0.20, 0.20];
                 if (gl == null)
                     throw "GL context cannot be null";
                 this.gl = gl;
@@ -12,10 +14,14 @@ var Sheet4;
                 this.vertexBuffer.addAttribute("a_Position", 3);
                 this.vertexBuffer.addAttribute("a_Color", 4);
                 // @ts-ignore
-                this.program = initShaders(gl, "renderer/vertex.shader", "renderer/fragment.shader");
+                this.program = initShaders(gl, "renderer/vertex.glsl", "renderer/fragment.glsl");
             }
-            setDirectionalLight(x, y, z) {
-                this.directionalLight = [x, y, z];
+            setDirectionalLight(direction, color) {
+                this.lightDirection = direction;
+                this.lightColor = color;
+            }
+            setAmbientColor(color) {
+                this.ambientColor = color;
             }
             draw(sphere, camera) {
                 this.gl.useProgram(this.program);
@@ -25,11 +31,18 @@ var Sheet4;
                 var uModel = this.gl.getUniformLocation(this.program, "u_Model");
                 // @ts-ignore
                 this.gl.uniformMatrix4fv(uModel, false, flatten(sphere.getModelMatrix()));
-                if (this.directionalLight != null) {
-                    var uLight = this.gl.getUniformLocation(this.program, "u_DirectionalLight");
+                if (this.lightDirection != null) {
+                    var uLightDirection = this.gl.getUniformLocation(this.program, "u_LightDirection");
                     // @ts-ignore
-                    this.gl.uniform3fv(uLight, flatten(this.directionalLight));
+                    var flattened = flatten(this.lightDirection);
+                    this.gl.uniform3fv(uLightDirection, flattened);
+                    var uLightColor = this.gl.getUniformLocation(this.program, "u_LightColor");
+                    // @ts-ignore
+                    this.gl.uniform3fv(uLightColor, flatten(this.lightColor));
                 }
+                var uAmbientColor = this.gl.getUniformLocation(this.program, "u_AmbientColor");
+                // @ts-ignore
+                this.gl.uniform3fv(uAmbientColor, flatten(this.ambientColor));
                 let vertices = sphere.getVertices();
                 this.vertexBuffer.clear();
                 this.vertexBuffer.push(vertices);
