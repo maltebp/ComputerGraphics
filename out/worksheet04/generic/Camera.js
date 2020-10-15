@@ -75,6 +75,9 @@ var Sheet4;
             this.pos = this.pos.splice(0, 3);
             this.dirty = true;
         }
+        getPosition() {
+            return this.pos;
+        }
     }
     Sheet4.LookAtCamera = LookAtCamera;
     class OrthographicCamera extends LookAtCamera {

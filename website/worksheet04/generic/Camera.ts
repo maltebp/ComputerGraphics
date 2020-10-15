@@ -106,6 +106,10 @@ namespace Sheet4 {
             this.pos = this.pos.splice(0, 3);
             this.dirty = true;
         }
+
+        getPosition(){
+            return this.pos;
+        }
     }
 
 

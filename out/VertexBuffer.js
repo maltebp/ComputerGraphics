@@ -32,8 +32,10 @@ class VertexBuffer extends FloatArrayList {
         if (program == null)
             throw "Shader program cannot be null";
         this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._buffer);
+        this._dirty = true; // TODO: FIX THIS!!! VERY IMPORTANT
         if (this._dirty) {
             this._gl.bufferData(this._gl.ARRAY_BUFFER, this.list, this._gl.STATIC_DRAW);
+            this._dirty = false;
         }
         this._attributes.forEach(attrib => {
             var pos = this._gl.getAttribLocation(program, attrib.name);
