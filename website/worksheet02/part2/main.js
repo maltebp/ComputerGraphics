@@ -1,5 +1,5 @@
 function clearAll(){
-    var clearColor = hexToRgb(clearColorPicker.value);
+    var clearColor = Util.hexToRgb(clearColorPicker.value);
     gl.clearColor(clearColor.r/255, clearColor.g/255, clearColor.b/255, 1.0); 
     layers.forEach(layer => {
         layer.clear();
@@ -28,7 +28,7 @@ function deleteSelectedLayer(){
 }
 
 function draw(layer, x, y){
-    var color = hexToRgb(document.getElementById("draw-color").value); 
+    var color = Util.hexToRgb(document.getElementById("draw-color").value); 
     var size = pointSizeSlider.value;
     
     layer.addPoint([x, y], size, [color.r/255, color.g/255, color.b/255, 1.0]);
@@ -52,7 +52,7 @@ function update(){
 const CANVAS_SIZE = [720, 480];
 
 var canvas = document.getElementById("canvas");
-var gl = setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
+var gl =Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
 
 gl.enable(gl.DEPTH_TEST);
 

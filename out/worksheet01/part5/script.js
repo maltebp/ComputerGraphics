@@ -22,7 +22,7 @@ var ballY = 0;
 
 
 function setup(){
-    gl = appendGLCanvas("container", 512, 512);
+    gl = Util.appendGLCanvas("container", 512, 512);
     gl.clearColor(0.3921, 0.5843, 0.9294, 1.0); 
 
     // Compile and use shader
@@ -31,7 +31,7 @@ function setup(){
     
 
 
-    var vertexBuffer = new VertexBuffer(gl);
+    var vertexBuffer = new Util.VertexBuffer(gl);
 
 
     var rotationPerTriangle = (Math.PI * 2) / TRIANGLES;

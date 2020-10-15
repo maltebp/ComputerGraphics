@@ -5,7 +5,7 @@ var Sheet4;
         function setup() {
             const CANVAS_SIZE = [720, 480];
             // @ts-ignore
-            gl = setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
+            gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
             gl.enable(gl.DEPTH_TEST);
             gl.enable(gl.CULL_FACE);
             gl.clearColor(0.3921, 0.5843, 0.9294, 1.0);
@@ -62,11 +62,9 @@ var Sheet4;
             // @ts-ignore
             if (rotateLight)
                 lightDirection = mult(rotateY(-60 * timeStep), lightDirection);
-            // @ts-ignore
-            var lightColor = hexToRgb(document.getElementById("directional-light-color").value);
+            var lightColor = Util.hexToRgb(document.getElementById("directional-light-color").value);
             sphereRenderer.setDirectionalLight(lightDirection.slice(0, 3), [lightColor.r / 255, lightColor.g / 255, lightColor.b / 255]);
-            // @ts-ignore
-            var ambientColor = hexToRgb(document.getElementById("ambient-color").value);
+            var ambientColor = Util.hexToRgb(document.getElementById("ambient-color").value);
             sphereRenderer.setAmbientColor([ambientColor.r / 255, ambientColor.g / 255, ambientColor.b / 255]);
             sphereRenderer.draw(camera);
             FPS.registerFrame();

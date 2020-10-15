@@ -145,8 +145,7 @@ namespace Sheet4 {
                 )
             }
 
-            // @ts-ignore
-            var vertexList = new FloatArrayList();
+            var vertexList = new Util.FloatArrayList();
             vertexList.push(coloredVertices);
             vertexList.compress();
             this.vertices = vertexList.getData();

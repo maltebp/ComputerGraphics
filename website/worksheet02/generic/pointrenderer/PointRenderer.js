@@ -10,7 +10,7 @@ class PointRenderer {
 
         this._camera = camera;
 
-        this._vertexBuffer = new VertexBuffer(gl, 256);
+        this._vertexBuffer = new Util.VertexBuffer(gl, 256);
         this._vertexBuffer.addAttribute("a_Position", 2);
         this._vertexBuffer.addAttribute("a_ZIndex", 1);
         this._vertexBuffer.addAttribute("a_Size", 1);

@@ -5,10 +5,10 @@ var Sheet3;
             if (gl == null)
                 throw "GL context cannot be null";
             this.gl = gl;
-            this.vertexBuffer = new VertexBuffer(gl, 256);
+            this.vertexBuffer = new Util.VertexBuffer(gl, 256);
             this.vertexBuffer.addAttribute("a_Position", 3);
             this.vertexBuffer.addAttribute("a_Color", 4);
-            this.indexBuffer = new IndexBuffer(gl);
+            this.indexBuffer = new Util.IndexBuffer(gl);
             // @ts-ignore
             this.program = initShaders(gl, "/worksheet03/generic/cuberenderer/vertex.shader", "/worksheet03/generic/cuberenderer/fragment.shader");
         }

@@ -12,7 +12,7 @@ var Sheet3;
         function setup() {
             const CANVAS_SIZE = [720, 480];
             // @ts-ignore
-            gl = setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
+            gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
             gl.clearColor(0.3921, 0.5843, 0.9294, 1.0);
             camera = new Sheet3.OrthographicCamera(CANVAS_SIZE, [-200, 100, -200], [0, 0, 0]);
             rotateCamera = false;

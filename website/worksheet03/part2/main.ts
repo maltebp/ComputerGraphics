@@ -20,11 +20,11 @@ namespace Sheet3.Part2 {
         
         gl = [
             // @ts-ignore
-            setupGLCanvas("canvas1", CANVAS_SIZE[0], CANVAS_SIZE[1]),
+           Util.setupGLCanvas("canvas1", CANVAS_SIZE[0], CANVAS_SIZE[1]),
             // @ts-ignore
-            setupGLCanvas("canvas2", CANVAS_SIZE[0], CANVAS_SIZE[1]),
+           Util.setupGLCanvas("canvas2", CANVAS_SIZE[0], CANVAS_SIZE[1]),
             // @ts-ignore
-            setupGLCanvas("canvas3", CANVAS_SIZE[0], CANVAS_SIZE[1])
+           Util.setupGLCanvas("canvas3", CANVAS_SIZE[0], CANVAS_SIZE[1])
         ];
         
         gl[0].clearColor(0.3921, 0.5843, 0.9294, 1.0); 

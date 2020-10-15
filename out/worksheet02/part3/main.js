@@ -15,7 +15,7 @@ function setDrawMode(newDrawMode){
 function clearAll(){
     clearDrawState();
 
-    var clearColor = hexToRgb(clearColorPicker.value);
+    var clearColor = Util.hexToRgb(clearColorPicker.value);
     gl.clearColor(clearColor.r/255, clearColor.g/255, clearColor.b/255, 1.0); 
     layers.forEach(layer => {
         layer.clear();
@@ -92,7 +92,7 @@ function drawPoint(layer, x, y, color){
 }
 
 function draw(layer, x, y){
-    var colorRaw = hexToRgb(document.getElementById("draw-color").value); 
+    var colorRaw = Util.hexToRgb(document.getElementById("draw-color").value); 
     var color = [colorRaw.r/255, colorRaw.g/255, colorRaw.b/255, 1.0];
     
     switch(drawMode){
@@ -131,7 +131,7 @@ const DrawModes = {
 const CANVAS_SIZE = [720, 480];
 
 var canvas = document.getElementById("canvas");
-var gl = setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
+var gl =Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
 
 gl.enable(gl.DEPTH_TEST);
 

@@ -14,7 +14,7 @@ class CircleRenderer {
         this._numTriangles = 100; // Number of triangles to use with fan
         this._rotationPerTriangle = (Math.PI*2)/this._numTriangles;
 
-        this._vertexBuffer = new VertexBuffer(gl, 1000);
+        this._vertexBuffer = new Util.VertexBuffer(gl, 1000);
         this._vertexBuffer.addAttribute("a_Position", 2);
         this._vertexBuffer.addAttribute("a_ZIndex", 1);
         this._vertexBuffer.addAttribute("a_Color", 4);

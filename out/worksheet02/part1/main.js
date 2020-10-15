@@ -43,7 +43,7 @@ function update(){
 const CANVAS_SIZE = [720, 480];
 
 var canvas = document.getElementById("canvas");
-var gl = setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
+var gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
 
 gl.clearColor(0.3921, 0.5843, 0.9294, 1.0); 
 gl.enable(gl.DEPTH_TEST);

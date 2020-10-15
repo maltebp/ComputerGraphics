@@ -8,7 +8,7 @@ var Sheet4;
                 if (gl == null)
                     throw "GL context cannot be null";
                 this.gl = gl;
-                this.vertexBuffer = new VertexBuffer(gl, 50000);
+                this.vertexBuffer = new Util.VertexBuffer(gl, 50000);
                 this.vertexBuffer.addAttribute("a_Position", 3);
                 this.vertexBuffer.addAttribute("a_Color", 4);
                 this.shader = new Util.ShaderProgram(gl, "renderer/vertex.glsl", "renderer/fragment.glsl");

@@ -5,8 +5,8 @@ namespace Sheet3 {
     export class CubeRenderer {
 
         private gl;
-        private vertexBuffer: VertexBuffer;
-        private indexBuffer: IndexBuffer; 
+        private vertexBuffer: Util.VertexBuffer;
+        private indexBuffer: Util.IndexBuffer; 
         private program;
         
         constructor(gl){
@@ -15,11 +15,11 @@ namespace Sheet3 {
     
             this.gl = gl;
     
-            this.vertexBuffer = new VertexBuffer(gl, 256);
+            this.vertexBuffer = new Util.VertexBuffer(gl, 256);
             this.vertexBuffer.addAttribute("a_Position", 3);
             this.vertexBuffer.addAttribute("a_Color", 4);
     
-            this.indexBuffer = new IndexBuffer(gl);
+            this.indexBuffer = new Util.IndexBuffer(gl);
     
             // @ts-ignore
             this.program = initShaders(gl, "/worksheet03/generic/cuberenderer/vertex.shader", "/worksheet03/generic/cuberenderer/fragment.shader");

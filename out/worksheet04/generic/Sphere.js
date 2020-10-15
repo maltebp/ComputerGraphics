@@ -100,8 +100,7 @@ var Sheet4;
                 }
                 coloredVertices.push(vertex1, triangleColor, vertex2, triangleColor, vertex3, triangleColor);
             }
-            // @ts-ignore
-            var vertexList = new FloatArrayList();
+            var vertexList = new Util.FloatArrayList();
             vertexList.push(coloredVertices);
             vertexList.compress();
             this.vertices = vertexList.getData();

@@ -13,8 +13,7 @@ namespace Sheet4.Part2 {
     function setup(){
         const CANVAS_SIZE = [720, 480];
     
-        // @ts-ignore
-        gl = setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
+        gl =Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
         gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.CULL_FACE);
         gl.clearColor(0.3921, 0.5843, 0.9294, 1.0); 

@@ -5,7 +5,7 @@ namespace Sheet4.Part1 {
     export class SphereRenderer {
 
         private gl;
-        private vertexBuffer: VertexBuffer;
+        private vertexBuffer: Util.VertexBuffer;
         private shader: Util.ShaderProgram;
 
         private sphere: Sphere = null;
@@ -16,7 +16,7 @@ namespace Sheet4.Part1 {
     
             this.gl = gl;
     
-            this.vertexBuffer = new VertexBuffer(gl, 50000);
+            this.vertexBuffer = new Util.VertexBuffer(gl, 500000);
             this.vertexBuffer.addAttribute("a_Position", 3);
             this.vertexBuffer.addAttribute("a_Color", 4);
         
