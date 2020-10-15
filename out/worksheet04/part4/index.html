@@ -37,7 +37,20 @@
         <tr>
             <!-- Right toolbox -->
             <td><table class="toolbox">
-                
+                <!-- Camera -->
+                <tr class="toolbox-row"><td>
+                    <b>Camera</b><br><br>
+                    <input type="checkbox" id="rotate_camera" name="rotate"> Rotate<br>
+                    <br>Height<br>
+                    <input id="camera-height" class="slider" type="range" min="-500" max="500" value="0">
+                </td></tr>
+
+                <!-- Sphere -->
+                <tr class="toolbox-row"><td>
+                    <b>Sphere</b><br><br>
+                    Subdivisions<br> 
+                    <input id="subdivisions" class="slider" type="range" min="0" max="8" value="0">
+                </td></tr>
             </table></td>
 
             <td>
@@ -46,38 +59,39 @@
             
             <!-- Right toolbox -->
             <td><table class="toolbox">
-                 <!-- Rotation Checkbox -->
-                 <tr class="toolbox-row"><td>
-                     <b>Camera</b><br>
-                    <input type="checkbox" id="rotate_camera" name="rotate"> Rotate<br>
-                    <br>Height<br>
-                    <input id="camera-height" class="slider" type="range" min="-500" max="500" value="0">
-
-                </td></tr>
 
                 <!-- Light rotation checkbox -->
                 <tr class="toolbox-row"><td>
-                    <b>Directional Light</b><br>
-                    <input type="checkbox" id="rotate_light" name="rotate"> Rotate<br>
-                    <input id="directional-light-color" type="color" value="#444444"> Color
+                    <b>Directional Light</b><br><br>
+                    <input type="checkbox" id="rotate_light" name="rotate"> Rotate<br><br>
+                    <input id="directional-light-color" type="color" value="#CCCCCC"> Color
                 </td></tr>
 
                 <!-- Ambient Light -->
                 <tr class="toolbox-row"><td>
-                    <b>Ambient Light</b><br>
+                    <b>Ambient Light</b><br><br>
                     <input id="ambient-color" type="color" value="#444444"> Color
                 </td></tr>
-                
-                <!-- Camera Height Slider -->
-                <tr class="toolbox-row"><td>
-                    <br>Camera Height<br> 
-                </td></tr>
 
-                <!-- Subdivisions Slider -->
+
+                <!-- Material -->
                 <tr class="toolbox-row"><td>
-                    <br>Subdivisions<br> 
-                    <input id="subdivisions" class="slider" type="range" min="0" max="8" value="0">
+                    <b>Material</b><br><br>
+                    Diffuse<br>
+                    <input id="mat-slider-diffuse" class="slider" type="range" min="0" max="1" step="0.025" value="0.5"><br>
+
+                    Ambient<br>
+                    <input id="mat-slider-ambient" class="slider" type="range" min="0" max="1" step="0.025" value="0.5"><br>
+
+                    Specular<br>
+                    <input id="mat-slider-specular" class="slider" type="range" min="0" max="1" step="0.025" value="0.5"><br>
+
+                    Shine<br>
+                    <input id="mat-slider-shine" class="slider" type="range" min="10" max="1000" step="1" value="100"><br>
                 </td></tr>
+                
+
+               
             </table></td>
         </tr>
     </table>

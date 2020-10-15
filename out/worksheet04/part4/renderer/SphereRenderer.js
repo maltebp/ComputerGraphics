@@ -7,6 +7,11 @@ var Sheet4;
                 this.lightDirection = null;
                 this.lightColor = null;
                 this.ambientColor = [0.20, 0.20, 0.20];
+                this.sphere = null;
+                this.materialDiffuse = 0.5;
+                this.materialSpecular = 0.5;
+                this.materialAmbient = 0.5;
+                this.materialShine = 100;
                 if (gl == null)
                     throw "GL context cannot be null";
                 this.gl = gl;
@@ -22,19 +27,31 @@ var Sheet4;
             setAmbientColor(color) {
                 this.ambientColor = color;
             }
-            draw(sphere, camera) {
+            setMaterial(ambient, diffuse, specular, shine) {
+                this.materialAmbient = ambient;
+                this.materialDiffuse = diffuse;
+                this.materialSpecular = specular;
+                this.materialShine = shine;
+            }
+            setSphere(sphere) {
+                this.sphere = sphere;
+                this.vertexBuffer.clear();
+                this.vertexBuffer.push(sphere.getVertices());
+            }
+            draw(camera) {
                 this.shader.bind();
                 this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());
-                this.shader.setFloatMatrix4("u_Model", sphere.getModelMatrix());
+                this.shader.setFloatMatrix4("u_Model", this.sphere.getModelMatrix());
                 if (this.lightDirection != null) {
                     this.shader.setFloatVector3("u_LightDirection", this.lightDirection);
                     this.shader.setFloatVector3("u_LightEmission", this.lightColor);
                 }
                 this.shader.setFloatVector3("u_AmbientEmission", this.ambientColor);
                 this.shader.setFloatVector3("u_CameraPos", camera.getPosition());
-                let vertices = sphere.getVertices();
-                this.vertexBuffer.clear();
-                this.vertexBuffer.push(vertices);
+                this.shader.setFloat("u_MaterialDiffuse", this.materialDiffuse);
+                this.shader.setFloat("u_MaterialAmbient", this.materialAmbient);
+                this.shader.setFloat("u_MaterialSpecular", this.materialSpecular);
+                this.shader.setFloat("u_MaterialPhongExponent", this.materialShine);
                 this.vertexBuffer.bind();
                 this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());
             }

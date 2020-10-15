@@ -7,7 +7,7 @@ uniform vec3 u_AmbientEmission;
 uniform vec3 u_LightEmission;
 uniform vec3 u_LightDirection;
 
-uniform float u_MaterialAmbience;
+uniform float u_MaterialAmbient;
 uniform float u_MaterialDiffuse;
 uniform float u_MaterialSpecular;
 
@@ -29,6 +29,7 @@ void main() {
 
     vec3 surfaceNormal = normalize(a_Position.xyz);
 
+    // Create base color from surface normal
     vec3 baseColor = (surfaceNormal + vec3(1.0, 1.0, 1.0)) *  0.5;
 
     vec4 modelPos = u_Model * vec4(a_Position.xyz, 1.0);
@@ -37,22 +38,23 @@ void main() {
 
     vec3 directionToLight = normalize(-u_LightDirection);
 
+    // Specular
     vec3 perfectReflection = normalize(2.0 * dot(directionToLight, surfaceNormal) * surfaceNormal - directionToLight);
+    vec3 specular = u_MaterialSpecular * baseColor.xyz * u_LightEmission * pow(max(dot(perfectReflection, directionToObserver), 0.0), u_MaterialPhongExponent);
 
-    vec3 phong = baseColor.xyz * u_LightEmission * pow(max(dot(perfectReflection, directionToObserver), 0.0), 200.0);
+    // Diffuse
+    vec3 diffuse =  u_MaterialDiffuse * baseColor.xyz * u_LightEmission * max(dot(surfaceNormal, directionToLight), 0.0);
 
-    vec3 lightedColor = u_AmbientEmission;
+    // Ambience
+    vec3 ambience = u_MaterialAmbient * baseColor.xyz * u_AmbientEmission;
 
-    lightedColor = 
-        // baseColor.xyz * u_AmbientEmission +
-        phong + baseColor.xyz * u_LightEmission * max(dot(surfaceNormal, directionToLight), 0.0) ;
+    // Final Color
+    vec3 finalColor = specular + diffuse + ambience;
 
-    // Note on ambient color:
-    // Instead of having a coefficient on the sphere, the ambient is the same for all objects
-    // and its intensity is given in the color (1,1,1 is full intensity)
+
 
     vec4 position = u_ViewProjection * modelPos;
     gl_Position = position;  
 
-    o_Color = vec4(lightedColor.xyz, 1.0);
+    o_Color = vec4(finalColor.xyz, 1.0);
 }

@@ -10,11 +10,8 @@ var Sheet4;
             gl.enable(gl.CULL_FACE);
             gl.clearColor(0.3921, 0.5843, 0.9294, 1.0);
             camera = new Sheet4.PerspectiveCamera(CANVAS_SIZE, [0, 0, -150], [0, 0, 0], 45);
-            lightDirection = [0, 0, 1, 0];
-            // rotateCamera = false;
-            sphereRenderer = new Part4.SphereRenderer(gl);
-            gl.clear(gl.COLOR_BUFFER_BIT);
-            sphere = new Sheet4.Sphere([0, 0, 0], 50, 2);
+            lightDirection = [1.0, 0, 0, 0];
+            previousTime = Date.now();
             rotateCamera = false;
             rotateLight = false;
             // FPS
@@ -27,7 +24,6 @@ var Sheet4;
             document.getElementById("rotate_light").onchange = (e) => {
                 rotateLight = !rotateLight;
             };
-            // Light Color
             // Camera height (lookat eye y component)
             let cameraSlider = document.getElementById("camera-height");
             cameraSlider.oninput = (e) => {
@@ -37,24 +33,42 @@ var Sheet4;
             // Cube size slider
             let subdivisionsSlider = document.getElementById("subdivisions");
             subdivisionsSlider.oninput = (e) => {
-                sphere.setSubdivisions(subdivisionsSlider.valueAsNumber);
+                sphereRenderer.setSphere(new Sheet4.Sphere([0, 0, 0], 50, subdivisionsSlider.valueAsNumber));
             };
-            sphere.setSubdivisions(subdivisionsSlider.valueAsNumber);
+            // rotateCamera = false;
+            sphereRenderer = new Part4.SphereRenderer(gl);
+            sphereRenderer.setSphere(new Sheet4.Sphere([0, 0, 0], 50, subdivisionsSlider.valueAsNumber));
+            // Material sliders
+            let materialAmbientSlider = document.getElementById("mat-slider-ambient");
+            let materialDiffuseSlider = document.getElementById("mat-slider-diffuse");
+            let materialSpecularSlider = document.getElementById("mat-slider-specular");
+            let materialShineSlider = document.getElementById("mat-slider-shine");
+            var updateMaterial = (e) => {
+                sphereRenderer.setMaterial(materialAmbientSlider.valueAsNumber, materialDiffuseSlider.valueAsNumber, materialSpecularSlider.valueAsNumber, materialShineSlider.valueAsNumber);
+            };
+            materialAmbientSlider.oninput = updateMaterial;
+            materialDiffuseSlider.oninput = updateMaterial;
+            materialSpecularSlider.oninput = updateMaterial;
+            materialShineSlider.oninput = updateMaterial;
         }
         function update() {
+            // Update time
+            var currentTime = Date.now();
+            var timeStep = (currentTime - previousTime) / 1000.0;
+            previousTime = currentTime;
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
             if (rotateCamera)
-                camera.rotateY(-0.02);
+                camera.rotateY((-Math.PI / 3) * timeStep);
             // @ts-ignore
             if (rotateLight)
-                lightDirection = mult(rotateY((0.02 / Math.PI) * 180), lightDirection);
+                lightDirection = mult(rotateY(-60 * timeStep), lightDirection);
             // @ts-ignore
             var lightColor = hexToRgb(document.getElementById("directional-light-color").value);
             sphereRenderer.setDirectionalLight(lightDirection.slice(0, 3), [lightColor.r / 255, lightColor.g / 255, lightColor.b / 255]);
             // @ts-ignore
             var ambientColor = hexToRgb(document.getElementById("ambient-color").value);
             sphereRenderer.setAmbientColor([ambientColor.r / 255, ambientColor.g / 255, ambientColor.b / 255]);
-            sphereRenderer.draw(sphere, camera);
+            sphereRenderer.draw(camera);
             FPS.registerFrame();
             requestAnimationFrame(update);
         }

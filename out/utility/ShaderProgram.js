@@ -12,9 +12,9 @@ var Util;
         setFloat(name, float) {
             var location = this.getUniformLocation(name);
             var existingUniform = this.gl.getUniform(this.program, location);
-            if (!(existingUniform instanceof this.gl.FLOAT))
+            if (typeof existingUniform !== "number")
                 throw "Uniform " + name + " is not a float in the shader";
-            this.gl.uniform1fv(location, float);
+            this.gl.uniform1f(location, float);
         }
         setFloatVector3(name, float3) {
             if (float3.length != 3)
@@ -51,7 +51,7 @@ var Util;
         getUniformLocation(name) {
             var location = this.gl.getUniformLocation(this.program, name);
             if (location == null)
-                throw "Couldn't find uniform " + name + " in shader program";
+                throw "Couldn't find uniform '" + name + "' in shader program";
             return location;
         }
     }

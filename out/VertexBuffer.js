@@ -24,12 +24,19 @@ class VertexBuffer extends FloatArrayList {
         super.reserve(newSize);
         this._dirty = true;
     }
+    push(...elements) {
+        super.push(...elements);
+        this._dirty = true;
+    }
+    clear() {
+        super.clear();
+        this._dirty = true;
+    }
     bind() {
         var shader = this._gl.getParameter(this._gl.CURRENT_PROGRAM);
         if (shader == null)
             throw "No shader program bound when binding vertex buffer";
         this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._buffer);
-        this._dirty = true; // TODO: FIX THIS!!! VERY IMPORTANT
         if (this._dirty) {
             this._gl.bufferData(this._gl.ARRAY_BUFFER, this.list, this._gl.STATIC_DRAW);
             this._dirty = false;

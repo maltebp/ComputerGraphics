@@ -15,6 +15,7 @@ var Sheet4;
             // @ts-ignore
             this.color = color == null ? null : vec4(color);
             this.subdivisionLevel = subdivisionLevel;
+            this.setupVertices();
         }
         setSize(size) {
             this.size = size;
@@ -23,10 +24,6 @@ var Sheet4;
         setPosition(x, y, z) {
             this.position = [x, y, z];
             this.dirty = true;
-        }
-        setSubdivisions(numSubdivisions) {
-            this.subdivisionLevel = numSubdivisions;
-            this.vertices = null;
         }
         getModelMatrix() {
             if (this.dirty) {

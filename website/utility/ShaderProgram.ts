@@ -24,10 +24,10 @@ namespace Util {
             var location = this.getUniformLocation(name);
     
             var existingUniform = this.gl.getUniform(this.program, location);
-            if( !(existingUniform instanceof this.gl.FLOAT) )
+            if( typeof existingUniform !== "number" )
                 throw "Uniform " + name + " is not a float in the shader";
     
-            this.gl.uniform1fv(location, float);
+            this.gl.uniform1f(location, float);
         }
 
     
@@ -83,7 +83,7 @@ namespace Util {
             var location = this.gl.getUniformLocation(this.program, name);
             
             if( location == null )
-                throw "Couldn't find uniform " + name + " in shader program";
+                throw "Couldn't find uniform '" + name + "' in shader program";
     
             return location;
         }
