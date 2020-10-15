@@ -3,8 +3,8 @@ precision mediump float;
 uniform mat4 u_ViewProjection;
 uniform mat4 u_Model;
 
-uniform vec3 u_AmbientColor;
-uniform vec3 u_LightColor;
+uniform vec3 u_AmbientEmission;
+uniform vec3 u_LightEmission;
 uniform vec3 u_LightDirection;
 
 attribute vec3 a_Position;
@@ -14,25 +14,33 @@ varying vec4 o_Color;
 
 
 void main() {
+
+    // This assignment is not used
+    // It only exists to make sure the color attribute exists
     o_Color = a_Color;
 
-    vec4 baseColor = (vec4(a_Position.xyz, 1.0) + vec4(1.0, 1.0, 1.0, 1.0)) *  0.5;
+    vec3 surfaceNormal = normalize(a_Position.xyz);
 
-    vec4 modelPos = u_Model * vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
+    // Create base color from surface normal
+    vec3 baseColor = (surfaceNormal + vec3(1.0, 1.0, 1.0)) *  0.5;
 
-    vec3 lightColor = u_LightColor;
-    vec3 surfaceNormal = normalize(a_Position);
+    vec4 modelPos = u_Model * vec4(a_Position.xyz, 1.0);
+
     vec3 directionToLight = normalize(-u_LightDirection);
-    vec3 incidentLight = lightColor;
 
-    vec3 lightedColor = baseColor.xyz * u_AmbientColor + baseColor.xyz * incidentLight * max(dot(surfaceNormal, directionToLight), 0.0) ;
+    // Diffuse
+    vec3 diffuse =  baseColor.xyz * u_LightEmission * max(dot(surfaceNormal, directionToLight), 0.0);
 
-    // Note on ambient color:
-    // Instead of having a coefficient on the sphere, the ambient is the same for all objects
-    // and its intensity is given in the color (1,1,1 is full intensity)
+    // Ambience
+    vec3 ambience = baseColor.xyz * u_AmbientEmission;
+
+    // Final Color
+    vec3 finalColor = diffuse + ambience;
+
+    o_Color = vec4(finalColor.xyz, 1.0);
 
     vec4 position = u_ViewProjection * modelPos;
     gl_Position = position;  
 
-    o_Color = vec4(lightedColor[0], lightedColor[1], lightedColor[2], 1.0);
+    
 }

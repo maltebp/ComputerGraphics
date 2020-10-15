@@ -57,7 +57,10 @@
         The specular term is the highligths, and as such, setting it to all zeros will just result in removing the highlights.
 
         <h3>f) Shininess exponent</h3>
+        The larger the shininess exponent, the less the highlights will spread (they will become more mirror like). This is due to fact that the dot product between the observer direction and the direction of the perfect reflection becomes less than 1 when they are not perfectly aligned. Thus, increasing the exponent will cause the specular term to decrease faster when the directions are not aligned.
         
+        <h3>g) Coordinate space</h3>
+        I calculated the lighting in world coordinates, as I already had the model's coordinates and camera position in world coordinates.
 
     </p>
 </body> 

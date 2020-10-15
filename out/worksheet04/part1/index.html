@@ -13,6 +13,8 @@
     <script src="/FloatArrayList.js"></script>
     <script src="/VertexBuffer.js"></script>
     <script src="/FPS.js"></script>
+    <script src="/utility/ShaderProgram.js"></script>
+    <script src="/utility/LinearAlgebraExtension.js"></script>
 
     <!-- General stylesheet -->
     <link rel="stylesheet" href="/general.css">
@@ -46,7 +48,7 @@
             <td><table class="toolbox">
                  <!-- Rotation Checkbox -->
                  <tr class="toolbox-row"><td>
-                    <input type="checkbox" id="rotate" name="rotate"> Rotate
+                    <input type="checkbox" id="rotate_camera" name="rotate"> Rotate
                 </td></tr>
                 
                 <!-- Camera Height Slider -->
@@ -71,7 +73,7 @@
     <p class="description">
         Drawing a Sphere by using subdivision, and (adjusted) triangle surface normals for colors to gain a better sense of the subdivision. The subdivision level goes from 0 to 8 inclusive, and increments by 1.
         <br>
-        <b>Note:</b> The subdivions is not implemented in a super fast manner, so increasing the level to the last to levels is really slow. Also, the sphere vertices are "uploaded" to the vertex buffer every frame, so FPS drops a bit.
+        <b>Note:</b> The subdivions is not implemented in a super fast manner, so increasing the level to the last to levels is really slow.
     </p>
 
     <script src="../generic/Camera.js"></script>

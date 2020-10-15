@@ -6,12 +6,14 @@ namespace Sheet4.Part3 {
 
         private gl;
         private vertexBuffer: VertexBuffer;
-        private program;
+        private shader: Util.ShaderProgram;
 
         private lightDirection: number[] = null;
         private lightColor: number[] = null;
+
         private ambientColor: number[] = [0.20,0.20,0.20];
 
+        private sphere: Sphere = null;
         
         constructor(gl){
             if( gl == null )
@@ -19,12 +21,11 @@ namespace Sheet4.Part3 {
     
             this.gl = gl;
     
-            this.vertexBuffer = new VertexBuffer(gl, 256);
+            this.vertexBuffer = new VertexBuffer(gl, 50000);
             this.vertexBuffer.addAttribute("a_Position", 3);
             this.vertexBuffer.addAttribute("a_Color", 4);
         
-            // @ts-ignore
-            this.program = initShaders(gl, "renderer/vertex.glsl", "renderer/fragment.glsl");
+            this.shader = new Util.ShaderProgram(gl, "renderer/vertex.glsl", "renderer/fragment.glsl");
         }
 
 
@@ -37,42 +38,30 @@ namespace Sheet4.Part3 {
         setAmbientColor( color: number[] ){
             this.ambientColor = color;
         }
+
+
+        setSphere(sphere: Sphere){
+            this.sphere = sphere;
+            this.vertexBuffer.clear();
+            this.vertexBuffer.push(sphere.getVertices());
+        }
         
     
-        draw(sphere: Sphere, camera: Camera){
-            this.gl.useProgram(this.program);
-    
-            var uViewProjection = this.gl.getUniformLocation(this.program, "u_ViewProjection");
-            // @ts-ignore
-            this.gl.uniformMatrix4fv(uViewProjection, false, flatten(camera.getViewProjectionMatrix()));
-    
-            var uModel = this.gl.getUniformLocation(this.program, "u_Model");
-            // @ts-ignore
-            this.gl.uniformMatrix4fv(uModel, false, flatten(sphere.getModelMatrix()));
+        draw(camera: LookAtCamera){
+            this.shader.bind();
+
+            this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());
+            this.shader.setFloatMatrix4("u_Model", this.sphere.getModelMatrix());
 
             if( this.lightDirection != null ){
-                var uLightDirection = this.gl.getUniformLocation(this.program, "u_LightDirection");
-                // @ts-ignore
-                var flattened = flatten(this.lightDirection);
-                this.gl.uniform3fv(uLightDirection, flattened);
-
-                var uLightColor = this.gl.getUniformLocation(this.program, "u_LightColor");
-                // @ts-ignore
-                this.gl.uniform3fv(uLightColor, flatten(this.lightColor));
+                this.shader.setFloatVector3("u_LightDirection", this.lightDirection);
+                this.shader.setFloatVector3("u_LightEmission", this.lightColor);
             }
+            this.shader.setFloatVector3("u_AmbientEmission", this.ambientColor);
 
-            var uAmbientColor = this.gl.getUniformLocation(this.program, "u_AmbientColor");
-            // @ts-ignore
-            this.gl.uniform3fv(uAmbientColor, flatten(this.ambientColor));
-
-            
-            let vertices = sphere.getVertices(); 
-            this.vertexBuffer.clear();
-            this.vertexBuffer.push(vertices);
-    
             this.vertexBuffer.bind();
     
-            this.gl.drawArrays(this.gl.TRIANGLES, 0, vertices.length/7);
+            this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());
         }
     }
 }

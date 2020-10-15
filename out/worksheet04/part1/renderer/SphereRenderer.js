@@ -4,28 +4,26 @@ var Sheet4;
     (function (Part1) {
         class SphereRenderer {
             constructor(gl) {
+                this.sphere = null;
                 if (gl == null)
                     throw "GL context cannot be null";
                 this.gl = gl;
-                this.vertexBuffer = new VertexBuffer(gl, 256);
+                this.vertexBuffer = new VertexBuffer(gl, 50000);
                 this.vertexBuffer.addAttribute("a_Position", 3);
                 this.vertexBuffer.addAttribute("a_Color", 4);
-                // @ts-ignore
-                this.program = initShaders(gl, "renderer/vertex.shader", "renderer/fragment.shader");
+                this.shader = new Util.ShaderProgram(gl, "renderer/vertex.glsl", "renderer/fragment.glsl");
             }
-            draw(sphere, camera) {
-                this.gl.useProgram(this.program);
-                var uViewProjection = this.gl.getUniformLocation(this.program, "u_ViewProjection");
-                // @ts-ignore
-                this.gl.uniformMatrix4fv(uViewProjection, false, flatten(camera.getViewProjectionMatrix()));
-                var uModel = this.gl.getUniformLocation(this.program, "u_Model");
-                // @ts-ignore
-                this.gl.uniformMatrix4fv(uModel, false, flatten(sphere.getModelMatrix()));
-                let vertices = sphere.getVertices();
+            setSphere(sphere) {
+                this.sphere = sphere;
                 this.vertexBuffer.clear();
-                this.vertexBuffer.push(vertices);
+                this.vertexBuffer.push(sphere.getVertices());
+            }
+            draw(camera) {
+                this.shader.bind();
+                this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());
+                this.shader.setFloatMatrix4("u_Model", this.sphere.getModelMatrix());
                 this.vertexBuffer.bind();
-                this.gl.drawArrays(this.gl.TRIANGLES, 0, vertices.length / 7);
+                this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());
             }
         }
         Part1.SphereRenderer = SphereRenderer;

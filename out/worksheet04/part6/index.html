@@ -34,20 +34,33 @@
         Phong lighting is a lighting equation which includes an ambient, a diffuse and a specular term.<br> Phong shading is the method of normals between vertices, and calculated the light for each pixel rather than for each vertex.
 
         <h3>b) Flat shading, Gouraud shading and Phong shading</h3>
-        In flat shading you do no interpolation between, meaning that every pixel on a triangle has the same color. This shading method does nothing to hide the underlying geometry of a mesh, and as such becomes "flat". Flat shading is a deliberate choice in OpenGL, as  colors are interpolated between vertices per default (using the varying key word).<br>Flat shading is super fast, as no interpolation is done, and th lighting calculations can be done for each triangle. However, flat shading is not realistic looking at all. This, of course, can be an artistic goal, and flat shading also makes it easier to visualize the geometries of a model.<br>
+        In flat shading there is interpolation between vertices, meaning that every pixel on a triangle has the same color. This shading method does nothing to hide the underlying geometry of a mesh, and as such becomes "flat". Flat shading is a deliberate choice in OpenGL, as  colors are interpolated between vertices per default (using the varying key word).<br>Flat shading is super fast, as no interpolation is done, and th lighting calculations can be done for each triangle. However, flat shading is not realistic looking at all. This, of course, can be an artistic goal, and flat shading also makes it easier to visualize the geometries of a model.<br>
         
         <br>
         Gourad Shading uses interpolation between vertex colors to approximate colors for pixels in between the vertex colors. It's a fast method, as we still only need to calulcate the lighting per vertex, but due to interpolation, it's not as fast as flat shading.
         <br> While it does a good job at approximating colors for meshes with low number of vertices, it's easy to spot unnatural lighting effects when the vertex count is low - especially highlights.<br>
 
         <br>
-        Phong shading only interpolates the surface normals (and renormalize them in the fragment shader), and calculates the color per pixel instead of per vertex. This is a slower, process but it grants much, much more realistic lighting effects - especially highlights are improved as mentioned in previous part.<br>
+        Phong shading only interpolates the surface normals (and renormalize them in the fragment shader), and calculates the color per pixel instead of per vertex. This is a slower process but it grants much, much more realistic lighting effects - especially highlights are improved as mentioned in previous part.<br>
         
 
-        <br><br>
-        <b>Model</b><br>
-        In both parts, the model matrix for each cube is created by using the Cube's size and position. The matrix is created from these values by using the following expression:
-        <strong>mult(translate(position), scalem(size, size, size))</strong>
+        <h3>c) Directional vs Point light</h3>
+        A point light has a position in the world, and emits light in all directions. A directional light only has a direction, and no position. A directional light may light all vertices facing in its general direction, while vertices have a distance to a point light, and as such may not be lit by it even when its facing it.
+        
+
+        <h3>d) Influence of eye position when lighting</h3>
+        The position of the eye does not influence the diffuse or ambient light. While we may not see it, the material is equally, difusely lit, regardless of the eye point.<br>
+        Phong highlights are, however, influenced by the position of the observer. This is due to the highlights being reflective lights, and what is reflected towards the observer, depends on the observers position.<br>
+
+
+        <h3>e) Specular term</h3>
+        The specular term is the highligths, and as such, setting it to all zeros will just result in removing the highlights.
+
+        <h3>f) Shininess exponent</h3>
+        The larger the shininess exponent, the less the highlights will spread (they will become more mirror like). This is due to fact that the dot product between the observer direction and the direction of the perfect reflection becomes less than 1 when they are not perfectly aligned. Thus, increasing the exponent will cause the specular term to decrease faster when the directions are not aligned.
+        
+        <h3>g) Coordinate space</h3>
+        I calculated the lighting in world coordinates, as I already had the model's coordinates and camera position in world coordinates.
 
     </p>
 </body> 
