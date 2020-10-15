@@ -1,0 +1,54 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <script src="/lib/initShaders.js"></script> -->
+    <script src="/lib/initShaders2.js"></script>
+    <script src="/lib/MV.js"></script>
+    <script src="/lib/webgl-utils.js"></script>
+    <script src="/utility.js"></script>
+    <script src="/FloatArrayList.js"></script>
+    <script src="/VertexBuffer.js"></script>
+
+    <!-- General stylesheet -->
+    <link rel="stylesheet" href="/general.css">
+
+    <title>Worksheet 4 - Part 6
+    </title>
+</head>
+<body>
+    <h2>Worksheet 4 - Part 6</h2>   
+    <a href="../">Back to worksheet</a>
+    <br>
+    <a href="../part5">Previous part</a><br>
+    <br>
+    <br>
+
+    <p class="description">
+
+
+        <h3>a) Phong Shading vs Phong lighting</h3>
+        Phong lighting is a lighting equation which includes an ambient, a diffuse and a specular term.<br> Phong shading is the method of normals between vertices, and calculated the light for each pixel rather than for each vertex.
+
+        <h3>b) Flat shading, Gouraud shading and Phong shading</h3>
+        In flat shading you do no interpolation between, meaning that every pixel on a triangle has the same color. This shading method does nothing to hide the underlying geometry of a mesh, and as such becomes "flat". Flat shading is a deliberate choice in OpenGL, as  colors are interpolated between vertices per default (using the varying key word).<br>Flat shading is super fast, as no interpolation is done, and th lighting calculations can be done for each triangle. However, flat shading is not realistic looking at all. This, of course, can be an artistic goal, and flat shading also makes it easier to visualize the geometries of a model.<br>
+        
+        <br>
+        Gourad Shading uses interpolation between vertex colors to approximate colors for pixels in between the vertex colors. It's a fast method, as we still only need to calulcate the lighting per vertex, but due to interpolation, it's not as fast as flat shading.
+        <br> While it does a good job at approximating colors for meshes with low number of vertices, it's easy to spot unnatural lighting effects when the vertex count is low - especially highlights.<br>
+
+        <br>
+        Phong shading only interpolates the surface normals (and renormalize them in the fragment shader), and calculates the color per pixel instead of per vertex. This is a slower, process but it grants much, much more realistic lighting effects - especially highlights are improved as mentioned in previous part.<br>
+        
+
+        <br><br>
+        <b>Model</b><br>
+        In both parts, the model matrix for each cube is created by using the Cube's size and position. The matrix is created from these values by using the following expression:
+        <strong>mult(translate(position), scalem(size, size, size))</strong>
+
+    </p>
+</body> 
+</html>
