@@ -87,7 +87,7 @@
                     <input id="mat-slider-specular" class="slider" type="range" min="0" max="1" step="0.025" value="0.5"><br>
 
                     Shine<br>
-                    <input id="mat-slider-shine" class="slider" type="range" min="10" max="1000" step="1" value="100"><br>
+                    <input id="mat-slider-shine" class="slider" type="range" min="1" max="1000" step="1" value="100"><br>
                 </td></tr>
                 
 
@@ -101,8 +101,10 @@
     
     <div class="seperator"></div>
     <p class="description">
-        A subdivided sphere, where each fragment color is determined by its normal.<br>
-        The sphere is lit up with a directional light, and an ambient light. The intensity of each determined by lightness of the color (grey is less intense than white).
+        A subdivided sphere and sphere being lit by a directional and ambient light.<br>
+        The intensity of the ambient light is determined by lightness of the color (grey is less intense than white).<br>
+        The material sliders determines how much of much of each light source (ambience, diffuse and specular) should be
+        included in the final color.
     </p>
 
     <script src="../generic/Camera.js"></script>
