@@ -24,21 +24,19 @@ class VertexBuffer extends FloatArrayList {
         super.reserve(newSize);
         this._dirty = true;
     }
-    /**
-     * Binds the buffer
-     * @param {*} program   The shader program to bind the attributes to
-     */
-    bind(program) {
-        if (program == null)
-            throw "Shader program cannot be null";
+    bind() {
+        var shader = this._gl.getParameter(this._gl.CURRENT_PROGRAM);
+        if (shader == null)
+            throw "No shader program bound when binding vertex buffer";
         this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._buffer);
         this._dirty = true; // TODO: FIX THIS!!! VERY IMPORTANT
         if (this._dirty) {
             this._gl.bufferData(this._gl.ARRAY_BUFFER, this.list, this._gl.STATIC_DRAW);
             this._dirty = false;
         }
+        // Not sure if this should be done everytime we bind...
         this._attributes.forEach(attrib => {
-            var pos = this._gl.getAttribLocation(program, attrib.name);
+            var pos = this._gl.getAttribLocation(shader, attrib.name);
             if (pos == -1)
                 throw "Couldn't find attribute " + attrib.name;
             this._gl.vertexAttribPointer(pos, attrib.count, this._gl.FLOAT, false, this._totalAttributesSize, attrib.offset);
@@ -52,5 +50,12 @@ class VertexBuffer extends FloatArrayList {
             offset: this._totalAttributesSize
         });
         this._totalAttributesSize += count * 4;
+    }
+    /**
+     * Returns the number of vertices in the number, when each vertex contains
+     * the number of elements defined by the sum of the count in the attributes.
+     */
+    getNumVertices() {
+        return this.numElements / (this._totalAttributesSize / 4);
     }
 }

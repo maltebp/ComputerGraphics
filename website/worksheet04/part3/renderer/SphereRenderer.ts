@@ -70,7 +70,7 @@ namespace Sheet4.Part3 {
             this.vertexBuffer.clear();
             this.vertexBuffer.push(vertices);
     
-            this.vertexBuffer.bind(this.program);
+            this.vertexBuffer.bind();
     
             this.gl.drawArrays(this.gl.TRIANGLES, 0, vertices.length/7);
         }

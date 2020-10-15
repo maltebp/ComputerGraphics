@@ -24,7 +24,7 @@ var Sheet3;
             this.vertexBuffer.push(cube.getVertices());
             this.indexBuffer.clear();
             this.indexBuffer.push(cube.getWireframeIndices());
-            this.vertexBuffer.bind(this.program);
+            this.vertexBuffer.bind();
             this.indexBuffer.bind();
             this.gl.drawElements(this.gl.LINES, this.indexBuffer.length(), this.gl.UNSIGNED_SHORT, 0);
         }
