@@ -7,6 +7,7 @@ Questions:
 
     General: 
         ☐ Is it okay that the source code is not uploaded to the website?  
+        ☐ How should you calculate the ambient color? Because if the base is red, then it can never be lit by something blue
     
     Sheet 3:
         ☐ Can I draw the cubes in seperate canvases?

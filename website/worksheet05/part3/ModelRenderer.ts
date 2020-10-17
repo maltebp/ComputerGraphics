@@ -14,6 +14,7 @@ namespace Sheet5.Part3 {
             
             this.shader = new Util.ShaderProgram(gl, "vertex.glsl", "fragment.glsl");
         }
+
     
         draw(camera: LookAtCamera, model: Model){
             this.shader.bind();

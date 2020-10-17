@@ -22,7 +22,7 @@ namespace Sheet5.Part3 {
         
         rotateCamera = false;
 
-        camera = new PerspectiveCamera(CANVAS_SIZE, [0, 10.0, 8], [0,2,0], 45);
+        camera = new PerspectiveCamera(CANVAS_SIZE, [0, 10.0, 6], [0,2.5,0], 45);
 
         renderer = new ModelRenderer(gl);
 

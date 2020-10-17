@@ -1,7 +1,7 @@
 var Sheet5;
 (function (Sheet5) {
-    var Part3;
-    (function (Part3) {
+    var Part4;
+    (function (Part4) {
         function setup() {
             const CANVAS_SIZE = [720, 480];
             // @ts-ignore
@@ -9,10 +9,13 @@ var Sheet5;
             gl.enable(gl.DEPTH_TEST);
             gl.enable(gl.CULL_FACE);
             gl.clearColor(0.3921, 0.5843, 0.9294, 1.0);
+            camera = new Sheet5.PerspectiveCamera(CANVAS_SIZE, [0, 0, -150], [0, 0, 0], 45);
+            lightDirection = [1.0, 0, 0, 0];
             previousTime = Date.now();
             rotateCamera = false;
+            rotateLight = false;
             camera = new Sheet5.PerspectiveCamera(CANVAS_SIZE, [0, 10.0, 6], [0, 2.5, 0], 45);
-            renderer = new Part3.ModelRenderer(gl);
+            renderer = new Part4.ModelRenderer(gl);
             // Load Model
             model = null;
             Sheet5.ObjUtil.loadFile("/models/Tree.obj", 1.0, false, (obj) => {
@@ -25,12 +28,28 @@ var Sheet5;
             document.getElementById("rotate_camera").onchange = (e) => {
                 rotateCamera = !rotateCamera;
             };
+            // Light Rotation Check box
+            document.getElementById("rotate_light").onchange = (e) => {
+                rotateLight = !rotateLight;
+            };
             // Camera height (lookat eye y component)
             let cameraSlider = document.getElementById("camera-height");
             cameraSlider.oninput = (e) => {
                 camera.setY(cameraSlider.valueAsNumber);
             };
             camera.setY(cameraSlider.valueAsNumber);
+            // Material sliders
+            let materialAmbientSlider = document.getElementById("mat-slider-ambient");
+            let materialDiffuseSlider = document.getElementById("mat-slider-diffuse");
+            let materialSpecularSlider = document.getElementById("mat-slider-specular");
+            let materialShineSlider = document.getElementById("mat-slider-shine");
+            var updateMaterial = (e) => {
+                renderer.setMaterial(materialAmbientSlider.valueAsNumber, materialDiffuseSlider.valueAsNumber, materialSpecularSlider.valueAsNumber, materialShineSlider.valueAsNumber);
+            };
+            materialAmbientSlider.oninput = updateMaterial;
+            materialDiffuseSlider.oninput = updateMaterial;
+            materialSpecularSlider.oninput = updateMaterial;
+            materialShineSlider.oninput = updateMaterial;
         }
         function update() {
             // Update time
@@ -40,6 +59,13 @@ var Sheet5;
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
             if (rotateCamera)
                 camera.rotateY((-Math.PI / 3) * timeStep);
+            // @ts-ignore
+            if (rotateLight)
+                lightDirection = mult(rotateY(-60 * timeStep), lightDirection);
+            var lightColor = Util.hexToRgb(document.getElementById("directional-light-color").value);
+            renderer.setDirectionalLight(lightDirection.slice(0, 3), [lightColor.r / 255, lightColor.g / 255, lightColor.b / 255]);
+            var ambientColor = Util.hexToRgb(document.getElementById("ambient-color").value);
+            renderer.setAmbientColor([ambientColor.r / 255, ambientColor.g / 255, ambientColor.b / 255]);
             // Render model
             if (model != null)
                 renderer.draw(camera, model);
@@ -50,7 +76,7 @@ var Sheet5;
             setup();
             update();
         }
-        Part3.start = start;
-    })(Part3 = Sheet5.Part3 || (Sheet5.Part3 = {}));
+        Part4.start = start;
+    })(Part4 = Sheet5.Part4 || (Sheet5.Part4 = {}));
 })(Sheet5 || (Sheet5 = {}));
-Sheet5.Part3.start();
+Sheet5.Part4.start();
