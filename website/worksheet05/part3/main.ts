@@ -5,6 +5,9 @@ namespace Sheet5.Part3 {
     declare var rotateCamera: boolean;
     declare var camera: PerspectiveCamera;
     declare var previousTime: number;   
+    declare var renderer: ModelRenderer;
+    declare var model: Model;
+    
 
     function setup(){
         const CANVAS_SIZE = [720, 480];
@@ -19,10 +22,20 @@ namespace Sheet5.Part3 {
         
         rotateCamera = false;
 
+        camera = new PerspectiveCamera(CANVAS_SIZE, [0, 10.0, 8], [0,2,0], 45);
+
+        renderer = new ModelRenderer(gl);
+
+        // Load Model
+        model = null;
+        ObjUtil.loadFile("/models/Tree.obj", 1.0, false, (obj) => {
+            console.log(obj.getDrawingInfo());
+            model = new Model(gl, obj, [0,0,0], 1.0);
+        });
+
         // FPS
         FPS.textElement = <HTMLParagraphElement> document.getElementById("fps-text");
         
-        camera = new PerspectiveCamera(CANVAS_SIZE, [0, 0, -150], [0,0,0], 45);
 
         // Camera Rotation Check box
         document.getElementById("rotate_camera").onchange =  (e) => {
@@ -48,18 +61,18 @@ namespace Sheet5.Part3 {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         if( rotateCamera ) camera.rotateY((-Math.PI/3) * timeStep);
 
+        // Render model
+        if( model != null )
+            renderer.draw(camera, model);
+
+
+        FPS.registerFrame();
         requestAnimationFrame(update);
     }
 
     export function start(){
-        // setup();
-        // update();
-        ObjUtil.loadFile("/models/Tree.obj", 1.0, false, (obj) => {
-            console.log("Loaded object file!");
-            console.log(obj.isMTLComplete());
-            console.log(obj);
-            console.log(obj.getDrawingInfo());
-        });
+        setup();
+        update();
     }
 }
 

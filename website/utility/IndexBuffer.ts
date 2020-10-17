@@ -36,6 +36,7 @@ namespace Util {
                     //@ts-ignore
                     this.list,
                     this.gl.STATIC_DRAW);
+                this.dirty = false;
             }
         }    
     

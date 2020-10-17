@@ -22,6 +22,7 @@ var Util;
                 this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, 
                 //@ts-ignore
                 this.list, this.gl.STATIC_DRAW);
+                this.dirty = false;
             }
         }
         push(...elements) {

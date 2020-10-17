@@ -11,9 +11,16 @@ var Sheet5;
             gl.clearColor(0.3921, 0.5843, 0.9294, 1.0);
             previousTime = Date.now();
             rotateCamera = false;
+            camera = new Sheet5.PerspectiveCamera(CANVAS_SIZE, [0, 10.0, 8], [0, 2, 0], 45);
+            renderer = new Part3.ModelRenderer(gl);
+            // Load Model
+            model = null;
+            Sheet5.ObjUtil.loadFile("/models/Tree.obj", 1.0, false, (obj) => {
+                console.log(obj.getDrawingInfo());
+                model = new Sheet5.Model(gl, obj, [0, 0, 0], 1.0);
+            });
             // FPS
             FPS.textElement = document.getElementById("fps-text");
-            camera = new Sheet5.PerspectiveCamera(CANVAS_SIZE, [0, 0, -150], [0, 0, 0], 45);
             // Camera Rotation Check box
             document.getElementById("rotate_camera").onchange = (e) => {
                 rotateCamera = !rotateCamera;
@@ -33,17 +40,15 @@ var Sheet5;
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
             if (rotateCamera)
                 camera.rotateY((-Math.PI / 3) * timeStep);
+            // Render model
+            if (model != null)
+                renderer.draw(camera, model);
+            FPS.registerFrame();
             requestAnimationFrame(update);
         }
         function start() {
-            // setup();
-            // update();
-            Part3.ObjUtil.loadFile("/models/Tree.obj", 1.0, false, (obj) => {
-                console.log("Loaded object file!");
-                console.log(obj.isMTLComplete());
-                console.log(obj);
-                console.log(obj.getDrawingInfo());
-            });
+            setup();
+            update();
         }
         Part3.start = start;
     })(Part3 = Sheet5.Part3 || (Sheet5.Part3 = {}));
