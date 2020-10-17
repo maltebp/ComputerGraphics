@@ -99,7 +99,13 @@
     
     <div class="seperator"></div>
     <p class="description">
-        Rendering the same Tree model, but with the same lighting model from Worksheet 4, part 6
+        Rendering the same Tree model, but with the same lighting model from Worksheet 4, part 5.
+
+        <br>
+        <b>Surface Normals</b><br>
+        Each vertex has a (surface) normal, which is included in the drawing information after loading an .obj file. I upload this normal as a vertex attribute, so that each vertex has a position, normal and color attribute.<br>
+        The normal is vertex normal is used to create smooth lighting of the model. Each fragment uses a normal, which has been received from interpolating the vertex normals. This normal is used for the Phong illumination, creating a smooth surface.
+
     </p>
 
     <script src="../generic/ObjUtil.js"></script>
