@@ -56,7 +56,9 @@ namespace Sheet5.Part3 {
         // update();
         ObjUtil.loadFile("/models/Tree.obj", 1.0, false, (obj) => {
             console.log("Loaded object file!");
+            console.log(obj.isMTLComplete());
             console.log(obj);
+            console.log(obj.getDrawingInfo());
         });
     }
 }

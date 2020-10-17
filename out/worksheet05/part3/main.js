@@ -40,7 +40,9 @@ var Sheet5;
             // update();
             Part3.ObjUtil.loadFile("/models/Tree.obj", 1.0, false, (obj) => {
                 console.log("Loaded object file!");
+                console.log(obj.isMTLComplete());
                 console.log(obj);
+                console.log(obj.getDrawingInfo());
             });
         }
         Part3.start = start;

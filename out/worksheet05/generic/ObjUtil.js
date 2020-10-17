@@ -4,6 +4,16 @@ var Sheet5;
     (function (Part3) {
         var ObjUtil;
         (function (ObjUtil) {
+            function waitForMTL(obj, callback) {
+                if (!obj.isMTLComplete()) {
+                    setTimeout(() => {
+                        waitForMTL(obj, callback);
+                    }, 100);
+                }
+                else {
+                    callback(obj);
+                }
+            }
             /**
              * Loads an .obj file, and calls the passed callback if successful
              */
@@ -19,7 +29,10 @@ var Sheet5;
                     var loadSuccess = objDoc.parse(request.responseText, scale, reverse);
                     if (!loadSuccess)
                         throw "Parsing object from '" + fileName + " failed";
-                    onLoadCallback(objDoc);
+                    // while(!objDoc.isMTLComplete()){
+                    //     console.log(objDoc);
+                    // }
+                    waitForMTL(objDoc, onLoadCallback);
                 };
                 request.open('GET', fileName, true); // Create a request to get file
                 request.send(); // Send the request
