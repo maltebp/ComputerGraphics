@@ -1,0 +1,123 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- External libraries -->
+    <script src="/lib/initShaders2.js"></script>
+    <script src="/lib/MV.js"></script>
+    <script src="/lib/webgl-utils.js"></script>
+    <script src="/lib/OBJParser.js"></script>
+
+    <!-- Utility -->
+    <script src="/utility/GL.js"></script>
+    <script src="/utility/Color.js"></script>
+    <script src="/utility/FPS.js"></script>
+    <script src="/utility/FloatArrayList.js"></script>
+    <script src="/utility/VertexBuffer.js"></script>
+    <script src="/utility/IndexBuffer.js"></script>
+    <script src="/utility/LinearAlgebraExtension.js"></script>
+    <script src="/utility/ShaderProgram.js"></script>
+    <script src="/utility/Camera.js"></script>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/general.css">
+
+    <!-- General stylesheet -->
+    <link rel="stylesheet" href="/general.css">
+
+    <title>Worksheet 6 - Part 2
+    </title>
+</head>
+<body>
+
+    <h2>Worksheet 6 - Part 2</h2>   
+    <a href="../">Back to worksheet</a>
+    <br>
+    <a href="../part3">Next part</a><br>
+    <a href="../part1 ">Previous part</a>
+    <br>
+    <br>
+
+
+    <table class="program-container">
+        <tr>
+            <!-- Right toolbox -->
+            <td><table class="toolbox">
+                <!-- Camera -->
+                <tr class="toolbox-row"><td>
+                    <b>Camera</b><br><br>
+
+                    <br>Distance<br>
+                    <input id="camera-distance" class="slider" type="range" min="0" max="100" value="35">
+
+                    <br>Horizontal angle<br>
+                    <input id="camera-horizontal" class="slider" type="range" min="-180" max="180" value="0">
+
+                    <br>Vertical angle<br>
+                    <input id="camera-vertical" class="slider" type="range" min="-180" max="180" value="5">
+                </td></tr>
+
+            </table></td>
+
+            <td>
+                <canvas id="canvas"></canvas>
+            </td>
+            
+            <!-- Right toolbox -->
+            <td><table class="toolbox">
+
+                <tr class="toolbox-row"><td>
+                    <b>Wrap mode</b><br>
+                    <input id="wrap-mode-repeat" type="radio" name="wrap-mode-group" checked> Repeat <br>
+                    <input id="wrap-mode-clamp" type="radio" name="wrap-mode-group">  Clamped<br>
+                </td></tr>
+
+                <tr class="toolbox-row"><td>
+                    <b>Minification filter</b><br>
+                    <input id="minfilter-mode-nearest" type="radio" name="min-filter-mode-group" checked> Nearest <br>
+                    <input id="minfilter-mode-linear" type="radio" name="min-filter-mode-group"> Linear <br>
+                    <input id="minfilter-mode-mipmap-n-l" type="radio" name="min-filter-mode-group"> Linear mipmap, nearest pixel <br>
+                    <input id="minfilter-mode-mipmap-l-l" type="radio" name="min-filter-mode-group"> Linear mipmap, linear pixel <br>
+                    <input id="minfilter-mode-mipmap-n-n" type="radio" name="min-filter-mode-group"> Nearest mipmap, nearest pixel <br>
+                    <input id="minfilter-mode-mipmap-l-n" type="radio" name="min-filter-mode-group"> Nearest mipmap, linear pixel <br>
+                </td></tr>
+
+                <tr class="toolbox-row"><td>
+                    <b>Magnification filter</b><br>
+                    <input id="magfilter-mode-nearest" type="radio" name="mag-filter-mode-group" checked> Nearest <br>
+                    <input id="magfilter-mode-linear" type="radio" name="mag-filter-mode-group"> Linear <br>
+                </td></tr>
+
+             
+            </table></td>
+        </tr>
+    </table>
+    
+    <p id="fps-text" class="fps-text">FPS: ?</p>
+
+    
+    <div class="seperator"></div>
+    <p class="description">
+        
+        
+        <h3>Linear vs Nearest</h3>
+        <p>'Nearest' filtering causes pixelation of the texture when its scaled, where as 'linear' blurs the transition between pixels. The linear filter can give smoother scaling, but only comes off realistic, if the texture doesn't contain too hard color transitions that we want to maintain when scaling, like this checkerboard texture. For minification, the linear transition works quite well regardless of the texture.</p>
+
+
+
+        <h3>Mipmapping</h3>
+        <p>Mipmapping allows to make a better estimate of a sized down versions of the texture (i.e. when zooming, or viewing it at a very sharp angle). Without mipmapping, we get this very noisy, pixelated texture when scaled down. Picking the mipmap can also be done linearly or with nearest, and it has the same effect as when picking texels. With the nearest mipmap, we get a very hard transition between the different mipmap levels, which in this case results in block, single color texture in some parts.<br>
+        The mipmapping can be combined with texel filtering, as texels are picked using either the nearest or linear filter, after the correct mipmap has been picked. </p>
+        
+
+
+    </p>
+
+    <script src="Renderer.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

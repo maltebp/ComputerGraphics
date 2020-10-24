@@ -18,7 +18,6 @@ uniform vec3 u_CameraPos;
 
 varying vec3 o_ObserverDirection;
 varying vec3 o_Normal;
-varying vec3 o_Position;
 varying vec4 o_Color;
 
 void main(){

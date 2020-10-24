@@ -19,13 +19,13 @@ namespace Sheet6.Part1 {
             this.vertexBuffer.addAttribute("a_Position", 2);
             this.vertexBuffer.addAttribute("a_TextureCoordinates", 2);
             this.vertexBuffer.push([
-                // Pos         // Texture Coordinate
-                -0.5, -0.5,     -1.5, 0.0,        
-                 0.5, -0.5,      2.5, 0.0,
-                -0.5,  0.5,     -1.5, 10.0,
-                -0.5,  0.5,     -1.5, 0.0,
-                 0.5, -0.5,      2.5, 10.0,
-                 0.5,  0.5,      2.5, 0.0
+               // Pos         // Texture Coordinate
+               -0.5, -0.5,     -2,  -2,        
+               0.5, -0.5,      2,  -2,
+              -0.5,  0.5,     -2,   2,
+              -0.5,  0.5,     -2,   2,
+               0.5, -0.5,      2,  -2,
+               0.5,  0.5,      2,   2
             ]);      
         }
 

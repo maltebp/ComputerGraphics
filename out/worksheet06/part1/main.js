@@ -12,6 +12,7 @@ var Sheet6;
                 }
             }
             var dataFlattened = new Uint8Array(data);
+            // Adding texture
             texture = gl.createTexture();
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -60,7 +61,7 @@ var Sheet6;
             previousTime = currentTime;
             renderer.drawQuad(camera, 
             // 40x40 quad laying flat on the xz plane 
-            [0, 0, 0], 40, 80, [90, 0, 0]);
+            [0, 0, 0], 80, 80, [90, 0, 0]);
             FPS.registerFrame();
             requestAnimationFrame(update);
         }
