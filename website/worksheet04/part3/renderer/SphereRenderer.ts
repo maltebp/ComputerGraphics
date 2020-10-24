@@ -47,7 +47,7 @@ namespace Sheet4.Part3 {
         }
         
     
-        draw(camera: LookAtCamera){
+        draw(camera: Util.Camera){
             this.shader.bind();
 
             this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());

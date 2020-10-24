@@ -9,6 +9,13 @@ var Util;
         bind() {
             this.gl.useProgram(this.program);
         }
+        setInteger(name, integer) {
+            var location = this.getUniformLocation(name);
+            var existingUniform = this.gl.getUniform(this.program, location);
+            if (typeof existingUniform !== "number")
+                throw "Uniform " + name + " is not an integer in the shader";
+            this.gl.uniform1i(location, integer);
+        }
         setFloat(name, float) {
             var location = this.getUniformLocation(name);
             var existingUniform = this.gl.getUniform(this.program, location);

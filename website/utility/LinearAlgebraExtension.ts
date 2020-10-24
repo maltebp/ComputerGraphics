@@ -3,6 +3,8 @@
 
 namespace Util {
 
+    
+
     /**
      * Takes any combination of numbers, lists of numbers, lists of lists of numbers etc, and
      * convert them to a single dimensional sequential Float32Array.
@@ -39,6 +41,44 @@ namespace Util {
 
             array.push(element);
         });
+    }
+
+
+    /**
+     * Creates a  model matrix as a Float32Array from a various parameters
+     * 
+     * @param position  X, y, z positions (translation)
+     * @param scale     X, y, z scaling
+     * @param rotation  X, y, z rotation
+     */
+    export function createModelMatrix(position: number[], scale: number[], rotation: number[]){
+        // @ts-ignore
+        let modelMatrix = mult(
+            
+            // @ts-ignore
+            translate(position[0], position[1], position[2]),
+
+            // @ts-ignore
+            mult(
+                // @ts-ignore
+                mult(   
+                    // @ts-ignore
+                    rotateX(rotation[0]),
+                    // @ts-ignore
+                    mult(
+                        // @ts-ignore
+                        rotateY(rotation[1]),
+                        // @ts-ignore
+                        rotateZ(rotation[2])
+                    )
+                ),
+
+                // @ts-ignore
+                scalem(scale[0], scale[1], scale[2])
+            )               
+        );
+
+        return toFloatArray(modelMatrix);
     }
 
 }

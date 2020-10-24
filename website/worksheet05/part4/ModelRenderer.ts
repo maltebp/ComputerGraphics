@@ -45,7 +45,7 @@ namespace Sheet5.Part4 {
             this.materialShine = shine;
         }
     
-        draw(camera: LookAtCamera, model: Model){
+        draw(camera: Util.OrbitalCamera, model: Model){
             this.shader.bind();
 
             this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());

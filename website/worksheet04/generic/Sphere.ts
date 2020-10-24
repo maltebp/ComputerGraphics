@@ -9,8 +9,7 @@ namespace Sheet4 {
         private color: number[];
         private vertices: Float32Array = null;
 
-        //@ts-ignore
-        private modelMatrix: number [] = mat4();
+        private modelMatrix: Float32Array;
         private dirty: boolean = true;
         
 
@@ -40,8 +39,12 @@ namespace Sheet4 {
         
         getModelMatrix(){
             if( this.dirty ){
-                //@ts-ignore
-                this.modelMatrix = mult(translate(this.position), scalem(this.size, this.size, this.size));  
+
+                this.modelMatrix = Util.createModelMatrix(
+                    this.position,
+                    [this.size, this.size, this.size],
+                    [0, 0, 0]
+                );
                 this.dirty = true;
             }   
             return this.modelMatrix;              
@@ -149,6 +152,9 @@ namespace Sheet4 {
             vertexList.push(coloredVertices);
             vertexList.compress();
             this.vertices = vertexList.getData();
+
+
+            console.log(this.vertices.byteLength);
         }
 
 

@@ -3,7 +3,7 @@ namespace Sheet5.Part3 {
 
     declare var gl;
     declare var rotateCamera: boolean;
-    declare var camera: PerspectiveCamera;
+    declare var camera: Util.OrbitalCamera;
     declare var previousTime: number;   
     declare var renderer: ModelRenderer;
     declare var model: Model;
@@ -22,7 +22,7 @@ namespace Sheet5.Part3 {
         
         rotateCamera = false;
 
-        camera = new PerspectiveCamera(CANVAS_SIZE, [0, 10.0, 6], [0,2.5,0], 45);
+        camera = new Util.OrbitalCamera(CANVAS_SIZE, [0, 2.5, 0], 45, 8, 0, 0);
 
         renderer = new ModelRenderer(gl);
 
@@ -45,9 +45,9 @@ namespace Sheet5.Part3 {
         // Camera height (lookat eye y component)
         let cameraSlider = <HTMLInputElement>document.getElementById("camera-height");
         cameraSlider.oninput =  (e) => {
-            camera.setY(cameraSlider.valueAsNumber);
+            camera.setVerticalRotation(cameraSlider.valueAsNumber);
         };
-        camera.setY(cameraSlider.valueAsNumber);
+        camera.setVerticalRotation(cameraSlider.valueAsNumber);
                    
     }
 
@@ -59,7 +59,7 @@ namespace Sheet5.Part3 {
         previousTime = currentTime;
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        if( rotateCamera ) camera.rotateY((-Math.PI/3) * timeStep);
+        if( rotateCamera ) camera.adjustHorizontalRotation( -60 * timeStep);
 
         // Render model
         if( model != null )

@@ -7,8 +7,6 @@ var Sheet4;
          */
         constructor(pos, size, subdivisionLevel, color = null) {
             this.vertices = null;
-            //@ts-ignore
-            this.modelMatrix = mat4();
             this.dirty = true;
             this.position = pos;
             this.size = size;
@@ -27,8 +25,7 @@ var Sheet4;
         }
         getModelMatrix() {
             if (this.dirty) {
-                //@ts-ignore
-                this.modelMatrix = mult(translate(this.position), scalem(this.size, this.size, this.size));
+                this.modelMatrix = Util.createModelMatrix(this.position, [this.size, this.size, this.size], [0, 0, 0]);
                 this.dirty = true;
             }
             return this.modelMatrix;
@@ -104,6 +101,7 @@ var Sheet4;
             vertexList.push(coloredVertices);
             vertexList.compress();
             this.vertices = vertexList.getData();
+            console.log(this.vertices.byteLength);
         }
     }
     Sheet4.Sphere = Sphere;

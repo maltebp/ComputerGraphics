@@ -4,7 +4,7 @@ namespace Sheet4.Part2 {
     declare var gl;
     declare var sphereRenderer: SphereRenderer;
     declare var rotateCamera: boolean;
-    declare var camera: PerspectiveCamera;
+    declare var camera: Util.OrbitalCamera;
     declare var sphere: Sphere;
     declare var previousTime: number;
 
@@ -25,7 +25,7 @@ namespace Sheet4.Part2 {
         // FPS
         FPS.textElement = <HTMLParagraphElement> document.getElementById("fps-text");
         
-        camera = new PerspectiveCamera(CANVAS_SIZE, [0, 0, -150], [0,0,0], 45);
+        camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 150, 0, 0 );
 
         // Camera Rotation Check box
         document.getElementById("rotate_camera").onchange =  (e) => {
@@ -35,9 +35,9 @@ namespace Sheet4.Part2 {
         // Camera height (lookat eye y component)
         let cameraSlider = <HTMLInputElement>document.getElementById("camera-height");
         cameraSlider.oninput =  (e) => {
-            camera.setY(cameraSlider.valueAsNumber);
+            camera.setVerticalRotation(cameraSlider.valueAsNumber);
         };
-        camera.setY(cameraSlider.valueAsNumber);
+        camera.setVerticalRotation(cameraSlider.valueAsNumber);
         
         // Sub division
         let subdivisionsSlider = <HTMLInputElement>document.getElementById("subdivisions");
@@ -59,7 +59,7 @@ namespace Sheet4.Part2 {
         previousTime = currentTime;
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        if( rotateCamera ) camera.rotateY((-Math.PI/3) * timeStep);
+        if( rotateCamera ) camera.adjustHorizontalRotation(-60 * timeStep);
 
         sphereRenderer.draw(camera);
         FPS.registerFrame();

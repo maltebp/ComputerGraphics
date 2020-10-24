@@ -16,7 +16,7 @@ namespace Sheet5.Part3 {
         }
 
     
-        draw(camera: LookAtCamera, model: Model){
+        draw(camera: Util.OrbitalCamera, model: Model){
             this.shader.bind();
 
             this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());

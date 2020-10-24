@@ -4,7 +4,7 @@ namespace Sheet5.Part4 {
 
     declare var rotateCamera: boolean;
     declare var rotateLight: boolean;
-    declare var camera: PerspectiveCamera;
+    declare var camera: Util.OrbitalCamera;
     
     declare var lightDirection: number[];
     
@@ -24,7 +24,6 @@ namespace Sheet5.Part4 {
         gl.enable(gl.CULL_FACE);
         gl.clearColor(0.3921, 0.5843, 0.9294, 1.0); 
         
-        camera = new PerspectiveCamera(CANVAS_SIZE, [0, 0, -150], [0,0,0], 45);
 
         lightDirection = [1.0, 0, 0, 0];
 
@@ -33,7 +32,7 @@ namespace Sheet5.Part4 {
         rotateCamera = false;
         rotateLight = false;
 
-        camera = new PerspectiveCamera(CANVAS_SIZE, [0, 10.0, 6], [0,2.5,0], 45);
+        camera = new Util.OrbitalCamera(CANVAS_SIZE, [0, 2.5, 0], 45, 8, 0, 0);
 
         renderer = new ModelRenderer(gl);
 
@@ -61,9 +60,9 @@ namespace Sheet5.Part4 {
         // Camera height (lookat eye y component)
         let cameraSlider = <HTMLInputElement>document.getElementById("camera-height");
         cameraSlider.oninput =  (e) => {
-            camera.setY(cameraSlider.valueAsNumber);
+            camera.setVerticalRotation(cameraSlider.valueAsNumber);
         };
-        camera.setY(cameraSlider.valueAsNumber);
+        camera.setVerticalRotation(cameraSlider.valueAsNumber);
 
         // Material sliders
         let materialAmbientSlider = <HTMLInputElement>document.getElementById("mat-slider-ambient");
@@ -94,7 +93,7 @@ namespace Sheet5.Part4 {
         previousTime = currentTime;
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        if( rotateCamera ) camera.rotateY((-Math.PI/3) * timeStep);
+        if( rotateCamera ) camera.adjustHorizontalRotation(-60 * timeStep);
 
         // @ts-ignore
         if( rotateLight ) lightDirection = mult(rotateY(-60 * timeStep), lightDirection);

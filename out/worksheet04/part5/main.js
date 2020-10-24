@@ -9,7 +9,7 @@ var Sheet4;
             gl.enable(gl.DEPTH_TEST);
             gl.enable(gl.CULL_FACE);
             gl.clearColor(0.3921, 0.5843, 0.9294, 1.0);
-            camera = new Sheet4.PerspectiveCamera(CANVAS_SIZE, [0, 0, -150], [0, 0, 0], 45);
+            camera = new Util.OrbitalCamera(CANVAS_SIZE, [0, 0, 0], 45, 150, 0, 0);
             lightDirection = [1.0, 0, 0, 0];
             previousTime = Date.now();
             rotateCamera = false;
@@ -27,9 +27,9 @@ var Sheet4;
             // Camera height (lookat eye y component)
             let cameraSlider = document.getElementById("camera-height");
             cameraSlider.oninput = (e) => {
-                camera.setY(cameraSlider.valueAsNumber);
+                camera.setVerticalRotation(cameraSlider.valueAsNumber);
             };
-            camera.setY(cameraSlider.valueAsNumber);
+            camera.setVerticalRotation(cameraSlider.valueAsNumber);
             // Cube size slider
             let subdivisionsSlider = document.getElementById("subdivisions");
             subdivisionsSlider.oninput = (e) => {
@@ -58,7 +58,7 @@ var Sheet4;
             previousTime = currentTime;
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
             if (rotateCamera)
-                camera.rotateY((-Math.PI / 3) * timeStep);
+                camera.adjustHorizontalRotation(-60 * timeStep);
             // @ts-ignore
             if (rotateLight)
                 lightDirection = mult(rotateY(-60 * timeStep), lightDirection);

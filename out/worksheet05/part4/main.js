@@ -9,12 +9,11 @@ var Sheet5;
             gl.enable(gl.DEPTH_TEST);
             gl.enable(gl.CULL_FACE);
             gl.clearColor(0.3921, 0.5843, 0.9294, 1.0);
-            camera = new Sheet5.PerspectiveCamera(CANVAS_SIZE, [0, 0, -150], [0, 0, 0], 45);
             lightDirection = [1.0, 0, 0, 0];
             previousTime = Date.now();
             rotateCamera = false;
             rotateLight = false;
-            camera = new Sheet5.PerspectiveCamera(CANVAS_SIZE, [0, 10.0, 6], [0, 2.5, 0], 45);
+            camera = new Util.OrbitalCamera(CANVAS_SIZE, [0, 2.5, 0], 45, 8, 0, 0);
             renderer = new Part4.ModelRenderer(gl);
             // Load Model
             model = null;
@@ -35,9 +34,9 @@ var Sheet5;
             // Camera height (lookat eye y component)
             let cameraSlider = document.getElementById("camera-height");
             cameraSlider.oninput = (e) => {
-                camera.setY(cameraSlider.valueAsNumber);
+                camera.setVerticalRotation(cameraSlider.valueAsNumber);
             };
-            camera.setY(cameraSlider.valueAsNumber);
+            camera.setVerticalRotation(cameraSlider.valueAsNumber);
             // Material sliders
             let materialAmbientSlider = document.getElementById("mat-slider-ambient");
             let materialDiffuseSlider = document.getElementById("mat-slider-diffuse");
@@ -58,7 +57,7 @@ var Sheet5;
             previousTime = currentTime;
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
             if (rotateCamera)
-                camera.rotateY((-Math.PI / 3) * timeStep);
+                camera.adjustHorizontalRotation(-60 * timeStep);
             // @ts-ignore
             if (rotateLight)
                 lightDirection = mult(rotateY(-60 * timeStep), lightDirection);
