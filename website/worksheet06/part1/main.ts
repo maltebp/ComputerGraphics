@@ -96,7 +96,7 @@ namespace Sheet6.Part1 {
 
         renderer.drawQuad(camera,
             // 40x40 quad laying flat on the xz plane 
-            [0, 0, 0], 80, 80, [90, 0, 0]
+            [0, 0, 0], 100, 500, [90, 0, 0]
         );
 
         FPS.registerFrame();

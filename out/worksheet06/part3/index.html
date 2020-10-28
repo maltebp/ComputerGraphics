@@ -86,22 +86,6 @@
                     <input type="checkbox" id="globe-rotate" name="rotate"> Rotate<br>
                 </td></tr>
 
-                
-                <tr class="toolbox-row"><td>
-                    <b>Minification filter</b><br>
-                    <input id="minfilter-mode-nearest" type="radio" name="min-filter-mode-group" checked> Nearest <br>
-                    <input id="minfilter-mode-linear" type="radio" name="min-filter-mode-group"> Linear <br>
-                    <input id="minfilter-mode-mipmap-n-l" type="radio" name="min-filter-mode-group"> Linear mipmap, nearest pixel <br>
-                    <input id="minfilter-mode-mipmap-l-l" type="radio" name="min-filter-mode-group"> Linear mipmap, linear pixel <br>
-                    <input id="minfilter-mode-mipmap-n-n" type="radio" name="min-filter-mode-group"> Nearest mipmap, nearest pixel <br>
-                    <input id="minfilter-mode-mipmap-l-n" type="radio" name="min-filter-mode-group"> Nearest mipmap, linear pixel <br>
-                </td></tr>
-
-                <tr class="toolbox-row"><td>
-                    <b>Magnification filter</b><br>
-                    <input id="magfilter-mode-nearest" type="radio" name="mag-filter-mode-group" checked> Nearest <br>
-                    <input id="magfilter-mode-linear" type="radio" name="mag-filter-mode-group"> Linear <br>
-                </td></tr>
             </table></td>
         </tr>
     </table>
@@ -111,8 +95,7 @@
     
     <div class="seperator"></div>
     <p class="description">
-        A subdivided sphere, where each fragment color is determined by its normal.<br>
-        The sphere is lit up with a directional light, and an ambient light. The intensity of each determined by lightness of the color (grey is less intense than white).
+        The texture filter used is LINEAR_MIPMAP_LINEAR for minification and LINEAR for magnification. I've chosen a full linear model due the color variance of the texture image. The linear texel filtering allows for smoother transistions during rotation (no flickering), and smoother texture when scaling. The linear mipmap lookup makes the texture quality "jump" less when zooming in and out.
     </p>
 
     <script src="Sphere.js"></script>

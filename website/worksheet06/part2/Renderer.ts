@@ -20,12 +20,12 @@ namespace Sheet6.Part2 {
             this.vertexBuffer.addAttribute("a_TextureCoordinates", 2);
             this.vertexBuffer.push([
                 // Pos         // Texture Coordinate
-                -0.5, -0.5,     -2,  -2,        
-                 0.5, -0.5,      2,  -2,
-                -0.5,  0.5,     -2,   2,
-                -0.5,  0.5,     -2,   2,
-                 0.5, -0.5,      2,  -2,
-                 0.5,  0.5,      2,   2
+                -0.5, -0.5,     -2,  -10,        
+                 0.5, -0.5,      2,  -10,
+                -0.5,  0.5,     -2,   10,
+                -0.5,  0.5,     -2,   10,
+                 0.5, -0.5,      2,  -10,
+                 0.5,  0.5,      2,   10
             ]); 
         }
 

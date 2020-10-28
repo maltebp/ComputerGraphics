@@ -52,7 +52,6 @@ void main() {
     vec3 finalColor = specular + diffuse + ambience;
 
 
-
     vec4 position = u_ViewProjection * modelPos;
     gl_Position = position;  
 
