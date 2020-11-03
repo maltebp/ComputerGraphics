@@ -1,5 +1,6 @@
 precision mediump float;
 
+
 uniform samplerCube u_TextureSampler;
 varying vec3 o_TextureCoordinates;
 

@@ -5,17 +5,7 @@
 Questions:
     
 
-    General: 
-        ☐ Is it okay that the source code is not uploaded to the website?  
-        ☐ How should you calculate the ambient color? Because if the base is red, then it can never be lit by something blue
-    
-    Sheet 3:
-        ☐ Can I draw the cubes in seperate canvases?
-
-    Sheet 4: 
-        ☐ Is the Phong highlight okay? Looks a bit weird?    
-        ☐ Is the Phong shading okay? Looks a bit weird?
-
-    Sheet 6:
-        ☐ Har ikke brugt de helt korrekte texture coordinates 
-        ☐ Hvorfor virker mine mipmaps ikke?
+    Sheet 7:
+        ☐ Ser min reflection rigtig ud i part3? Synes den ser lidt funky ud
+        ☐ Hvad er der galt med min depth?
+        ☐ Skal reflection være i vertex eller fragment shader?

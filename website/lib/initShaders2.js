@@ -35,6 +35,7 @@
 
         if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
             alert("Could not initialise shaders");
+            alert(gl.getProgramInfoLog(program)); // I inserted this (Malte)
             return null;
         }
 
