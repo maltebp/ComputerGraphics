@@ -1,5 +1,5 @@
 
-namespace Sheet7.Part3  {
+namespace Sheet7.Part3 {
     declare var gl: WebGLRenderingContext;
 
     declare var sphere: Sphere;
@@ -127,7 +127,7 @@ namespace Sheet7.Part3  {
     }
 }
 
-Sheet7.Part2.start();
+Sheet7.Part3.start();
 
 
 

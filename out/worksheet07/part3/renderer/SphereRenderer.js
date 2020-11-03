@@ -22,12 +22,10 @@ var Sheet7;
             }
             draw(camera) {
                 this.shader.bind();
-                // this.shader.setFloatVector3("u_ViewPosition", (<Util.OrbitalCamera>camera).getPosition() );
                 this.shader.setInteger("u_TextureSampler", 0);
                 this.drawBackground(camera);
-                // this.shader.setInteger("u_Reflective", 1);
-                this.shader.bind();
-                this.shader.setInteger("u_TextureSampler", 0);
+                this.shader.setInteger("u_Reflection", 1);
+                this.shader.setFloatVector3("u_ViewPosition", camera.getPosition());
                 this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());
                 this.shader.setFloatMatrix4("u_Model", this.sphere.getModelMatrix());
                 // @ts-ignore
@@ -37,7 +35,7 @@ var Sheet7;
             }
             drawBackground(camera) {
                 this.gl.depthMask(false);
-                // this.shader.setInteger("u_Reflective", 0);
+                this.shader.setInteger("u_Reflection", 0);
                 // @ts-ignore
                 this.shader.setFloatMatrix4("u_ViewProjection", flatten(mat4()));
                 // @ts-ignore
