@@ -152,9 +152,12 @@ var Util;
             this.setHorizontalRotation(this.horizontalRotation + rotation);
         }
         getPosition() {
-            if (this.dirty)
-                this.createViewMatrix();
+            this.clean();
             return this.position;
+        }
+        getDirection() {
+            this.clean();
+            return this.direction;
         }
         createViewMatrix() {
             // Change up vector to upside down if on the "other side" of the orbit target
@@ -171,6 +174,8 @@ var Util;
             this.position[0] += this.target[0];
             this.position[1] += this.target[1];
             this.position[2] += this.target[2];
+            // @ts-ignore
+            this.direction = normalize(subtract(this.target, this.position));
             // @ts-ignore
             this.viewMatrix = lookAt(this.position, this.target, upVector);
         }

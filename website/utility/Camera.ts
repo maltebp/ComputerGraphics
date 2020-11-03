@@ -18,7 +18,7 @@ namespace Util {
         protected abstract createProjectionMatrix();
 
 
-        private clean(){
+        protected clean(){
             if( !this.dirty ) return;
 
             this.createViewMatrix();
@@ -171,6 +171,7 @@ namespace Util {
         protected horizontalRotation: number;
         protected verticalRotation: number;
         protected position: number[];
+        protected direction: number[];
 
         constructor(screenSize: number[], target: number[], fov: number, distance: number, horizontalRotation: number, verticalRotation: number ){
             super();
@@ -220,8 +221,13 @@ namespace Util {
 
 
         getPosition(){
-            if( this.dirty ) this.createViewMatrix();
+            this.clean();
             return this.position;
+        }
+
+        getDirection(){
+            this.clean();
+            return this.direction;
         }
 
         createViewMatrix() {
@@ -243,6 +249,9 @@ namespace Util {
             this.position[0] += this.target[0];
             this.position[1] += this.target[1];
             this.position[2] += this.target[2];
+
+            // @ts-ignore
+            this.direction = normalize(subtract(this.target, this.position));
 
             // @ts-ignore
             this.viewMatrix = lookAt( this.position, this.target, upVector );
