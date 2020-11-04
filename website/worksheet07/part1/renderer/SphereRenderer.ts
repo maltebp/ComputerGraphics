@@ -4,15 +4,10 @@ namespace Sheet7.Part1 {
 
     export class SphereRenderer {
 
-        private gl;
+        private gl: WebGLRenderingContext;
         private vertexBuffer: Util.VertexBuffer;
         private backgroundVertices: Util.VertexBuffer;
         private shader: Util.ShaderProgram;
-
-        private lightDirection: number[] = null;
-        private lightColor: number[] = null;
-
-        private ambientColor: number[] = [0.20,0.20,0.20];
 
         private sphere: Sphere = null;
         
@@ -24,19 +19,17 @@ namespace Sheet7.Part1 {
     
             this.vertexBuffer = new Util.VertexBuffer(gl, 50000);
             this.vertexBuffer.addAttribute("a_Position", 3);
-            this.vertexBuffer.addAttribute("a_Color", 4);
 
             this.backgroundVertices = new Util.VertexBuffer(gl);
             this.backgroundVertices.addAttribute("a_Position", 3);
-            this.backgroundVertices.addAttribute("a_Color", 4); // TODO: REMOVE THIS
 
             this.backgroundVertices.push(
-                -1,  1, 0.999, 0, 0, 0, 0,
-                -1, -1, 0.999, 0, 0, 0, 0,
-                 1, -1, 0.999, 0, 0, 0, 0,
-                -1,  1, 0.999, 0, 0, 0, 0,
-                 1, -1, 0.999, 0, 0, 0, 0,
-                 1,  1, 0.999, 0, 0, 0, 0,
+                -1,  1, -0.999,
+                -1, -1, -0.999,
+                 1, -1, -0.999,
+                -1,  1, -0.999,
+                 1, -1, -0.999,
+                 1,  1, -0.999,
             );
 
             
@@ -44,16 +37,6 @@ namespace Sheet7.Part1 {
             this.shader = new Util.ShaderProgram(gl, "renderer/vertex.glsl", "renderer/fragment.glsl");
         }
 
-
-        setDirectionalLight(direction: number[], color: number[] ){
-            this.lightDirection = direction;
-            this.lightColor = color;
-        }
-
-
-        setAmbientColor( color: number[] ){
-            this.ambientColor = color;
-        }
 
 
         setSphere(sphere: Sphere){
@@ -64,79 +47,16 @@ namespace Sheet7.Part1 {
     
     
         draw(camera: Util.Camera){
-            this.drawBackground(camera);
-
-            // this.shader.bind();
-
-            // this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());
-            // this.shader.setFloatMatrix4("u_Model", this.sphere.getModelMatrix());
-
-            // if( this.lightDirection != null ){
-            //     this.shader.setFloatVector3("u_LightDirection", this.lightDirection);
-            //     this.shader.setFloatVector3("u_LightEmission", this.lightColor);
-            // }
-            // this.shader.setFloatVector3("u_AmbientEmission", this.ambientColor);
-
-            // this.shader.setInteger("u_TextureSampler", 0);
-
-            // this.vertexBuffer.bind();
-    
-            // this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());
-        }
-
-
-
-
-
-
-        private drawBackground(camera: Util.Camera){
-
             this.shader.bind();
-
-            // @ts-ignore
-            this.shader.setFloatMatrix4("u_ViewProjection", flatten(mat4()));
-
-            // @ts-ignore
-            this.shader.setFloatMatrix4("u_Model", flatten(mat4()));
-
-            if( this.lightDirection != null ){
-                this.shader.setFloatVector3("u_LightDirection", this.lightDirection);
-
-                // @ts-ignore
-                this.shader.setFloatVector3("u_LightEmission", flatten(vec3(0,0,0)));
-                // Remove light emission oon background        
-            }
-
-            // @ts-ignore
-            this.shader.setFloatVector3("u_AmbientEmission", flatten(vec3(0,0,0)));
-           
-            // @ts-ignore
-            let reversedViewMatrix = inverse4(camera.getViewMatrix);
-
-            // @ts-ignore
-            reversedViewMatrix = mat4(
-                reversedViewMatrix[0][0], reversedViewMatrix[0][1], reversedViewMatrix[0][2], 0,
-                reversedViewMatrix[1][0], reversedViewMatrix[1][1], reversedViewMatrix[1][2], 0,
-                reversedViewMatrix[2][0], reversedViewMatrix[2][1], reversedViewMatrix[2][2], 0,
-                               0,                0,                0,                         0,
-            );
-
-            // @ts-ignore
-            let textureMatrix = mult(
-                reversedViewMatrix,
-                // @ts-ignore
-                inverse4(camera.getProjectionMatrix)
-            );
-
-            // @ts-ignore
-            this.shader.setFloatMatrix4("u_TextureMatrix", flatten(textureMatrix));
-
+            
             this.shader.setInteger("u_TextureSampler", 0);
+
+            this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());
+            this.shader.setFloatMatrix4("u_Model", this.sphere.getModelMatrix());
 
             this.vertexBuffer.bind();
     
-            this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
-
+            this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());
         }
     }
 }

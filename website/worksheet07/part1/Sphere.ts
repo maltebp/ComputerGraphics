@@ -123,41 +123,8 @@ namespace Sheet7.Part1 {
                 currentVertices = newVertices;
             }
 
-
-            // Add Colors
-            var coloredVertices = [];
-
-            // For each triangle...
-            for( var triangleIndex=0; triangleIndex < currentVertices.length; triangleIndex += 3 ){
-                    
-                let vertex1 = currentVertices[triangleIndex+0]; 
-                let vertex2 = currentVertices[triangleIndex+1]; 
-                let vertex3 = currentVertices[triangleIndex+2]; 
-                
-
-                var triangleColor = this.color;
-                if( triangleColor == null ){
-                    // This color calculation is damn slow
-
-                    // Build color as the surface normal of the triangle
-                    // @ts-ignore
-                    let edge1 = subtract(vertex2, vertex1);
-                    // @ts-ignore
-                    let edge2 = subtract(vertex3, vertex1);
-                    // @ts-ignore
-                    triangleColor = scale(0.5, add(vec4(1.0, 1.0, 1.0, 1.0), vec4( normalize( cross(edge1, edge2)))));
-                    
-                }
-                
-                coloredVertices.push(
-                    vertex1, triangleColor,
-                    vertex2, triangleColor,
-                    vertex3, triangleColor,
-                )
-            }
-
             var vertexList = new Util.FloatArrayList();
-            vertexList.push(coloredVertices);
+            vertexList.push(currentVertices);
             vertexList.compress();
             this.vertices = vertexList.getData();
 

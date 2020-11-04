@@ -8,8 +8,6 @@ namespace Sheet7.Part1 {
     declare var rotateGlobe: boolean;
     declare var camera: Util.OrbitalCamera;
 
-    declare var lightDirection: number[];
-
     declare var previousTime: number;
 
     declare var texture;
@@ -25,9 +23,7 @@ namespace Sheet7.Part1 {
         gl.enable(gl.CULL_FACE);
         gl.clearColor(0, 0.0, 0.0, 1.0); 
         
-        camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 150, 0, 0 );
-
-        lightDirection = [1.0, 0, -1.0, 0];
+        camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 90, 150, 0, 0 );
 
         previousTime = Date.now();
         
@@ -40,12 +36,7 @@ namespace Sheet7.Part1 {
         // Globe Rotation Check box
         document.getElementById("globe-rotate").onchange =  (e) => {
             rotateGlobe = !rotateGlobe;
-        };
-
-        // Light Rotation Check box
-        document.getElementById("rotate_light").onchange =  (e) => {
-            rotateLight = !rotateLight;
-        };        
+        };       
 
         // Camera Zoom
         let cameraDistanceSlider = <HTMLInputElement> document.getElementById("camera-distance");
@@ -118,25 +109,12 @@ namespace Sheet7.Part1 {
 
         FPS.registerFrame();
 
-
-        // if( !textureLoaded ){
-        //     requestAnimationFrame(update);
-        //     return;
-        // }
-
-        // @ts-ignore
-        if( rotateLight ) lightDirection = mult(rotateY(-60 * timeStep), lightDirection);
+        if( textureLoadCount < 6 ){
+            requestAnimationFrame(update);
+            return;
+        }
 
         if( rotateGlobe ) sphere.rotateY(-30 * timeStep);
-
-        var lightColor = Util.hexToRgb((<HTMLInputElement>document.getElementById("directional-light-color")).value);
-        sphereRenderer.setDirectionalLight(
-            lightDirection.slice(0, 3),
-            [lightColor.r/255, lightColor.g/255, lightColor.b/255]
-        );
-
-        var ambientColor = Util.hexToRgb((<HTMLInputElement> document.getElementById("ambient-color")).value);
-        sphereRenderer.setAmbientColor([ambientColor.r/255, ambientColor.g/255, ambientColor.b/255]);
 
         sphereRenderer.draw(camera);
         requestAnimationFrame(update);

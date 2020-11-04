@@ -11,9 +11,7 @@ uniform mat4 u_TextureMatrix;
 uniform mediump int u_Reflection;
 uniform vec3 u_ViewPosition;
 
-
 attribute vec3 a_Position;
-
 
 varying vec3 o_SurfaceNormal;
 varying vec3 o_TextureCoordinates;
@@ -34,14 +32,18 @@ void main() {
     vec4 modelPos = u_Model * vec4(a_Position, 1.0); 
 
     if( u_Reflection == 1  ){
-        vec3 incident = modelPos.xyz - u_ViewPosition;
-        vec3 surfaceNormal = normalize(modelPos.xyz);
 
+        // Computing the normal from the map
+        vec3 surfaceNormal = normalize(a_Position);
         float u = 1.0 - atan(surfaceNormal.z, surfaceNormal.x)/(2.0 * PI);
         float v = acos(surfaceNormal.y)/(PI);
-        
         vec3 mappedNormal = rotate_to_normal(surfaceNormal, texture2D(u_NormalMap, vec2(u, v)).xyz*2.0 - vec3(1,1,1)); 
-        o_TextureCoordinates = reflect(incident, mappedNormal);
+        
+        // Rotate the normal 
+        vec3 rotatedScaledNormal = normalize(u_Model * vec4(mappedNormal.xyz, 0.0)).xyz;
+
+        vec3 incident = modelPos.xyz - u_ViewPosition;
+        o_TextureCoordinates = reflect(incident, rotatedScaledNormal);
     }else{
         o_TextureCoordinates = (u_TextureMatrix * modelPos).xyz;
     }
