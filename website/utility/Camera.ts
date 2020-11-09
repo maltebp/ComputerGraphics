@@ -160,7 +160,7 @@ namespace Util {
      * Perspective camera which has a target view point, and spherical position in relation to that point.
      * The spherical position consists of a distance, vertical rotation (polar) and a horizontal rotation (azimuth)
      * 
-     * With a rotation of (0,0) it looks down the positive z-axis.
+     * With a rotation of (0,0) it looks down the z-axis in the negative direction.
      */
     export class OrbitalCamera extends Camera {
         
@@ -235,12 +235,12 @@ namespace Util {
             // Change up vector to upside down if on the "other side" of the orbit target
             var upVector = this.verticalRotation <= 90 || this.verticalRotation >= 270 ? [0, 1, 0] : [0, -1, 0];
 
-            let vAngleRadians = (this.verticalRotation / 180) * Math.PI - Math.PI/2;
-            let hAngleRadians = (this.horizontalRotation / 180) * Math.PI - Math.PI/2;
+            let vAngleRadians = ((-this.verticalRotation+90) / 180) * Math.PI;
+            let hAngleRadians = ((this.horizontalRotation+90) / 180) * Math.PI;
 
             // Spherical to cartesian
             this.position = [
-                this.distance * Math.sin(vAngleRadians) * Math.cos(hAngleRadians),
+                -this.distance * Math.sin(vAngleRadians) * Math.cos(hAngleRadians),
                 this.distance * Math.cos(vAngleRadians),
                 this.distance * Math.sin(vAngleRadians) * Math.sin(hAngleRadians)
             ];

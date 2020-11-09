@@ -480,7 +480,7 @@ function ortho( left, right, bottom, top, near, far )
     var h = top - bottom;
     var d = far - near;
 
-    var result = mat4();
+    var result = mat4();    
     result[0][0] = 2.0 / w;
     result[1][1] = 2.0 / h;
     result[2][2] = -2.0 / d;

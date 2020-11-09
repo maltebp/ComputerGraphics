@@ -6,6 +6,9 @@ Questions:
     
 
     Sheet 7:
-        ☐ Ser min reflection rigtig ud i part3? Synes den ser lidt funky ud
+        ✔ Ser min reflection rigtig ud i part3? Synes den ser lidt funky ud
         ☐ Hvad er der galt med min depth?
-        ☐ Skal reflection være i vertex eller fragment shader?
+        ✔ Skal reflection være i vertex eller fragment shader?
+
+    Sheet 8:
+        ☐ Er det okay, at jeg ikke bruger de præcis koordinater, men bare sikrer at der ser nognelunde ens ud?

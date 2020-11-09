@@ -50,13 +50,14 @@
                     <b>Camera</b><br><br>
                     
                     <br>Distance<br>
-                    <input id="camera-distance" class="slider" type="range" min="51" max="300" value="150">
+                    <input id="camera-distance" class="slider" type="range" min="25" max="600" value="350">
 
                     <br>Horizontal angle<br>
-                    <input id="camera-horizontal" class="slider" type="range" min="-180" max="180" value="0">
+                    <input id="camera-horizontal" class="slider" type="range" min="-360" max="360" value="0">
 
                     <br>Vertical angle<br>
-                    <input id="camera-vertical" class="slider" type="range" min="-89" max="89" value="0">
+                    <input id="camera-vertical" class="slider" type="range" min="-89" max="89" value="20">
+
                 </td></tr>
             </table></td>
 
@@ -66,12 +67,6 @@
             
             <!-- Right toolbox -->
             <td><table class="toolbox">
-
-                <!-- Globe rotation -->
-                <tr class="toolbox-row"><td>
-                    <b>Globe</b><br><br>
-                    <input type="checkbox" id="globe-rotate" name="rotate"> Rotate<br>
-                </td></tr>
 
             </table></td>
         </tr>
@@ -85,8 +80,8 @@
         
     </p>
 
-    <script src="Sphere.js"></script>
-    <script src="renderer/SphereRenderer.js"></script>
+    <script src="../Quad.js"></script>
+    <script src="QuadRenderer.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
