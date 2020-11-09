@@ -1,13 +1,16 @@
 
-namespace Sheet8.Part1 {
+namespace Sheet8.Part2 {
     declare var gl: WebGLRenderingContext;
 
     declare var camera: Util.OrbitalCamera;
     declare var renderer: QuadRenderer;
+    declare var texturesLoaded: boolean;
+
+    declare var lightPosition: number[];
+    declare var lightRotate: boolean;
 
     declare var previousTime: number;
 
-    declare var texturesLoaded: boolean;
     
     function setup(){
 
@@ -22,6 +25,7 @@ namespace Sheet8.Part1 {
 
         previousTime = Date.now();
         
+       
 
         // FPS
         FPS.textElement = <HTMLParagraphElement> document.getElementById("fps-text");   
@@ -47,10 +51,19 @@ namespace Sheet8.Part1 {
         };
         camera.setVerticalRotation(cameraVerticalSlider.valueAsNumber);   
 
+
+         // Setting initial light position
+         lightPosition = [40, 100, 0, 1];
+         lightRotate = false;
+         // Light Rotation Check box
+         document.getElementById("light-rotate").onchange =  (e) => {
+             lightRotate = !lightRotate;
+         };  
+
         renderer = new QuadRenderer(gl);
         
         // Ground quad
-        renderer.addQuad(new Quad(
+        renderer.setGroundPlane(new Quad(
             [0,0,0], // Position
             [
                 // Corners
@@ -77,11 +90,11 @@ namespace Sheet8.Part1 {
         renderer.addQuad(new Quad(
             [-75, 0, 0 ], // Position
             [
-                 // Corners
-                 [0,   0, -25],
-                 [0,  50, -25],
-                 [0,  50,  25],
-                 [0,   0,  25]
+                // Corners
+                [0,   0, -25],
+                [0,  50, -25],
+                [0,  50,  25],
+                [0,   0,  25]
             ], 1 // Texture index
         )); 
 
@@ -141,6 +154,12 @@ namespace Sheet8.Part1 {
 
         FPS.registerFrame();
 
+        if( lightRotate )
+            // @ts-ignore
+            lightPosition = mult(rotateY(-60 * timeStep), lightPosition);      
+
+        renderer.setLightPosition(lightPosition.slice(0, 4));
+
         if( texturesLoaded )
             renderer.draw(camera);
 
@@ -154,7 +173,7 @@ namespace Sheet8.Part1 {
     }
 }
 
-Sheet8.Part1.start();
+Sheet8.Part2.start();
 
 
 

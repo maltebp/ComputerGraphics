@@ -1,6 +1,6 @@
 
 
-namespace Sheet8.Part1 {
+namespace Sheet8 {
     
     export class Quad {
         private position: number[];
