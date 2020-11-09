@@ -13,7 +13,7 @@ namespace Util {
             document.getElementById(parent).appendChild(canvas);
 
         // @ts-ignore
-        var gl = WebGLUtils.setupWebGL(canvas);
+        var gl = WebGLUtils.setupWebGL(canvas, { alpha: false });
 
         return gl;
     }
@@ -25,7 +25,7 @@ namespace Util {
         canvas.height = height;
 
         // @ts-ignore
-        var gl = WebGLUtils.setupWebGL(canvas);
+        var gl = WebGLUtils.setupWebGL(canvas, { alpha: false });
 
         return gl;
     }
