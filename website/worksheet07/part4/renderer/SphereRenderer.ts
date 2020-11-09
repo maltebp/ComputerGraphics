@@ -24,12 +24,12 @@ namespace Sheet7.Part4 {
             this.backgroundVertices.addAttribute("a_Position", 3);
 
             this.backgroundVertices.push(
-                -1,  1, -0.999,
-                -1, -1, -0.999,
-                 1, -1, -0.999,
-                -1,  1, -0.999,
-                 1, -1, -0.999,
-                 1,  1, -0.999,
+                -1,  1, 0.999,
+                -1, -1, 0.999,
+                 1, -1, 0.999,
+                -1,  1, 0.999,
+                 1, -1, 0.999,
+                 1,  1, 0.999,
             );
 
             this.shader = new Util.ShaderProgram(gl, "renderer/vertex.glsl", "renderer/fragment.glsl");
@@ -67,9 +67,6 @@ namespace Sheet7.Part4 {
 
 
         private drawBackground(camera: Util.Camera){
-
-            this.gl.depthMask(false);
-
             this.shader.setInteger("u_Reflection", 0);
 
             // @ts-ignore
@@ -103,9 +100,6 @@ namespace Sheet7.Part4 {
             this.backgroundVertices.bind();
     
             this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
-
-            this.gl.depthMask(true);
-
         }
     }
 }

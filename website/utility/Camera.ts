@@ -245,7 +245,7 @@ namespace Util {
                 this.distance * Math.sin(vAngleRadians) * Math.sin(hAngleRadians)
             ];
 
-            // Translate origin
+            // Translate origin 
             this.position[0] += this.target[0];
             this.position[1] += this.target[1];
             this.position[2] += this.target[2];
@@ -260,7 +260,7 @@ namespace Util {
 
         createProjectionMatrix(){
             // @ts-ignore
-            this.projectionMatrix = perspective(this.fov, this.screenSize[0]/this.screenSize[1], 0.01, 10000);
+            this.projectionMatrix = perspective(this.fov, this.screenSize[0]/this.screenSize[1], 1, 10000);
         };
 
 

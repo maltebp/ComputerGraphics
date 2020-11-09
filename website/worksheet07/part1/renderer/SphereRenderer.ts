@@ -24,15 +24,13 @@ namespace Sheet7.Part1 {
             this.backgroundVertices.addAttribute("a_Position", 3);
 
             this.backgroundVertices.push(
-                -1,  1, -0.999,
-                -1, -1, -0.999,
-                 1, -1, -0.999,
-                -1,  1, -0.999,
-                 1, -1, -0.999,
-                 1,  1, -0.999,
+                -1,  1, 0.999,
+                -1, -1, 0.999,
+                 1, -1, 0.999,
+                -1,  1, 0.999,
+                 1, -1, 0.999,
+                 1,  1, 0.999,
             );
-
-            
         
             this.shader = new Util.ShaderProgram(gl, "renderer/vertex.glsl", "renderer/fragment.glsl");
         }
