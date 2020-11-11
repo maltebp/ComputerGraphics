@@ -17,4 +17,5 @@ void main(){
     else if ( adjustedTextureIndex == 1 ) {
         gl_FragColor = texture2D(u_TextureSampler1, o_TextureCoordinates);
     }
+    
 }
