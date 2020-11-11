@@ -10,7 +10,7 @@
 // OBJParser
 //------------------------------------------------------------------------------
 
-// OBJDoc object
+// OBJDoc 
 // Constructor
 var OBJDoc = function (fileName) {
   this.fileName = fileName;

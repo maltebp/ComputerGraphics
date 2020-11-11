@@ -3,12 +3,12 @@ namespace Sheet9.Part1 {
     declare var gl: WebGLRenderingContext;
 
     declare var camera: Util.OrbitalCamera;
-    // declare var renderer: QuadRenderer;
+    declare var modelRenderer: ModelRenderer;
     declare var groundRenderer: GroundRenderer;
 
     declare var previousTime: number;
 
-    declare var texturesLoaded: boolean;
+    declare var model;
     
     function setup(){
 
@@ -22,6 +22,18 @@ namespace Sheet9.Part1 {
         camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 0, 0, 0 ); // Distance value is unused, as its set below
 
         previousTime = Date.now();
+
+        // Load Model
+        model = null;
+        Util.loadObjFile("/models/teapot/teapot.obj", 1.0, false, (obj) => {
+            console.log(obj.getDrawingInfo());
+            model = new Model(gl, obj, [0,0,0], 25);
+        });
+
+        modelRenderer = new ModelRenderer(gl);
+        modelRenderer.setAmbientColor([0.40, 0.40, 0.40]);
+        modelRenderer.setMaterial(1.0, 1.0, 0.1, 1);
+        modelRenderer.setPointLight([100, 50, 100], [0.75, 0.75, 0.75]);
         
 
         // FPS
@@ -48,43 +60,6 @@ namespace Sheet9.Part1 {
         };
         camera.setVerticalRotation(cameraVerticalSlider.valueAsNumber);   
 
-        // renderer = new QuadRenderer(gl);
-        
-        // // Ground quad
-        // renderer.addQuad(new Quad(
-        //     [0,0,0], // Position
-        //     [
-        //         // Corners
-        //         [-150, 0, -150],
-        //         [ 150, 0, -150],
-        //         [ 150, 0,  150],
-        //         [-150, 0,  150]
-        //     ], 0 // Texture index
-        // ));
-
-        // // Parallel quad
-        // renderer.addQuad(new Quad(
-        //     [75, 5, -75 ], // Position
-        //     [
-        //         // Corners
-        //         [-25, 0, -25],
-        //         [ 25, 0, -25],
-        //         [ 25, 0,  25],
-        //         [-25, 0,  25]
-        //     ], 1 // Texture index
-        // ));
-
-        // // Perpendicular quad
-        // renderer.addQuad(new Quad(
-        //     [-75, 0, 0 ], // Position
-        //     [
-        //          // Corners
-        //          [0,   0, -25],
-        //          [0,  50, -25],
-        //          [0,  50,  25],
-        //          [0,   0,  25]
-        //     ], 1 // Texture index
-        // )); 
 
          // Loading xamp23.png
         groundRenderer = null;
@@ -144,6 +119,9 @@ namespace Sheet9.Part1 {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         FPS.registerFrame();
+
+        if( model != null )
+            modelRenderer.draw(camera, model);
 
         if( groundRenderer != null )
             groundRenderer.draw(camera);
