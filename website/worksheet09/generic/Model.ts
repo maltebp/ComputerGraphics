@@ -61,6 +61,18 @@ namespace Sheet9 {
             this.position = [x, y, z];
             this.dirty = true;
         }
+
+        setPositionY(y: number){
+            this.position[1] = y;
+            this.dirty = true;
+        }
+
+        adjustPosition(x: number, y: number, z: number){
+            this.position[0] += x;
+            this.position[1] += y;
+            this.position[2] += z;
+            this.dirty = true;
+        }
         
         getModelMatrix(){
             if( this.dirty ){

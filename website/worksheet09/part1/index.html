@@ -66,9 +66,35 @@
             <td>
                 <canvas id="canvas"></canvas>
             </td>
+
+
             
             <!-- Right toolbox -->
             <td><table class="toolbox">
+
+                <!-- Model stuff -->
+                <tr class="toolbox-row"><td>
+                    <b>Model</b><br><br>
+                    
+                    Animation speed<br>
+                    <input id="model-animationspeed" class="slider" type="range" min="0" max="1" value="0.25" step="0.01">
+                </td></tr>
+
+                <!-- Point light -->
+                <tr class="toolbox-row"><td>
+                    <b>Point light</b><br><br>
+                    <input id="pointlight-rotate" type="checkbox" name="rotate"> Rotate<br>
+                    <input id="pointlight-color" type="color" value="#FFFFFF"> Color
+
+                </td></tr>
+
+                <!-- Ambient Light -->
+                <tr class="toolbox-row"><td>
+                    <b>Ambient Light</b><br><br>
+                    <input id="ambientlight-color" type="color" value="#202020"> Color
+                </td></tr>
+
+                
 
             </table></td>
         </tr>

@@ -7,8 +7,13 @@ namespace Sheet9.Part1 {
     declare var groundRenderer: GroundRenderer;
 
     declare var previousTime: number;
+    
+    declare var lightPosition: number[];
+    declare var lightRotate: boolean;
 
-    declare var model;
+    declare var model: Model;
+    declare var modelAnimationSpeed: number; // Number between 0 and 1
+    declare var modelAnimationTime: number;
     
     function setup(){
 
@@ -30,10 +35,11 @@ namespace Sheet9.Part1 {
             model = new Model(gl, obj, [0,0,0], 25);
         });
 
+        modelAnimationTime = 0;
+
         modelRenderer = new ModelRenderer(gl);
         modelRenderer.setAmbientColor([0.40, 0.40, 0.40]);
-        modelRenderer.setMaterial(1.0, 1.0, 0.1, 1);
-        modelRenderer.setPointLight([100, 50, 100], [0.75, 0.75, 0.75]);
+        modelRenderer.setMaterial(1.0, 1.0, 0.25, 50);
         
 
         // FPS
@@ -60,6 +66,22 @@ namespace Sheet9.Part1 {
         };
         camera.setVerticalRotation(cameraVerticalSlider.valueAsNumber);   
 
+        // Camera Vertical Angle
+        
+        let modelAnimationSpeedSlider = <HTMLInputElement> document.getElementById("model-animationspeed");
+        modelAnimationSpeedSlider.oninput =  (e) => {
+            modelAnimationSpeed = modelAnimationSpeedSlider.valueAsNumber;
+        };
+        modelAnimationSpeed = modelAnimationSpeedSlider.valueAsNumber;
+
+
+        // Setting initial light position
+        lightPosition = [100, 50, 100, 1.0];
+        lightRotate = false;
+        // Light Rotation Check box
+        document.getElementById("pointlight-rotate").onchange =  (e) => {
+            lightRotate = !lightRotate;
+        };
 
          // Loading xamp23.png
         groundRenderer = null;
@@ -120,14 +142,46 @@ namespace Sheet9.Part1 {
 
         FPS.registerFrame();
 
-        if( model != null )
-            modelRenderer.draw(camera, model);
+        // Set Ambient color
+        {
+            var ambientColor = Util.hexToRgb((<HTMLInputElement> document.getElementById("ambientlight-color")).value);
+            modelRenderer.setAmbientColor([ambientColor.r/255, ambientColor.g/255, ambientColor.b/255]);
+        }
+        
+        // Set Point light color
+        let pointLightColor = Util.hexToRgb((<HTMLInputElement>document.getElementById("pointlight-color")).value);
 
+        // Rotate point light
+        if( lightRotate )
+            // @ts-ignore
+            lightPosition = mult(rotateY(-60 * timeStep), lightPosition);  
+
+        modelRenderer.setPointLight(
+            lightPosition.slice(0,3),
+            [pointLightColor.r/255, pointLightColor.g/255, pointLightColor.b/255]
+        );
+
+        // Draw model
+        if( model != null ) {   
+            { // Animate model floating
+                var animationLength = 1.0; // Number of seconds the animation takes if speed is 1.0
+                modelAnimationTime += timeStep/animationLength * modelAnimationSpeed;
+                
+                while( modelAnimationTime > 1.0 )
+                    modelAnimationTime -= 1.0;
+    
+                let adjustedTime = (modelAnimationTime*2 - 1) * Math.PI;
+                
+                model.setPositionY( Math.sin(adjustedTime)*20 + 25);
+            }
+        
+            modelRenderer.draw(camera, model);
+        }
+
+        // Draw ground
         if( groundRenderer != null )
             groundRenderer.draw(camera);
 
-        // if( texturesLoaded )
-            // renderer.draw(camera);
 
         requestAnimationFrame(update);
     }
