@@ -1,5 +1,5 @@
 
-namespace Sheet9.Part1 {
+namespace Sheet9.Part2 {
     declare var gl: WebGLRenderingContext;
 
     declare var camera: Util.OrbitalCamera;
@@ -117,6 +117,8 @@ namespace Sheet9.Part1 {
             };
             image.src = '../xamp23.png';
         }
+        
+       
     }
 
 
@@ -182,7 +184,7 @@ namespace Sheet9.Part1 {
     }
 }
 
-Sheet9.Part1.start();
+Sheet9.Part2.start();
 
 
 
