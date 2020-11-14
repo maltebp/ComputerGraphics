@@ -67,8 +67,6 @@
                 <canvas id="canvas"></canvas>
             </td>
 
-
-            
             <!-- Right toolbox -->
             <td><table class="toolbox">
 
@@ -83,8 +81,11 @@
                 <!-- Point light -->
                 <tr class="toolbox-row"><td>
                     <b>Point light</b><br><br>
-                    <input id="pointlight-rotate" type="checkbox" name="rotate"> Rotate<br>
-                    <input id="pointlight-color" type="color" value="#FFFFFF"> Color
+
+                    Height<br>
+                    <input id="pointlight-height" class="slider" type="range" min="1" max="300" value="100" step="1"><br><br>
+                    <input id="pointlight-rotate" type="checkbox" name="rotate"> Rotate<br><br>
+                    <input id="pointlight-color" type="color" value="#FFFFFF"> Color<br>
 
                 </td></tr>
 
@@ -105,7 +106,7 @@
     
     <div class="seperator"></div>
     <p class="description">
-        Rendering a textured ground quad of size 300x300 at the world origin, and 2 red quads at world positions (75, 5, -75) and (-75, 0, 0).
+        Rendering a teapot which is lit using ambient and a point light. The ground is not lit.    
     </p>
 
     <script src="../generic/Model.js"></script>

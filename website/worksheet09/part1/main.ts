@@ -78,10 +78,18 @@ namespace Sheet9.Part1 {
         // Setting initial light position
         lightPosition = [100, 50, 100, 1.0];
         lightRotate = false;
+
         // Light Rotation Check box
         document.getElementById("pointlight-rotate").onchange =  (e) => {
             lightRotate = !lightRotate;
         };
+
+        // Light height slider
+        let lightHeightSlider = <HTMLInputElement> document.getElementById("pointlight-height");
+        lightHeightSlider.oninput =  (e) => {
+            lightPosition[1] = lightHeightSlider.valueAsNumber;
+        };
+        lightPosition[1] = lightHeightSlider.valueAsNumber;
 
          // Loading xamp23.png
         groundRenderer = null;
