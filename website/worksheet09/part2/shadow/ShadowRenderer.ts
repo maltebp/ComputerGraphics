@@ -64,11 +64,6 @@ namespace Sheet9.Part2 {
             this.shader.bind();
 
             this.shader.setFloatMatrix4("u_ViewProjection", lightCamera.getViewProjectionMatrix());
-
-            // Draw ground
-            // this.shader.setFloatMatrix4("u_Model", this.groundModelMatrix);
-            // this.groundVertices.bind();
-            // this.gl.drawArrays(this.gl.TRIANGLES, 0, this.groundVertices.getNumVertices());
         }
 
     

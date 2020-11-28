@@ -101,14 +101,7 @@
                 <tr class="toolbox-row"><td>
                     <b>Shadow map</b><br><br>
 
-                    <input id="shadowmap-viewtexture" type="checkbox"> View texture<br><br>
-                </td></tr>
-
-                 <!-- Texture -->
-                 <tr class="toolbox-row"><td>
-                    <b>Texture Size</b><br>
-                    <input id="texture-size-slider" class="slider" type="range" min="0" max="150" value="1" step="1">
-                    <p id="texture-size-slider-value"></p>
+                    <input id="shadowmap-viewtexture" type="checkbox"> View depth texture<br><br>
                 </td></tr>
                 
             </table></td>
@@ -125,6 +118,7 @@
 
     <script src="../generic/Model.js"></script>
     <script src="../generic/screenrenderer/ScreenRenderer.js"></script>
+    <script src="../generic/pointlight/PointLight.js"></script>
     <script src="model/ModelRenderer.js"></script>
     <script src="ground/GroundRenderer.js"></script>
     <script src="shadow/ShadowRenderer.js"></script>

@@ -15,31 +15,37 @@ namespace Sheet9.Part2 {
 
     declare var previousTime: number;
     
-    declare var lightPosition: number[];
+    declare var pointLight: PointLight;
     declare var lightRotate: boolean;
+    declare var pointLightRenderer: PointLightRenderer;
 
     declare var model: Model;
     declare var modelAnimationSpeed: number; // Number between 0 and 1
     declare var modelAnimationTime: number;
     
     declare var groundTexture: WebGLTexture;
-    declare var shadowMapTexture: WebGLTexture; // TODO: Remove this
 
     declare var screenRenderer: ScreenRenderer;
     declare var viewShadowMapTexture: boolean;
 
-
     
     function setup(){
 
-        // @ts-ignore
+        // @ts-ignore   
         gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
         gl.enable(gl.DEPTH_TEST);
+        
         
         camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 0, 0, 0 ); // Distance value is unused, as its set below
         lightCamera = new Util.PerspectiveCamera(CANVAS_SIZE, [0,0,0], [0,50,0], 35, 150, 700);
         activeCamera = camera;
 
+        // Creating point light
+        pointLight = new PointLight([175, 100, 175], [1,1,1]);
+        lightRotate = false;
+        pointLightRenderer = new PointLightRenderer(gl);
 
         previousTime = Date.now();
 
@@ -95,9 +101,7 @@ namespace Sheet9.Part2 {
         modelAnimationSpeed = modelAnimationSpeedSlider.valueAsNumber;
 
 
-        // Setting initial light position
-        lightPosition = [175, 100, 175, 1.0];
-        lightRotate = false;
+        
 
         // Light Rotation Check box
         document.getElementById("pointlight-rotate").onchange =  (e) => {
@@ -107,23 +111,15 @@ namespace Sheet9.Part2 {
         // Light height slider
         let lightHeightSlider = <HTMLInputElement> document.getElementById("pointlight-height");
         lightHeightSlider.oninput =  (e) => {
-            lightPosition[1] = lightHeightSlider.valueAsNumber;
+            pointLight.setY(lightHeightSlider.valueAsNumber);
         };
-        lightPosition[1] = lightHeightSlider.valueAsNumber;
+        pointLight.setY(lightHeightSlider.valueAsNumber);
 
         // Light Camera Check box
         let useLightCameraCheckbox = <HTMLInputElement>document.getElementById("pointlight-camera");
         useLightCameraCheckbox.onchange =  (e) => {
             activeCamera = useLightCameraCheckbox.checked ? lightCamera : camera;
         };
-
-         // Light Camera Check box
-         let textureSizeSliderValue = <HTMLParagraphElement>document.getElementById("texture-size-slider-value");
-         let textureSizeSlider = <HTMLInputElement>document.getElementById("texture-size-slider");
-         textureSizeSlider.oninput =  (e) => {
-             let texSize = textureSizeSlider.valueAsNumber;
-             createTexture(texSize);
-         };
 
         
         // Shadow map texture view
@@ -159,37 +155,8 @@ namespace Sheet9.Part2 {
             };
             image.src = '../xamp23.png';
         }
-
-        {
-            createTexture(textureSizeSlider.valueAsNumber);
-        }       
+   
     }
-
-    function createTexture(size: number) {
-        (<HTMLParagraphElement>document.getElementById("texture-size-slider-value")).innerText = size.toString();
-
-        var data = Array<number>();
-        let texSize = size;
-
-        // Filling texture with bright green, for making debugging easier
-        for( var i=0; i < texSize*texSize; i++ ) {
-            data.push(0, 225, 0);
-        } 
-
-        console.log("Tex data:", data);
-        var dataFlattened = new Uint8Array(data);
-        console.log("Tex data flattened:", dataFlattened);
-
-        
-        shadowMapTexture = gl.createTexture();
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, shadowMapTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, texSize, texSize, 0, gl.RGB, gl.UNSIGNED_BYTE, dataFlattened);
-
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-    }
-
 
 
     function update(){
@@ -211,18 +178,18 @@ namespace Sheet9.Part2 {
         
         // Set Point light color
         let pointLightColor = Util.hexToRgb((<HTMLInputElement>document.getElementById("pointlight-color")).value);
+        pointLight.setColor([pointLightColor.r/255, pointLightColor.g/255, pointLightColor.b/255]);
 
         // Rotate point light
         if( lightRotate )
-            // @ts-ignore
-            lightPosition = mult(rotateY(-60 * timeStep), lightPosition);  
+            pointLight.rotateY([0,0,0], -60*timeStep);
 
         modelRenderer.setPointLight(
-            lightPosition.slice(0,3),
+            pointLight.getPosition(),
             [pointLightColor.r/255, pointLightColor.g/255, pointLightColor.b/255]
         );
 
-        lightCamera.setPosition(lightPosition.slice(0, 3));
+        lightCamera.setPosition(pointLight.getPosition());
 
         // Render scene
         if( model != null && groundRenderer != null ) {
@@ -238,11 +205,11 @@ namespace Sheet9.Part2 {
                 
                 model.setPositionY( Math.sin(adjustedTime)*20 + 25);
             }
-
-
-            gl.activeTexture(gl.TEXTURE0);
-            gl.bindTexture(gl.TEXTURE_2D, shadowMapTexture); 
             
+            // TODO: Moves these
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, groundTexture); 
+
             gl.activeTexture(gl.TEXTURE1);
             gl.bindTexture(gl.TEXTURE_2D, groundTexture); 
 
@@ -260,6 +227,8 @@ namespace Sheet9.Part2 {
                 // Draw model
                 modelRenderer.draw(activeCamera, model);
 
+
+
                 // Draw ground
                 groundRenderer.draw(
                     activeCamera,
@@ -270,6 +239,8 @@ namespace Sheet9.Part2 {
                     1
                 );
             }
+
+            pointLightRenderer.draw(activeCamera, pointLight, 20);
             
         }
 
