@@ -31,7 +31,6 @@ namespace Sheet9.Part1 {
         // Load Model
         model = null;
         Util.loadObjFile("/models/teapot/teapot.obj", 1.0, false, (obj) => {
-            console.log(obj.getDrawingInfo());
             model = new Model(gl, obj, [0,0,0], 25);
         });
 

@@ -16,6 +16,8 @@ namespace Sheet9.Part2 {
         private materialAmbient: number = 0.5;
         private materialShine: number = 100;
 
+        private shadowMapTextureSlot: number = 0;
+
 
         constructor(gl){
             if( gl == null )
@@ -44,9 +46,8 @@ namespace Sheet9.Part2 {
             this.materialSpecular = specular;
             this.materialShine = shine;
         }
-
     
-        draw(camera: Util.OrbitalCamera, model: Model){
+        draw(camera: Util.Camera, model: Model){
             this.shader.bind();
 
             this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());

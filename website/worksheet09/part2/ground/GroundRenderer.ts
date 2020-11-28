@@ -7,13 +7,10 @@ namespace Sheet9.Part2 {
         private shader: Util.ShaderProgram;
         private vertexBuffer: Util.VertexBuffer;
 
-        constructor(gl: WebGLRenderingContext, texture: WebGLTexture, groundWidth: number, groundLength: number){
+        constructor(gl: WebGLRenderingContext, groundWidth: number, groundLength: number){
             if( gl == null )
                 throw "GL context cannot be null";
 
-            if( texture == null )
-                throw "Texture cannot be null";
-    
             this.gl = gl;
     
             this.vertexBuffer = new Util.VertexBuffer(gl);
@@ -26,11 +23,11 @@ namespace Sheet9.Part2 {
 
                 this.vertexBuffer.push(
                     -halfWidth, -halfHeight, 0, 0,
-                    -halfWidth,  halfHeight, 0, 1,
+                    -halfWidth, halfHeight, 0, 1,
                     halfWidth, -halfHeight, 1, 0,
 
-                    -halfWidth,  halfHeight, 0, 1,
-                    halfWidth,  halfHeight, 1, 1,
+                    -halfWidth, halfHeight, 0, 1,
+                    halfWidth, halfHeight, 1, 1,
                     halfWidth, -halfHeight, 1, 0
                 );
             }
@@ -39,13 +36,15 @@ namespace Sheet9.Part2 {
         }
 
     
-        draw(camera: Util.Camera){
+        draw(camera: Util.Camera, lightCamera: Util.Camera, shadowMapSlot: number, textureSlot: number){
             this.shader.bind();
             
             // Set texture samplers
-            this.shader.setInteger("u_TextureSampler", 0);
+            this.shader.setInteger("u_ShadowMap", shadowMapSlot);
+            this.shader.setInteger("u_TextureSampler", textureSlot);
 
             this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());
+            this.shader.setFloatMatrix4("u_LightViewProjection", lightCamera.getViewProjectionMatrix());
 
             this.vertexBuffer.bind();
     

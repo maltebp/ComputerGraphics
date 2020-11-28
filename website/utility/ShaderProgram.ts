@@ -21,9 +21,9 @@ namespace Util {
 
 
         setInteger(name: string, integer: number){    
-            var location = this.getUniformLocation(name);
+            let location = this.getUniformLocation(name);
     
-            var existingUniform = this.gl.getUniform(this.program, location);
+            let existingUniform = this.gl.getUniform(this.program, location);
             if( typeof existingUniform !== "number" )
                 throw "Uniform " + name + " is not an integer in the shader";
     

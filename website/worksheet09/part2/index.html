@@ -84,10 +84,10 @@
                     <b>Point light</b><br><br>
 
                     Height<br>
-                    <input id="pointlight-height" class="slider" type="range" min="1" max="300" value="100" step="1"><br><br>
+                    <input id="pointlight-height" class="slider" type="range" min="100" max="250" value="100" step="1"><br><br>
                     <input id="pointlight-rotate" type="checkbox" name="rotate"> Rotate<br><br>
+                    <input id="pointlight-camera" type="checkbox" name="rotate"> Use as camera<br><br>
                     <input id="pointlight-color" type="color" value="#FFFFFF"> Color<br>
-
                 </td></tr>
 
                 <!-- Ambient Light -->
@@ -96,8 +96,21 @@
                     <input id="ambientlight-color" type="color" value="#202020"> Color
                 </td></tr>
 
-                
 
+                <!-- Shadow map -->
+                <tr class="toolbox-row"><td>
+                    <b>Shadow map</b><br><br>
+
+                    <input id="shadowmap-viewtexture" type="checkbox"> View texture<br><br>
+                </td></tr>
+
+                 <!-- Texture -->
+                 <tr class="toolbox-row"><td>
+                    <b>Texture Size</b><br>
+                    <input id="texture-size-slider" class="slider" type="range" min="0" max="150" value="1" step="1">
+                    <p id="texture-size-slider-value"></p>
+                </td></tr>
+                
             </table></td>
         </tr>
     </table>
@@ -107,12 +120,15 @@
     
     <div class="seperator"></div>
     <p class="description">
-            
+        
     </p>
 
     <script src="../generic/Model.js"></script>
+    <script src="../generic/screenrenderer/ScreenRenderer.js"></script>
     <script src="model/ModelRenderer.js"></script>
     <script src="ground/GroundRenderer.js"></script>
+    <script src="shadow/ShadowRenderer.js"></script>
+    <script src="ShadowMapBuffer.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

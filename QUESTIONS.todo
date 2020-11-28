@@ -7,8 +7,16 @@ Questions:
 
     Sheet 7:
         ✔ Ser min reflection rigtig ud i part3? Synes den ser lidt funky ud
-        ☐ Hvad er der galt med min depth?
+        ✔ Hvad er der galt med min depth?
         ✔ Skal reflection være i vertex eller fragment shader?
 
     Sheet 8:
-        ☐ Er det okay, at jeg ikke bruger de præcis koordinater, men bare sikrer at der ser nognelunde ens ud?
+        ✔ Er det okay, at jeg ikke bruger de præcis koordinater, men bare sikrer at der ser nognelunde ens ud?
+
+
+
+    Sheet 9:
+        ☐ Hvorfor sætter vi viewport på framebuffer, og hvad skal vi sætte den til?
+        ☐ Er det fint, at justere sig frem til størrelsen på kameraet?
+        ☐ SKAL vi lave det bitshifting show der?
+    

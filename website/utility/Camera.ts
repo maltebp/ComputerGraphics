@@ -13,6 +13,7 @@ namespace Util {
         protected projectionMatrix: Float32Array = null;
         protected viewProjectionMatrix: Float32Array = null;
         protected screensize: number[] = null;
+        protected position: number[] = null;
 
         protected abstract createViewMatrix();
         protected abstract createProjectionMatrix();
@@ -47,12 +48,33 @@ namespace Util {
             return this.viewMatrix;
         }
 
+        
+        setY(y: number){
+            this.position[1] = y;
+            this.dirty = true;
+        }
+
+
+        setZ(z: number){
+            this.position[2] = z;
+            this.dirty = true;
+        }
+
+        setPosition(position: number[]) {
+            this.position = position;
+            this.dirty = true;
+        }
+
+        getPosition(){
+            this.clean();
+            return this.position;
+        }
+
     }
 
 
 
     export abstract class LookAtCamera extends Camera {
-        private pos: number[] = [0, 0, 0];
         private target: number[] = [0, 0, 0];
         protected screensize: number[] = null;
 
@@ -61,7 +83,7 @@ namespace Util {
             super();
 
             this.screensize = screenSize;
-            this.pos = pos;
+            this.position = pos;
             this.target = target;
             this.dirty= true;
         }
@@ -69,7 +91,7 @@ namespace Util {
         
         createViewMatrix() {
             // @ts-ignore
-            this.viewMatrix = lookAt(vec3(this.pos), vec3(this.target), vec3(0, 1, 0));
+            this.viewMatrix = lookAt(vec3(this.position), vec3(this.target), vec3(0, 1, 0));
         }
 
 
@@ -80,17 +102,6 @@ namespace Util {
             this.dirty = true;
         }
 
-        
-        setY(y: number){
-            this.pos[1] = y;
-            this.dirty = true;
-        }
-
-
-        setZ(z: number){
-            this.pos[2] = z;
-            this.dirty = true;
-        }
         
 
         /**
@@ -108,14 +119,12 @@ namespace Util {
             let totalMatrix = mult(translate(this.target), mult(rotationMatrix, translationMatrix));
             
             // @ts-ignore
-            this.pos = mult(totalMatrix, vec4(this.pos));
-            this.pos = this.pos.splice(0, 3);
+            this.position = mult(totalMatrix, vec4(this.position));
+            this.position = this.position.splice(0, 3);
             this.dirty = true;
         }
 
-        getPosition(){
-            return this.pos;
-        }
+        
     }
 
 
@@ -132,13 +141,16 @@ namespace Util {
 
     export class PerspectiveCamera extends LookAtCamera {
         protected fov: number;
+        protected farPlane: number;
+        protected nearPlane: number;
 
-
-        constructor(screenSize: number[], pos: number[], target: number[], fov: number){
+        constructor(screenSize: number[], pos: number[], target: number[], fov: number, nearPlane = 1, farPlane = 10000) {
             super(screenSize, pos, target);
             this.fov = fov;
-        }
-
+            this.farPlane = farPlane;
+            this.nearPlane = nearPlane; 
+        }     
+       
 
         setFOV(fov: number){
             this.fov = fov;
@@ -148,7 +160,7 @@ namespace Util {
 
         createProjectionMatrix(){
             // @ts-ignore
-            this.projectionMatrix = perspective(this.fov, this.screensize[0]/this.screensize[1], 0.01, 10000);
+            this.projectionMatrix = perspective(this.fov, this.screensize[0]/this.screensize[1], this.nearPlane, this.farPlane);
         };
     }
 
@@ -170,7 +182,6 @@ namespace Util {
         protected fov: number;
         protected horizontalRotation: number;
         protected verticalRotation: number;
-        protected position: number[];
         protected direction: number[];
 
         constructor(screenSize: number[], target: number[], fov: number, distance: number, horizontalRotation: number, verticalRotation: number ){
@@ -216,13 +227,6 @@ namespace Util {
 
         adjustHorizontalRotation(rotation: number){
             this.setHorizontalRotation(this.horizontalRotation + rotation);
-        }
-
-
-
-        getPosition(){
-            this.clean();
-            return this.position;
         }
 
         getDirection(){

@@ -9,7 +9,6 @@ namespace Sheet6.Part2 {
     
 
     function createCheckerboard(){
-        
 
         var data = Array<number>();
         var squareSize = 8;
@@ -33,7 +32,6 @@ namespace Sheet6.Part2 {
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, imageSize, imageSize, 0, gl.RGBA, gl.UNSIGNED_BYTE, dataFlattened);
 
         gl.generateMipmap(gl.TEXTURE_2D);
-
 
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
