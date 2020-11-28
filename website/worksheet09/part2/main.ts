@@ -33,7 +33,7 @@ namespace Sheet9.Part2 {
     function setup(){
 
         // @ts-ignore
-        gl =Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
+        gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
         gl.enable(gl.DEPTH_TEST);
         
         camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 0, 0, 0 ); // Distance value is unused, as its set below
@@ -198,14 +198,16 @@ namespace Sheet9.Part2 {
         var timeStep = (currentTime - previousTime)/1000.0;
         previousTime = currentTime;
 
-        gl.clearColor(1, 1, 1, 1.0); 
+        // Set Ambient color
+        let ambientColor = Util.hexToRgb((<HTMLInputElement> document.getElementById("ambientlight-color")).value);
+        modelRenderer.setAmbientColor([ambientColor.r/255, ambientColor.g/255, ambientColor.b/255]);
+        
+
+        gl.clearColor(ambientColor.r/255, ambientColor.g/255, ambientColor.b/255, 1.0); 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         FPS.registerFrame();
 
-        // Set Ambient color
-        let ambientColor = Util.hexToRgb((<HTMLInputElement> document.getElementById("ambientlight-color")).value);
-        modelRenderer.setAmbientColor([ambientColor.r/255, ambientColor.g/255, ambientColor.b/255]);
         
         // Set Point light color
         let pointLightColor = Util.hexToRgb((<HTMLInputElement>document.getElementById("pointlight-color")).value);
@@ -259,7 +261,14 @@ namespace Sheet9.Part2 {
                 modelRenderer.draw(activeCamera, model);
 
                 // Draw ground
-                groundRenderer.draw(activeCamera, lightCamera, 0, 1);
+                groundRenderer.draw(
+                    activeCamera,
+                    lightCamera,
+                    [pointLightColor.r/255, pointLightColor.g/255, pointLightColor.b/255],
+                    [ambientColor.r/255, ambientColor.g/255, ambientColor.b/255],
+                    0,
+                    1
+                );
             }
             
         }

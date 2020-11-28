@@ -36,7 +36,7 @@ namespace Sheet9.Part2 {
         }
 
     
-        draw(camera: Util.Camera, lightCamera: Util.Camera, shadowMapSlot: number, textureSlot: number){
+        draw(camera: Util.Camera, lightCamera: Util.Camera, lightColor: number[], ambientColor: number[], shadowMapSlot: number, textureSlot: number){
             this.shader.bind();
             
             // Set texture samplers
@@ -45,6 +45,11 @@ namespace Sheet9.Part2 {
 
             this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());
             this.shader.setFloatMatrix4("u_LightViewProjection", lightCamera.getViewProjectionMatrix());
+            
+            this.shader.setFloatVector3("u_AmbientEmission", ambientColor);
+            this.shader.setFloatVector3("u_LightEmission", lightColor);
+            this.shader.setFloatVector3("u_LightPosition", lightCamera.getPosition());
+            this.shader.setFloatVector3("u_CameraPosition", camera.getPosition());
 
             this.vertexBuffer.bind();
     

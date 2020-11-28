@@ -6,7 +6,6 @@ uniform mat4 u_Model;
 
 uniform vec3 u_AmbientEmission;
 uniform vec3 u_LightEmission;
-uniform vec3 u_LightPosition;
 
 uniform float u_MaterialAmbient;
 uniform float u_MaterialDiffuse;
