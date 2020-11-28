@@ -58,6 +58,10 @@ namespace Sheet9 {
 
 
 
+    /**
+     * Renderer, which renders a PointLight object by drawing a white light texture
+     * as a billboard, colored with the color of the light.
+     */
     export class PointLightRenderer {
 
         private gl;
@@ -65,12 +69,10 @@ namespace Sheet9 {
         private shader: Util.ShaderProgram;
         private texture: WebGLTexture = null;
         
-        constructor(gl: WebGLRenderingContext){
-            if( gl == null )
-                throw "GL context cannot be null";
-    
+        constructor(gl: WebGLRenderingContext){    
             this.gl = gl;
     
+            // Quad vertices
             this.vertexBuffer = new Util.VertexBuffer(gl, 50);
             this.vertexBuffer.addAttribute("a_Position", 2);
             this.vertexBuffer.addAttribute("a_TextureCoordinates", 2);
@@ -78,7 +80,6 @@ namespace Sheet9 {
                 -0.5, -0.5,     0.0, 0.0,
                  0.5,  0.5,     1.0, 1.0,
                 -0.5,  0.5,     0.0, 1.0,
-
                 -0.5, -0.5,     0.0, 0.0,
                  0.5, -0.5,     1.0, 0.0,
                  0.5,  0.5,     1.0, 1.0
@@ -86,9 +87,10 @@ namespace Sheet9 {
         
             this.shader = new Util.ShaderProgram(gl, "../generic/pointlight/vertex.glsl", "../generic/pointlight/fragment.glsl");
 
-            let _this = this;
+            
             // Loading light texture
             {
+                let _this = this;
                 let image = <HTMLImageElement> document.createElement('img');
                 image.crossOrigin = 'anonymous';
                 image.onload = function () {
@@ -117,15 +119,16 @@ namespace Sheet9 {
 
             this.shader.bind();
 
+            // Bind texutre
             this.gl.activeTexture(this.gl.TEXTURE0);
             this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+            this.shader.setInteger("u_Texture", 0);
 
             this.shader.setFloatMatrix4("u_View", camera.getViewMatrix());
             this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());
             this.shader.setFloatVector3("u_Color", light.getColor());
             this.shader.setFloatVector3("u_Position", light.getPosition());
             this.shader.setFloat("u_Size", size);
-            this.shader.setInteger("u_Texture", 0);
 
             this.vertexBuffer.bind();
     
