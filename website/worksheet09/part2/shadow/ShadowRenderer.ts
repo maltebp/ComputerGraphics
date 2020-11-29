@@ -60,6 +60,7 @@ namespace Sheet9.Part2 {
             // the depth is 1.0 which furthest away
             this.gl.clearColor(1.0, 1.0, 1.0, 1.0); 
             this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+            this.gl.disable(this.gl.BLEND);
 
             this.shader.bind();
 

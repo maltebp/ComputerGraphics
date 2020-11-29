@@ -38,7 +38,8 @@ namespace Sheet9.Part2 {
     
         draw(camera: Util.Camera, lightCamera: Util.Camera, lightColor: number[], ambientColor: number[], shadowMapSlot: number, textureSlot: number){
             this.shader.bind();
- 
+
+            this.gl.disable(this.gl.BLEND); 
 
             // Set texture samplers
             this.shader.setInteger("u_ShadowMap", shadowMapSlot);

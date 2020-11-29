@@ -1,20 +1,19 @@
 
-namespace Sheet9 {
+namespace Util {
 
     /**
-     * Simple renderer to render a texture to the screen middle of the screen
+     *  Simple renderer to render flat 2D images onto the screen
      */
-    export class ScreenRenderer {
+    export class ImageRenderer {
 
         private gl: WebGLRenderingContext;
-        private vertices: Util.VertexBuffer;
-        private shader: Util.ShaderProgram;
-
+        private vertices: VertexBuffer;
+        private shader: ShaderProgram;
 
         constructor(gl: WebGLRenderingContext, ) {
             this.gl = gl;
 
-            this.vertices = new Util.VertexBuffer(gl);
+            this.vertices = new VertexBuffer(gl);
             this.vertices.addAttribute("a_Position", 2);
             this.vertices.addAttribute("a_TextureCoordinates", 2);
 
@@ -28,14 +27,13 @@ namespace Sheet9 {
                  1, -1,  1, 0
             );
 
-            this.shader = new Util.ShaderProgram(gl, "../generic/screenrenderer/vertex.glsl", "../generic/screenrenderer/fragment.glsl");            
+            this.shader = new Util.ShaderProgram(gl, "/utility/imagerenderer/vertex.glsl", "/utility/imagerenderer/fragment.glsl");            
         }
 
 
-        draw(screenWidth: number, screenHeight: number, textureWidth: number, textureHeight: number) {
-
+        draw(textureSlot: number, screenWidth: number, screenHeight: number, textureWidth: number, textureHeight: number) {
             this.shader.bind();
-            this.shader.setInteger("u_TextureSampler", 0);
+            this.shader.setInteger("u_TextureSampler", this.gl.TEXTURE0 + textureSlot);
             this.shader.setFloat("u_WidthScaling", textureWidth / screenWidth);
             this.shader.setFloat("u_HeightScaling", textureHeight / screenHeight);
 

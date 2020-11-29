@@ -114,7 +114,7 @@ namespace Sheet9.Part1 {
             groundRenderer = new GroundRenderer(gl, texture, 300, 300);
                 
             };
-            image.src = '../xamp23.png';
+            image.src = '../generic/xamp23.png';
         }
     }
 

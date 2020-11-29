@@ -15,9 +15,9 @@ namespace Sheet9.Part2 {
 
     declare var previousTime: number;
     
-    declare var pointLight: PointLight;
+    declare var pointLight: Util.PointLight;
     declare var lightRotate: boolean;
-    declare var pointLightRenderer: PointLightRenderer;
+    declare var pointLightRenderer: Util.PointLightRenderer;
 
     declare var model: Model;
     declare var modelAnimationSpeed: number; // Number between 0 and 1
@@ -25,7 +25,7 @@ namespace Sheet9.Part2 {
     
     declare var groundTexture: WebGLTexture;
 
-    declare var screenRenderer: ScreenRenderer;
+    declare var imageRenderer: Util.ImageRenderer;
     declare var viewShadowMapTexture: boolean;
 
     
@@ -33,19 +33,16 @@ namespace Sheet9.Part2 {
 
         // @ts-ignore   
         gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
-        gl.enable(gl.BLEND);
-        gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
         gl.enable(gl.DEPTH_TEST);
-        
         
         camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 0, 0, 0 ); // Distance value is unused, as its set below
         lightCamera = new Util.PerspectiveCamera(CANVAS_SIZE, [0,0,0], [0,50,0], 35, 150, 700);
         activeCamera = camera;
 
         // Creating point light
-        pointLight = new PointLight([175, 100, 175], [1,1,1]);
+        pointLight = new Util.PointLight([175, 100, 175], [1,1,1]);
         lightRotate = false;
-        pointLightRenderer = new PointLightRenderer(gl);
+        pointLightRenderer = new Util.PointLightRenderer(gl);
 
         previousTime = Date.now();
 
@@ -65,7 +62,7 @@ namespace Sheet9.Part2 {
         shadowRenderer = new ShadowRenderer(gl, GROUND_SIZE[0], GROUND_SIZE[1]);
 
         // Screen renderer to render shadow map as an image to screen
-        screenRenderer = new ScreenRenderer(gl);
+        imageRenderer = new Util.ImageRenderer(gl);
         
 
         // FPS
@@ -153,7 +150,7 @@ namespace Sheet9.Part2 {
                 groundRenderer = new GroundRenderer(gl, GROUND_SIZE[0], GROUND_SIZE[1]);
                 
             };
-            image.src = '../xamp23.png';
+            image.src = '../generic/xamp23.png';
         }
    
     }
@@ -222,7 +219,7 @@ namespace Sheet9.Part2 {
 
             if( viewShadowMapTexture ) {
                 // Draw shadow map as image to screen
-                screenRenderer.draw(CANVAS_SIZE[0], CANVAS_SIZE[1], 400, 400 );
+                imageRenderer.draw(0, CANVAS_SIZE[0], CANVAS_SIZE[1], 400, 400 );
             }else {
                 // Draw model
                 modelRenderer.draw(activeCamera, model);
@@ -240,7 +237,7 @@ namespace Sheet9.Part2 {
                 );
             }
 
-            pointLightRenderer.draw(activeCamera, pointLight, 20);
+            pointLightRenderer.draw(activeCamera, pointLight, 10);
             
         }
 

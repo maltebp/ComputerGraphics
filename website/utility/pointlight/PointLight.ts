@@ -1,5 +1,5 @@
 
-namespace Sheet9 {
+namespace Util {
 
     /**
      * Represents a point light with a position and a color, and exposes
@@ -85,7 +85,7 @@ namespace Sheet9 {
                  0.5,  0.5,     1.0, 1.0
             );
         
-            this.shader = new Util.ShaderProgram(gl, "../generic/pointlight/vertex.glsl", "../generic/pointlight/fragment.glsl");
+            this.shader = new Util.ShaderProgram(gl, "/utility/pointlight/vertex.glsl", "/utility/pointlight/fragment.glsl");
 
             
             // Loading light texture
@@ -109,7 +109,7 @@ namespace Sheet9 {
                     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
         
                 };
-                image.src = '../generic/pointlight/light.png';
+                image.src = '/utility/pointlight/light.png';
                 // image.src = '../xamp23.png';
             }    
         }
@@ -118,6 +118,9 @@ namespace Sheet9 {
             if( this.texture === null ) return;
 
             this.shader.bind();
+
+            this.gl.enable(this.gl.BLEND);
+            this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA);
 
             // Bind texutre
             this.gl.activeTexture(this.gl.TEXTURE0);
