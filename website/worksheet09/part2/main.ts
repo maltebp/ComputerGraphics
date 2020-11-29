@@ -23,7 +23,7 @@ namespace Sheet9.Part2 {
     declare var modelAnimationSpeed: number; // Number between 0 and 1
     declare var modelAnimationTime: number;
     
-    declare var groundTexture: WebGLTexture;
+    declare var groundTexture: Util.Texture;
 
     declare var imageRenderer: Util.ImageRenderer;
     declare var viewShadowMapTexture: boolean;
@@ -126,32 +126,40 @@ namespace Sheet9.Part2 {
             viewShadowMapTexture = shadowMapViewTexture.checked;
         };
 
-        //Loading xamp23.png
-        groundRenderer = null;
-        {
-            let image = <HTMLImageElement> document.createElement('img');
-            image.crossOrigin = 'anonymous';
-            image.onload = function () {
-                // Adding texture
-                groundTexture = gl.createTexture();
-                gl.activeTexture(gl.TEXTURE1);
-                gl.bindTexture(gl.TEXTURE_2D, groundTexture); 
-        
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-        
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-    
-                gl.generateMipmap(gl.TEXTURE_2D);
-    
+
+        Util.Texture.createFromImage(gl, "../generic/xamp23.png")
+            .setChannels(4)
+            .setFilter(gl.LINEAR_MIPMAP_LINEAR, gl.LINEAR)
+            .build((texture) => {
+                groundTexture = texture;
                 groundRenderer = new GroundRenderer(gl, GROUND_SIZE[0], GROUND_SIZE[1]);
+            });
+
+        // //Loading xamp23.png
+        // groundRenderer = null;
+        // {
+        //     let image = <HTMLImageElement> document.createElement('img');
+        //     image.crossOrigin = 'anonymous';
+        //     image.onload = function () {
+        //         // Adding texture
+        //         groundTexture = gl.createTexture();
+        //         gl.activeTexture(gl.TEXTURE1);
+        //         gl.bindTexture(gl.TEXTURE_2D, groundTexture); 
+        
+        //         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        
+        //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+        //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        
+        //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+        //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+    
+        //         gl.generateMipmap(gl.TEXTURE_2D);
+    
                 
-            };
-            image.src = '../generic/xamp23.png';
-        }
+        //     };
+        //     image.src = '../generic/xamp23.png';
+        // }
    
     }
 
@@ -204,11 +212,8 @@ namespace Sheet9.Part2 {
             }
             
             // TODO: Moves these
-            gl.activeTexture(gl.TEXTURE0);
-            gl.bindTexture(gl.TEXTURE_2D, groundTexture); 
-
-            gl.activeTexture(gl.TEXTURE1);
-            gl.bindTexture(gl.TEXTURE_2D, groundTexture); 
+            groundTexture.bind(1);
+            // gl.bindTexture(gl.TEXTURE_2D, groundTexture); 
 
             // Draw shadow
             shadowRenderer.startDraw(lightCamera, 0);
