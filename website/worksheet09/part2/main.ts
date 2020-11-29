@@ -1,8 +1,12 @@
 
-const CANVAS_SIZE = [720, 480];
-const GROUND_SIZE = [300, 300];
 
 namespace Sheet9.Part2 {
+
+    // Settings
+    const CANVAS_SIZE = [720, 480];
+    const GROUND_SIZE = [300, 300];
+
+    // Globals
     declare var gl: WebGLRenderingContext;
 
     declare var activeCamera: Util.Camera;
@@ -16,16 +20,16 @@ namespace Sheet9.Part2 {
     declare var previousTime: number;
     
     declare var pointLight: Util.PointLight;
-    declare var lightRotate: boolean;
     declare var pointLightRenderer: Util.PointLightRenderer;
 
     declare var model: Model;
     declare var modelAnimationSpeed: number; // Number between 0 and 1
     declare var modelAnimationTime: number;
-    
-    declare var groundTexture: Util.Texture;
 
     declare var imageRenderer: Util.ImageRenderer;
+
+    // Flags
+    declare var rotateLight: boolean;
     declare var viewShadowMapTexture: boolean;
 
     
@@ -41,10 +45,12 @@ namespace Sheet9.Part2 {
 
         // Creating point light
         pointLight = new Util.PointLight([175, 100, 175], [1,1,1]);
-        lightRotate = false;
+        rotateLight = false;
         pointLightRenderer = new Util.PointLightRenderer(gl);
 
         previousTime = Date.now();
+
+        groundRenderer = new GroundRenderer(gl, "../generic/xamp23.png", GROUND_SIZE[0], GROUND_SIZE[1]);
 
         // Load Model
         model = null;
@@ -68,99 +74,29 @@ namespace Sheet9.Part2 {
         // FPS
         FPS.textElement = <HTMLParagraphElement> document.getElementById("fps-text");   
 
-        // Camera Zoom
-        let cameraDistanceSlider = <HTMLInputElement> document.getElementById("camera-distance");
-        cameraDistanceSlider.oninput =  (e) => {
-             camera.setDistance(cameraDistanceSlider.valueAsNumber);
-        };
-         camera.setDistance(cameraDistanceSlider.valueAsNumber);
+        // Camera distance
+        new Util.Slider("camera-distance", 25, 600, 350, 1, (value) => camera.setDistance(value) );
 
         // Camera Horizontal Angle
-        let cameraHorizontalSlider = <HTMLInputElement> document.getElementById("camera-horizontal");
-        cameraHorizontalSlider.oninput =  (e) => {
-            camera.setHorizontalRotation(cameraHorizontalSlider.valueAsNumber);
-        };
-        camera.setHorizontalRotation(cameraHorizontalSlider.valueAsNumber);
+        new Util.Slider("camera-horizontal", -360, 360, 0, 1, (value) => camera.setHorizontalRotation(value) );
 
         // Camera Vertical Angle
-        let cameraVerticalSlider = <HTMLInputElement> document.getElementById("camera-vertical");
-        cameraVerticalSlider.oninput =  (e) => {
-            camera.setVerticalRotation(cameraVerticalSlider.valueAsNumber);
-        };
-        camera.setVerticalRotation(cameraVerticalSlider.valueAsNumber);   
+        new Util.Slider("camera-vertical", -89, 89, 20, 0.5, (value) => camera.setVerticalRotation(value) );
 
-        // Camera Vertical Angle
-        
-        let modelAnimationSpeedSlider = <HTMLInputElement> document.getElementById("model-animationspeed");
-        modelAnimationSpeedSlider.oninput =  (e) => {
-            modelAnimationSpeed = modelAnimationSpeedSlider.valueAsNumber;
-        };
-        modelAnimationSpeed = modelAnimationSpeedSlider.valueAsNumber;
-
-
-        
+        // Model animation speed
+        new Util.Slider("model-animationspeed", 0, 1, 0.25, 0.01, (value) => modelAnimationSpeed = value );       
 
         // Light Rotation Check box
-        document.getElementById("pointlight-rotate").onchange =  (e) => {
-            lightRotate = !lightRotate;
-        };
+        new Util.Checkbox("pointlight-rotate", false, (checked) =>  rotateLight = checked ); 
 
         // Light height slider
-        let lightHeightSlider = <HTMLInputElement> document.getElementById("pointlight-height");
-        lightHeightSlider.oninput =  (e) => {
-            pointLight.setY(lightHeightSlider.valueAsNumber);
-        };
-        pointLight.setY(lightHeightSlider.valueAsNumber);
+        new Util.Slider("pointlight-height", 100, 250, 100, 1, (value) => pointLight.setY(value));
 
         // Light Camera Check box
-        let useLightCameraCheckbox = <HTMLInputElement>document.getElementById("pointlight-camera");
-        useLightCameraCheckbox.onchange =  (e) => {
-            activeCamera = useLightCameraCheckbox.checked ? lightCamera : camera;
-        };
+        new Util.Checkbox("pointlight-camera", false, (checked) =>  activeCamera = checked ? lightCamera : camera ); 
 
-        
         // Shadow map texture view
-        viewShadowMapTexture = false;
-        let shadowMapViewTexture = <HTMLInputElement>document.getElementById("shadowmap-viewtexture");
-        shadowMapViewTexture.onchange =  (e) => {
-            viewShadowMapTexture = shadowMapViewTexture.checked;
-        };
-
-
-        Util.Texture.createFromImage(gl, "../generic/xamp23.png")
-            .setChannels(4)
-            .setFilter(gl.LINEAR_MIPMAP_LINEAR, gl.LINEAR)
-            .build((texture) => {
-                groundTexture = texture;
-                groundRenderer = new GroundRenderer(gl, GROUND_SIZE[0], GROUND_SIZE[1]);
-            });
-
-        // //Loading xamp23.png
-        // groundRenderer = null;
-        // {
-        //     let image = <HTMLImageElement> document.createElement('img');
-        //     image.crossOrigin = 'anonymous';
-        //     image.onload = function () {
-        //         // Adding texture
-        //         groundTexture = gl.createTexture();
-        //         gl.activeTexture(gl.TEXTURE1);
-        //         gl.bindTexture(gl.TEXTURE_2D, groundTexture); 
-        
-        //         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-        
-        //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-        //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        
-        //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-        //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-    
-        //         gl.generateMipmap(gl.TEXTURE_2D);
-    
-                
-        //     };
-        //     image.src = '../generic/xamp23.png';
-        // }
-   
+        new Util.Checkbox("shadowmap-viewtexture", false, (checked) => viewShadowMapTexture = checked); 
     }
 
 
@@ -186,7 +122,7 @@ namespace Sheet9.Part2 {
         pointLight.setColor([pointLightColor.r/255, pointLightColor.g/255, pointLightColor.b/255]);
 
         // Rotate point light
-        if( lightRotate )
+        if( rotateLight )
             pointLight.rotateY([0,0,0], -60*timeStep);
 
         modelRenderer.setPointLight(
@@ -211,9 +147,6 @@ namespace Sheet9.Part2 {
                 model.setPositionY( Math.sin(adjustedTime)*20 + 25);
             }
             
-            // TODO: Moves these
-            groundTexture.bind(1);
-            // gl.bindTexture(gl.TEXTURE_2D, groundTexture); 
 
             // Draw shadow
             shadowRenderer.startDraw(lightCamera, 0);
@@ -229,8 +162,6 @@ namespace Sheet9.Part2 {
                 // Draw model
                 modelRenderer.draw(activeCamera, model);
 
-
-
                 // Draw ground
                 groundRenderer.draw(
                     activeCamera,
@@ -243,10 +174,8 @@ namespace Sheet9.Part2 {
             }
 
             pointLightRenderer.draw(activeCamera, pointLight, 10);
-            
         }
 
-    
         requestAnimationFrame(update);
     }
 

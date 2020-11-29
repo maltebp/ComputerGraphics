@@ -16,15 +16,8 @@ namespace Sheet9.Part2 {
         private materialAmbient: number = 0.5;
         private materialShine: number = 100;
 
-        private shadowMapTextureSlot: number = 0;
-
-
         constructor(gl){
-            if( gl == null )
-                throw "GL context cannot be null";
-    
-            this.gl = gl;
-            
+            this.gl = gl;            
             this.shader = new Util.ShaderProgram(gl, "model/vertex.glsl", "model/fragment.glsl");
         }
 

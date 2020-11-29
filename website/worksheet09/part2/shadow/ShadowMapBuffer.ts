@@ -1,13 +1,16 @@
 
 namespace Sheet9.Part2 {
 
+    /**
+     * A Framebuffer, renderbuffer and texture combined into a structure for a shadowmap
+     */
     export class ShadowMapBuffer {
 
         private gl: WebGLRenderingContext;
 
         private framebuffer: WebGLFramebuffer;
         private renderbuffer: WebGLRenderbuffer;
-        private texture: WebGLTexture;
+        private texture: Util.Texture;
 
         private width: number;
         private height: number;
@@ -39,33 +42,17 @@ namespace Sheet9.Part2 {
             gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, width, height);
             gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, this.renderbuffer);
 
-            {
-                var data = Array<number>();
-    
-                for( var y=0; y<width; y++ ) {
-                    for( var x=0; x<height; x++ ) {
-                        // var black = (Math.floor(x/16) + Math.floor(y/16)) % 2 == 0;
-                        // var color = black ? [0, 0, 0, 1] : [255, 255, 255, 1];
-                        var color = [100, 255, 175, 1];
-                        color.forEach((e) => data.push(e));
-                    } 
-                } 
 
-                var dataFlattened = new Uint8Array(data);
+            let _this = this;
+            Util.Texture.createFromData(gl, null, width, height)
+                .setChannels(4)
+                .build((texture) => {
+                    _this.texture = texture;
+                });
 
-                // Create shadowmap buffer
-                this.texture = gl.createTexture();
-                gl.activeTexture(gl.TEXTURE0);
-                gl.bindTexture(gl.TEXTURE_2D, this.texture);
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, dataFlattened);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-                
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-                gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.texture, 0);
-            }
-            
+            // I know the texture build is synchronous, so I know I can build use it here already
+            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.texture.getGLTexture(), 0);
+      
             var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
             if (status !== gl.FRAMEBUFFER_COMPLETE) {
                 throw "Framebuffer creation failed: " + status.toString();
@@ -104,8 +91,9 @@ namespace Sheet9.Part2 {
         }
 
         bindTexture(textureSlot: number) {
-            this.gl.activeTexture(this.gl.TEXTURE0+textureSlot);
-            this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+            this.texture.bind(textureSlot); 
+            // this.gl.activeTexture(this.gl.TEXTURE0+textureSlot);
+            // this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
         }
 
 
@@ -116,9 +104,7 @@ namespace Sheet9.Part2 {
         getHeight() : number {
             return this.height;
         }
-        
     
-
     }
 
 }

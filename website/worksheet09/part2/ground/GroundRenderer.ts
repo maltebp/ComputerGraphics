@@ -6,8 +6,10 @@ namespace Sheet9.Part2 {
         private gl: WebGLRenderingContext;
         private shader: Util.ShaderProgram;
         private vertexBuffer: Util.VertexBuffer;
+        private texture: Util.Texture;
+        private loaded = false;
 
-        constructor(gl: WebGLRenderingContext, groundWidth: number, groundLength: number){
+        constructor(gl: WebGLRenderingContext, texturePath: string, groundWidth: number, groundLength: number){
             if( gl == null )
                 throw "GL context cannot be null";
 
@@ -33,13 +35,27 @@ namespace Sheet9.Part2 {
             }
 
             this.shader = new Util.ShaderProgram(gl, "ground/vertex.glsl", "ground/fragment.glsl");
+
+            // Load texture
+            let _this = this;
+            Util.Texture.createFromImage(gl, texturePath)
+                .setChannels(4)
+                .setFilter(gl.LINEAR_MIPMAP_LINEAR, gl.LINEAR)
+                .build((texture) => {
+                    _this.texture = texture;
+                    _this.loaded = true;
+                });
         }
 
     
         draw(camera: Util.Camera, lightCamera: Util.Camera, lightColor: number[], ambientColor: number[], shadowMapSlot: number, textureSlot: number){
+            if( !this.loaded ) return;
+            
             this.shader.bind();
 
             this.gl.disable(this.gl.BLEND); 
+
+            this.texture.bind(textureSlot);
 
             // Set texture samplers
             this.shader.setInteger("u_ShadowMap", shadowMapSlot);
