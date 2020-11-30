@@ -19,6 +19,7 @@ namespace Sheet9.Part2 {
 
     declare var previousTime: number;
     
+    declare var ambientColor: Util.Color;
     declare var pointLight: Util.PointLight;
     declare var pointLightRenderer: Util.PointLightRenderer;
 
@@ -44,7 +45,7 @@ namespace Sheet9.Part2 {
         activeCamera = camera;
 
         // Creating point light
-        pointLight = new Util.PointLight([175, 100, 175], [1,1,1]);
+        pointLight = new Util.PointLight([175, 100, 175], Util.Color.WHITE);
         rotateLight = false;
         pointLightRenderer = new Util.PointLightRenderer(gl);
 
@@ -70,7 +71,6 @@ namespace Sheet9.Part2 {
         // Screen renderer to render shadow map as an image to screen
         imageRenderer = new Util.ImageRenderer(gl);
         
-
         // FPS
         FPS.textElement = <HTMLParagraphElement> document.getElementById("fps-text");   
 
@@ -86,17 +86,28 @@ namespace Sheet9.Part2 {
         // Model animation speed
         new Util.Slider("model-animationspeed", 0, 1, 0.25, 0.01, (value) => modelAnimationSpeed = value );       
 
-        // Light Rotation Check box
+        // Point light Rotation Check box
         new Util.Checkbox("pointlight-rotate", false, (checked) =>  rotateLight = checked ); 
 
-        // Light height slider
+        // Point Light height slider
         new Util.Slider("pointlight-height", 100, 250, 100, 1, (value) => pointLight.setY(value));
+
+        // POint light color picker
+        new Util.ColorPicker("pointlight-color", new Util.Color(1.0, 1.0, 1.0), (color) => { pointLight.setColor(color) });
 
         // Light Camera Check box
         new Util.Checkbox("pointlight-camera", false, (checked) =>  activeCamera = checked ? lightCamera : camera ); 
 
         // Shadow map texture view
-        new Util.Checkbox("shadowmap-viewtexture", false, (checked) => viewShadowMapTexture = checked); 
+        new Util.Checkbox("shadowmap-viewtexture", false, (checked) => viewShadowMapTexture = checked);
+        
+        // Ambient color picker
+        new Util.ColorPicker("ambientlight-color", new Util.Color(0.10, 0.10, 0.10), (color) => {
+            ambientColor = color;
+            modelRenderer.setAmbientColor(color.asList());
+        });
+
+        
     }
 
 
@@ -106,20 +117,15 @@ namespace Sheet9.Part2 {
         var timeStep = (currentTime - previousTime)/1000.0;
         previousTime = currentTime;
 
-        // Set Ambient color
-        let ambientColor = Util.hexToRgb((<HTMLInputElement> document.getElementById("ambientlight-color")).value);
-        modelRenderer.setAmbientColor([ambientColor.r/255, ambientColor.g/255, ambientColor.b/255]);
-        
-
-        gl.clearColor(ambientColor.r/255, ambientColor.g/255, ambientColor.b/255, 1.0); 
+        gl.clearColor(ambientColor.getRed(), ambientColor.getGreen(), ambientColor.getBlue(), ambientColor.getAlpha()); 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         FPS.registerFrame();
 
         
-        // Set Point light color
-        let pointLightColor = Util.hexToRgb((<HTMLInputElement>document.getElementById("pointlight-color")).value);
-        pointLight.setColor([pointLightColor.r/255, pointLightColor.g/255, pointLightColor.b/255]);
+        // // Set Point light color
+        // let pointLightColor = Util.hexToRgb((<HTMLInputElement>document.getElementById("pointlight-color")).value);
+        // pointLight.setColor([pointLightColor.r/255, pointLightColor.g/255, pointLightColor.b/255]);
 
         // Rotate point light
         if( rotateLight )

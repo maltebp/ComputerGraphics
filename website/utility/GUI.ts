@@ -58,6 +58,31 @@ namespace Util {
         }
     }
 
+    
+    export class ColorPicker {
+        private element: HTMLInputElement;
+
+        constructor(id: string, initial: Color, callback: (color: Color) => void ) {
+            this.element = <HTMLInputElement> document.getElementById(id);
+            
+            if( this.element.getAttribute("type") !== "color" )
+                throw "Color picker must be an HTMLInputElement with type='color'"
+
+            this.element.setAttribute("value", initial.toHex(false) );
+
+            this.element.onchange = (e) => {
+                callback(Color.fromHex(this.element.value));
+            }
+
+            callback(Color.fromHex(this.element.value));
+        }
+    
+        getColor() {
+            return Color.fromHex(this.element.value);
+        }
+    }
+    
+
 
 
 }

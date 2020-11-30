@@ -8,12 +8,12 @@ namespace Util {
     export class PointLight {
 
         private position: number[];
-        private color: number[];
+        private color: Util.Color;
 
 
-        constructor(position: number[], color: number[]) {
+        constructor(position: number[], color: Color) {
             this.position = [position[0], position[1], position[2]];
-            this.color = [color[0], color[1], color[2]];   
+            this.color = color.copy();
         }
 
 
@@ -22,8 +22,8 @@ namespace Util {
         }
 
 
-        setColor(color: number[]) {
-            this.color = [color[0], color[1], color[2]];   
+        setColor(color: Util.Color) {
+            this.color = color.copy(); 
         }
 
 
@@ -51,7 +51,7 @@ namespace Util {
 
 
         getColor() {
-            return [this.color[0], this.color[1], this.color[2]];
+            return this.color.copy();
         }
 
     }
@@ -129,7 +129,7 @@ namespace Util {
 
             this.shader.setFloatMatrix4("u_View", camera.getViewMatrix());
             this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());
-            this.shader.setFloatVector3("u_Color", light.getColor());
+            this.shader.setFloatVector3("u_Color", light.getColor().asList(false) );
             this.shader.setFloatVector3("u_Position", light.getPosition());
             this.shader.setFloat("u_Size", size);
 
