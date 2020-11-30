@@ -9,6 +9,8 @@ namespace Sheet9.Part2 {
     // Globals
     declare var gl: WebGLRenderingContext;
 
+    declare var frameTimer: Util.FrameTimer;
+
     declare var activeCamera: Util.Camera;
     declare var camera: Util.OrbitalCamera;
     declare var lightCamera: Util.PerspectiveCamera;
@@ -16,8 +18,6 @@ namespace Sheet9.Part2 {
     declare var modelRenderer: ModelRenderer;
     declare var groundRenderer: GroundRenderer;
     declare var shadowRenderer: ShadowRenderer;
-
-    declare var previousTime: number;
     
     declare var ambientColor: Util.Color;
     declare var pointLight: Util.PointLight;
@@ -39,6 +39,8 @@ namespace Sheet9.Part2 {
         // @ts-ignore   
         gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
         gl.enable(gl.DEPTH_TEST);
+
+        frameTimer = new Util.FrameTimer("fps-text");
         
         camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 0, 0, 0 ); // Distance value is unused, as its set below
         lightCamera = new Util.PerspectiveCamera(CANVAS_SIZE, [0,0,0], [0,50,0], 35, 150, 700);
@@ -48,8 +50,6 @@ namespace Sheet9.Part2 {
         pointLight = new Util.PointLight([175, 100, 175], Util.Color.WHITE);
         rotateLight = false;
         pointLightRenderer = new Util.PointLightRenderer(gl);
-
-        previousTime = Date.now();
 
         groundRenderer = new GroundRenderer(gl, "../generic/xamp23.png", GROUND_SIZE[0], GROUND_SIZE[1]);
 
@@ -70,9 +70,7 @@ namespace Sheet9.Part2 {
 
         // Screen renderer to render shadow map as an image to screen
         imageRenderer = new Util.ImageRenderer(gl);
-        
-        // FPS
-        FPS.textElement = <HTMLParagraphElement> document.getElementById("fps-text");   
+    
 
         // Camera distance
         new Util.Slider("camera-distance", 25, 600, 350, 1, (value) => camera.setDistance(value) );
@@ -113,15 +111,10 @@ namespace Sheet9.Part2 {
 
     function update(){
         // Update time
-        var currentTime = Date.now();
-        var timeStep = (currentTime - previousTime)/1000.0;
-        previousTime = currentTime;
+        var timeStep = frameTimer.registerFrame() / 1000.0;
 
         gl.clearColor(ambientColor.getRed(), ambientColor.getGreen(), ambientColor.getBlue(), ambientColor.getAlpha()); 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-        FPS.registerFrame();
-
 
         // Rotate point light
         if( rotateLight )
