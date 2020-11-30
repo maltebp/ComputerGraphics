@@ -75,33 +75,17 @@ namespace Sheet10.Part1 {
         // Mouse Events
         mousePressed = false;
         let canvas = <HTMLCanvasElement> document.getElementById("canvas");
-        canvas.onmousedown = (e) => {
-            console.log("Mouse down!");
-            mousePressed = true;
-        } 
-
-        canvas.onmouseleave = (e) => {
-            console.log("Mouse left");
-            mousePressed = false;
-        }
-
-        canvas.onmouseup = (e) => {
-            console.log("Mouse up!");
-            mousePressed = false;
-        } 
-
+        canvas.onmousedown = (e) => mousePressed = true;  
+        canvas.onmouseleave = (e) => mousePressed = false;
+        canvas.onmouseup = (e) => mousePressed = false;     
         canvas.onmousemove = (e) => {
             if( mousePressed ) {
                 camera.adjustHorizontalRotation(-e.movementX);
                 camera.adjustVerticalRotation(e.movementY);
             }
-                console.log("Mouse moved: ", e.movementX, e.movementY);
         }
+        canvas.onwheel = (e) => camera.adjustDistance(e.deltaY);
 
-        canvas.onwheel = (e) => {
-            console.log("Mouse wheel: ", e.deltaY);
-            camera.adjustDistance(e.deltaY);
-        }
 
         // Camera reset
         (<HTMLButtonElement>document.getElementById('camera-reset')).onclick = (e) => {
@@ -109,7 +93,6 @@ namespace Sheet10.Part1 {
             camera.setVerticalRotation(20);
             camera.setDistance(350)
         }
-
 
         // Model animation speed
         new Util.Slider("model-animationspeed", 0, 1, 0.25, 0.01, (value) => modelAnimationSpeed = value );       
