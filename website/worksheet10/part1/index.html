@@ -1,0 +1,118 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- External libraries -->
+    <script src="/lib/initShaders2.js"></script>
+    <script src="/lib/OBJParser.js"></script>
+    <script src="/lib/MV.js"></script>
+    <script src="/lib/webgl-utils.js"></script>
+
+    <!-- Utility -->
+    <script src="/utility/GL.js"></script>
+    <script src="/utility/FrameTimer.js"></script>
+    <script src="/utility/Color.js"></script>
+    <script src="/utility/FPS.js"></script>
+    <script src="/utility/FloatArrayList.js"></script>
+    <script src="/utility/VertexBuffer.js"></script>
+    <script src="/utility/IndexBuffer.js"></script>
+    <script src="/utility/LinearAlgebraExtension.js"></script>
+    <script src="/utility/ShaderProgram.js"></script>
+    <script src="/utility/Camera.js"></script>
+    <script src="/utility/Obj.js"></script>
+    <script src="/utility/Texture.js"></script>
+    <script src="/utility/GUI.js"></script>
+    <script src="/utility/imagerenderer/ImageRenderer.js"></script>
+    <script src="/utility/pointlight/PointLight.js"></script>
+
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/general.css">
+
+    <title>Worksheet 10 - Part 1
+    </title>
+</head>
+<body>
+
+    <h2>Worksheet 10 - Part 1</h2>   
+    <a href="../">Back to worksheet</a>
+    <br>
+    <a href="../part2">Next part</a><br>
+    <br>
+    <br>
+
+
+    <table class="program-container">
+        <tr>
+            <!-- Right toolbox -->
+            <td><table class="toolbox">
+                <!-- Camera -->
+                <tr class="toolbox-row"><td>
+                    <b>Camera</b><br><br>
+                    
+                    <br>Distance<br>
+                    <input id="camera-distance" class="slider" type="range">
+
+                    <br>Horizontal angle<br>
+                    <input id="camera-horizontal" class="slider" type="range">
+
+                    <br>Vertical angle<br>
+                    <input id="camera-vertical" class="slider" type="range">
+
+                </td></tr>
+            </table></td>
+
+            <td>
+                <canvas id="canvas"></canvas>
+            </td>
+
+            <!-- Right toolbox -->
+            <td><table class="toolbox">
+
+                <!-- Model stuff -->
+                <tr class="toolbox-row"><td>
+                    <b>Model</b><br><br>
+                    
+                    Animation speed<br>
+                    <input id="model-animationspeed" class="slider" type="range">
+                </td></tr>
+
+                <!-- Point light -->
+                <tr class="toolbox-row"><td>
+                    <b>Point light</b><br><br>
+
+                    Height<br>
+                    <input id="pointlight-height" class="slider" type="range"><br><br>
+                    <input id="pointlight-rotate" type="checkbox" name="rotate"> Rotate<br><br>
+                    <input id="pointlight-color" type="color" value="#FFFFFF"> Color<br>
+                </td></tr>
+
+                <!-- Ambient Light -->
+                <tr class="toolbox-row"><td>
+                    <b>Ambient Light</b><br><br>
+                    <input id="ambientlight-color" type="color" value="#202020"> Color
+                </td></tr>
+                
+            </table></td>
+        </tr>
+    </table>
+    
+    <p id="fps-text" class="fps-text">FPS: ?</p>
+
+    
+    <div class="seperator"></div>
+    <p class="description">
+    </p>
+
+    <script src="../generic/model/Model.js"></script>
+    <script src="../generic/model/ModelRenderer.js"></script>
+    <script src="../generic/ground/GroundRenderer.js"></script>
+    <script src="../generic/shadow/ShadowRenderer.js"></script>
+    <script src="../generic/shadow/ShadowMapBuffer.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
