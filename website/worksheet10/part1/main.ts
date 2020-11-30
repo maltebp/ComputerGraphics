@@ -11,7 +11,6 @@ namespace Sheet10.Part1 {
 
     declare var frameTimer: Util.FrameTimer;
 
-    declare var activeCamera: Util.Camera;
     declare var camera: Util.OrbitalCamera;
     declare var lightCamera: Util.PerspectiveCamera;
 
@@ -45,7 +44,6 @@ namespace Sheet10.Part1 {
         // Cameras
         camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 350, 0, 20 ); // Distance value is unused, as its set below
         lightCamera = new Util.PerspectiveCamera(CANVAS_SIZE, [0,0,0], [0,50,0], 35, 150, 700);
-        activeCamera = camera;
 
         // Creating point light
         pointLight = new Util.PointLight([175, 100, 175], Util.Color.WHITE);
@@ -77,7 +75,7 @@ namespace Sheet10.Part1 {
         canvas.onmousedown = (e) => {
             mousePressed = true;
             e.preventDefault(); 
-        }   
+        }
         canvas.onmouseleave = (e) => {
             mousePressed = false;
             e.preventDefault();
@@ -88,8 +86,8 @@ namespace Sheet10.Part1 {
         }
         canvas.onmousemove = (e) => {
             if( mousePressed ) {
-                camera.adjustHorizontalRotation(-e.movementX);
-                camera.adjustVerticalRotation(e.movementY);
+                camera.adjustHorizontalRotation(-e.movementX*0.25);
+                camera.adjustVerticalRotation(e.movementY*0.25);
             }
         }
         canvas.onwheel = (e) =>{
@@ -160,11 +158,11 @@ namespace Sheet10.Part1 {
             shadowRenderer.bindShadowMap(0);
 
             // Draw model
-            modelRenderer.draw(activeCamera, model);
+            modelRenderer.draw(camera, model);
 
             // Draw ground
             groundRenderer.draw(
-                activeCamera,
+                camera,
                 lightCamera,
                 pointLight,
                 ambientColor,
@@ -173,7 +171,7 @@ namespace Sheet10.Part1 {
             );
                 
             // Draw point light
-            pointLightRenderer.draw(activeCamera, pointLight, 10);
+            pointLightRenderer.draw(camera, pointLight, 10);
         }
 
         requestAnimationFrame(update);
