@@ -1,6 +1,6 @@
 
 
-namespace Sheet10.Part1 {
+namespace Sheet10.Part2 {
 
     // Settings
     const CANVAS_SIZE = [720, 480];
@@ -12,7 +12,7 @@ namespace Sheet10.Part1 {
     declare var frameTimer: Util.FrameTimer;
 
     declare var activeCamera: Util.Camera;
-    declare var camera: Util.OrbitalCamera;
+    declare var camera: QuaternionCamera;
     declare var lightCamera: Util.PerspectiveCamera;
 
     declare var modelRenderer: ModelRenderer;
@@ -43,7 +43,7 @@ namespace Sheet10.Part1 {
         frameTimer = new Util.FrameTimer("fps-text");
         
         // Cameras
-        camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 350, 0, 20 ); // Distance value is unused, as its set below
+        camera = new QuaternionCamera(CANVAS_SIZE, [0,0,0], [0, 100, 350], 45 );
         lightCamera = new Util.PerspectiveCamera(CANVAS_SIZE, [0,0,0], [0,50,0], 35, 150, 700);
         activeCamera = camera;
 
@@ -88,20 +88,14 @@ namespace Sheet10.Part1 {
         }
         canvas.onmousemove = (e) => {
             if( mousePressed ) {
-                camera.adjustHorizontalRotation(-e.movementX);
-                camera.adjustVerticalRotation(e.movementY);
+                // Feels more natural to reverse the movement
+                camera.adjustRotation(-e.movementX, -e.movementY);
             }
-        }
-        canvas.onwheel = (e) =>{
-            camera.adjustDistance(e.deltaY);
-            e.preventDefault();
         }
 
         // Camera reset
         (<HTMLButtonElement>document.getElementById('camera-reset')).onclick = (e) => {
-            camera.setHorizontalRotation(0);
-            camera.setVerticalRotation(20);
-            camera.setDistance(350)
+            camera = new QuaternionCamera(CANVAS_SIZE, [0,0,0], [0, 100, 350], 45 );
         }
 
         // Model animation speed
@@ -186,7 +180,7 @@ namespace Sheet10.Part1 {
     }
 }
 
-Sheet10.Part1.start();
+Sheet10.Part2.start();
 
 
 
