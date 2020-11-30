@@ -2,6 +2,16 @@
 namespace Util {
 
     
+    export class Button {
+        constructor(id: string, callback: () => void ) {
+            (<HTMLButtonElement> document.getElementById(id)).onclick = (e) => {
+                callback();
+            }
+        }
+    }
+
+
+    
     export class Slider {
         private element: HTMLInputElement;
         private value: number;
@@ -81,6 +91,7 @@ namespace Util {
             return Color.fromHex(this.element.value);
         }
     }
+
     
 
 
