@@ -24,7 +24,6 @@ namespace Sheet10.Part2 {
             this.rotation = new Quaternion().make_rot_vec2vec([0,0,1], normalizedEye);
             
             // Up vector
-            // QUESTION: Should this be inverse?
             this.up = this.rotation.apply([0,1,0]);
 
         }

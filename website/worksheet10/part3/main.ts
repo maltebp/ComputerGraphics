@@ -29,7 +29,6 @@ namespace Sheet10.Part3 {
     // Flags
     declare var rotateLight: boolean;
 
-
     declare var mousePressed: boolean;
     
 
@@ -71,6 +70,7 @@ namespace Sheet10.Part3 {
 
         // Mouse Events
         mousePressed = false;
+
         let canvas = <HTMLCanvasElement> document.getElementById("canvas");
         canvas.onmousedown = (e) => {
             mousePressed = true;
@@ -86,8 +86,11 @@ namespace Sheet10.Part3 {
         }
         canvas.onmousemove = (e) => {
             if( mousePressed ) {
-                // Feels more natural to reverse the movement
-                camera.adjustRotation(-e.movementX, -e.movementY);
+                if( e.ctrlKey )
+                    camera.adjustPan(e.movementX, e.movementY);
+                else
+                    // Feels more natural to reverse the movement
+                    camera.adjustRotation(-e.movementX, -e.movementY);
             }
         }
         canvas.onwheel = (e) =>{
