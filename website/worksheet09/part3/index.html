@@ -1,0 +1,57 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- External libraries -->
+    <script src="/lib/initShaders2.js"></script>
+    <script src="/lib/OBJParser.js"></script>
+    <script src="/lib/MV.js"></script>
+    <script src="/lib/webgl-utils.js"></script>
+
+    <!-- Utility -->
+    <script src="/utility/GL.js"></script>
+    <script src="/utility/FrameTimer.js"></script>
+    <script src="/utility/Color.js"></script>
+    <script src="/utility/FPS.js"></script>
+    <script src="/utility/FloatArrayList.js"></script>
+    <script src="/utility/VertexBuffer.js"></script>
+    <script src="/utility/IndexBuffer.js"></script>
+    <script src="/utility/LinearAlgebraExtension.js"></script>
+    <script src="/utility/ShaderProgram.js"></script>
+    <script src="/utility/Camera.js"></script>
+    <script src="/utility/Obj.js"></script>
+    <script src="/utility/Texture.js"></script>
+    <script src="/utility/GUI.js"></script>
+    <script src="/utility/imagerenderer/ImageRenderer.js"></script>
+    <script src="/utility/pointlight/PointLight.js"></script>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/general.css">
+
+    <title>Worksheet 9 - Part 3
+    </title>
+</head>
+<body>
+
+    <h2>Worksheet 9 - Part 3</h2>   
+    <a href="../">Back to worksheet</a>
+    <br>
+    <a href="../part2">Previous part</a><br>
+    <br>
+    <br>
+    
+    <div class="seperator"></div>
+    <p class="description">
+        
+        <b> Projection shadows vs Shadow mapping</b><br>
+        Projection shadows are simpler to render than shadow mapping, as they don't use deferred rendering like shadow mapping. Unlike shadow mapping, it's also easier to add more objects, as we simply add them
+        to the rendeirng pipeline, whereas shadow mapping requires us to correct the camera to bind the objects. However, projection shadow doesn't really provide useful shadows in applications. The shadows casted
+        are bound the a uniform ground plane, and as such we can't add objects to cast shadows onto, nor add self shadowing. This is what shadow mapping allows us to do, although it requires us to make more considerations
+        in terms of how we implement our pipeline.  
+    </p>
+</body>
+</html>
