@@ -29,6 +29,9 @@ namespace Sheet10.Part1 {
 
     // Flags
     declare var rotateLight: boolean;
+
+
+    declare var mousePressed: boolean;
     
 
     function setup(){
@@ -40,7 +43,7 @@ namespace Sheet10.Part1 {
         frameTimer = new Util.FrameTimer("fps-text");
         
         // Cameras
-        camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 0, 0, 0 ); // Distance value is unused, as its set below
+        camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 350, 0, 20 ); // Distance value is unused, as its set below
         lightCamera = new Util.PerspectiveCamera(CANVAS_SIZE, [0,0,0], [0,50,0], 35, 150, 700);
         activeCamera = camera;
 
@@ -69,14 +72,44 @@ namespace Sheet10.Part1 {
         shadowRenderer = new ShadowRenderer(gl, GROUND_SIZE[0], GROUND_SIZE[1]);
 
 
-        // Camera distance
-        new Util.Slider("camera-distance", 25, 600, 350, 1, (value) => camera.setDistance(value) );
+        // Mouse Events
+        mousePressed = false;
+        let canvas = <HTMLCanvasElement> document.getElementById("canvas");
+        canvas.onmousedown = (e) => {
+            console.log("Mouse down!");
+            mousePressed = true;
+        } 
 
-        // Camera Horizontal Angle
-        new Util.Slider("camera-horizontal", -360, 360, 0, 1, (value) => camera.setHorizontalRotation(value) );
+        canvas.onmouseleave = (e) => {
+            console.log("Mouse left");
+            mousePressed = false;
+        }
 
-        // Camera Vertical Angle
-        new Util.Slider("camera-vertical", -89, 89, 20, 0.5, (value) => camera.setVerticalRotation(value) );
+        canvas.onmouseup = (e) => {
+            console.log("Mouse up!");
+            mousePressed = false;
+        } 
+
+        canvas.onmousemove = (e) => {
+            if( mousePressed ) {
+                camera.adjustHorizontalRotation(-e.movementX);
+                camera.adjustVerticalRotation(e.movementY);
+            }
+                console.log("Mouse moved: ", e.movementX, e.movementY);
+        }
+
+        canvas.onwheel = (e) => {
+            console.log("Mouse wheel: ", e.deltaY);
+            camera.adjustDistance(e.deltaY);
+        }
+
+        // Camera reset
+        (<HTMLButtonElement>document.getElementById('camera-reset')).onclick = (e) => {
+            camera.setHorizontalRotation(0);
+            camera.setVerticalRotation(20);
+            camera.setDistance(350)
+        }
+
 
         // Model animation speed
         new Util.Slider("model-animationspeed", 0, 1, 0.25, 0.01, (value) => modelAnimationSpeed = value );       
@@ -94,9 +127,7 @@ namespace Sheet10.Part1 {
         new Util.ColorPicker("ambientlight-color", new Util.Color(0.10, 0.10, 0.10), (color) => {
             ambientColor = color;
             modelRenderer.setAmbientColor(color);
-        });
-
-        
+        });        
     }
 
 

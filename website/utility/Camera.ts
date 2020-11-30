@@ -205,7 +205,7 @@ namespace Util {
         setHorizontalRotation(rotation: number){
             var newRotation = rotation % 360;
             if( newRotation < 0 ) newRotation += 360;
-            this.horizontalRotation = rotation;
+            this.horizontalRotation = newRotation;
             this.dirty = true;
         }
 
@@ -228,16 +228,37 @@ namespace Util {
         adjustHorizontalRotation(rotation: number){
             this.setHorizontalRotation(this.horizontalRotation + rotation);
         }
+    
+
+        adjustVerticalRotation(rotation: number){
+            this.setVerticalRotation(this.verticalRotation + rotation);
+        }
+
+
+        adjustDistance(amount: number) {
+            this.setDistance(this.distance+amount);
+        }
+
 
         getDirection(){
             this.clean();
             return this.direction;
         }
 
+
         createViewMatrix() {
 
             // Change up vector to upside down if on the "other side" of the orbit target
-            var upVector = this.verticalRotation <= 90 || this.verticalRotation >= 270 ? [0, 1, 0] : [0, -1, 0];
+            let upVector = [0,0,0];
+            if( this.verticalRotation < 90 || this.verticalRotation > 270 ) {
+                upVector = [0, 1, 0];
+
+            }else if(this.verticalRotation == 90 ) {
+                // @ts-ignore
+                upVector = mult(rotateY(-this.horizontalRotation), [0, 0, -1, 0]).splice(0,3);
+            }else {
+                upVector = [0, -1, 0];
+            }
 
             let vAngleRadians = ((-this.verticalRotation+90) / 180) * Math.PI;
             let hAngleRadians = ((this.horizontalRotation+90) / 180) * Math.PI;
