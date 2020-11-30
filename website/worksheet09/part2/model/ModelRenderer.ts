@@ -6,9 +6,7 @@ namespace Sheet9.Part2 {
         private gl;
         private shader: Util.ShaderProgram;
 
-        private lightPosition: number[] = null;
-        private lightColor: number[] = null;
-
+        private pointLight: Util.PointLight = null;
         private ambientColor: number[] = [0.20,0.20,0.20];
 
         private materialDiffuse: number = 0.5;
@@ -22,14 +20,13 @@ namespace Sheet9.Part2 {
         }
 
         
-        setPointLight(position: number[], color: number[]) {
-            this.lightPosition = position;
-            this.lightColor = color;
+        setPointLight(light: Util.PointLight) {
+            this.pointLight = light;
         }
 
 
-        setAmbientColor( color: number[] ){
-            this.ambientColor = color;
+        setAmbientColor( color: Util.Color ){
+            this.ambientColor = color.asList(false);
         }
 
 
@@ -46,9 +43,9 @@ namespace Sheet9.Part2 {
             this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());
             this.shader.setFloatMatrix4("u_Model", model.getModelMatrix());
 
-            if( this.lightPosition != null ){
-                this.shader.setFloatVector3("u_LightPosition", this.lightPosition);
-                this.shader.setFloatVector3("u_LightEmission", this.lightColor);
+            if( this.pointLight !== null ){
+                this.shader.setFloatVector3("u_LightPosition", this.pointLight.getPosition());
+                this.shader.setFloatVector3("u_LightEmission", this.pointLight.getColor().asList(false));
             }
             this.shader.setFloatVector3("u_AmbientEmission", this.ambientColor);
             this.shader.setFloatVector3("u_CameraPos", camera.getPosition());

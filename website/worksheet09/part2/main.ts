@@ -62,8 +62,8 @@ namespace Sheet9.Part2 {
         modelAnimationTime = 0;
 
         modelRenderer = new ModelRenderer(gl);
-        modelRenderer.setAmbientColor([0.40, 0.40, 0.40]);
         modelRenderer.setMaterial(1.0, 1.0, 0.25, 50);
+        modelRenderer.setPointLight(pointLight);
 
         // The ground size, should match the one in the ground renderer
         shadowRenderer = new ShadowRenderer(gl, GROUND_SIZE[0], GROUND_SIZE[1]);
@@ -104,7 +104,7 @@ namespace Sheet9.Part2 {
         // Ambient color picker
         new Util.ColorPicker("ambientlight-color", new Util.Color(0.10, 0.10, 0.10), (color) => {
             ambientColor = color;
-            modelRenderer.setAmbientColor(color.asList());
+            modelRenderer.setAmbientColor(color);
         });
 
         
@@ -122,19 +122,10 @@ namespace Sheet9.Part2 {
 
         FPS.registerFrame();
 
-        
-        // // Set Point light color
-        // let pointLightColor = Util.hexToRgb((<HTMLInputElement>document.getElementById("pointlight-color")).value);
-        // pointLight.setColor([pointLightColor.r/255, pointLightColor.g/255, pointLightColor.b/255]);
 
         // Rotate point light
         if( rotateLight )
             pointLight.rotateY([0,0,0], -60*timeStep);
-
-        modelRenderer.setPointLight(
-            pointLight.getPosition(),
-            [pointLightColor.r/255, pointLightColor.g/255, pointLightColor.b/255]
-        );
 
         lightCamera.setPosition(pointLight.getPosition());
 
@@ -172,14 +163,15 @@ namespace Sheet9.Part2 {
                 groundRenderer.draw(
                     activeCamera,
                     lightCamera,
-                    [pointLightColor.r/255, pointLightColor.g/255, pointLightColor.b/255],
-                    [ambientColor.r/255, ambientColor.g/255, ambientColor.b/255],
+                    pointLight,
+                    ambientColor,
                     0,
                     1
                 );
+                    
+                // Draw point light
+                pointLightRenderer.draw(activeCamera, pointLight, 10);
             }
-
-            pointLightRenderer.draw(activeCamera, pointLight, 10);
         }
 
         requestAnimationFrame(update);

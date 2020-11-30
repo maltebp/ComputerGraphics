@@ -70,11 +70,11 @@ namespace Util {
 
             this.element.setAttribute("value", initial.toHex(false) );
 
-            this.element.onchange = (e) => {
-                callback(Color.fromHex(this.element.value));
+            this.element.oninput = (e) => {
+                callback(Util.Color.fromHex(this.element.value));
             }
 
-            callback(Color.fromHex(this.element.value));
+            callback(Util.Color.fromHex(this.element.value));
         }
     
         getColor() {

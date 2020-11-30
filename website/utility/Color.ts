@@ -90,13 +90,53 @@ namespace Util {
          * @param {*} hex 
          */
         private static _componentToHex(c) {
-            var hex = (c*255).toString(16);
+            // Pretty bad solution, but it works
+            var hex = parseInt((c*255).toFixed()).toString(16);
             return hex.length == 1 ? "0" + hex : hex;
         }
     }
 
     export namespace Color {
         export const WHITE = new Color(1.0, 1.0, 1.0);
+    }
+
+
+
+
+
+    // - - -  - - -  - - -  - - -  - - -  - - -  - - -  - - -  - - -  - - -  - - - 
+    // Old solution to color problem. Still here because it's used by some older
+    // worksheetss
+
+    /**
+     * Source: https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+     * @param {*} hex 
+     */
+    export function hexToRgb(hex) {
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+        } : null;
+    }
+
+
+    /**
+     * Source: https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+     * @param {*} hex 
+     */
+    function _componentToHex(c) {
+        var hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
+    }
+
+    /**
+     * Source: https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+     * @param {*} hex 
+     */
+    export function rgbToHex(r, g, b) {
+        return "#" + _componentToHex(r) + _componentToHex(g) + _componentToHex(b);
     }
     
 }

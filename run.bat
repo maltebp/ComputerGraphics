@@ -7,7 +7,8 @@ set typescript="C:\Users\s185139\.IntelliJIdea2019.2\config\node\node-v10.16.0-w
 
 :: Delete out folder
 echo Cleaning targer folder...
-rmdir /q /s out
+rd /s /q out
+rmdir /s /q out
 mkdir out
 
 :: Copying HTML and javascript
