@@ -41,6 +41,20 @@ namespace Util {
             this.gl.uniform1f(location, float);
         }
 
+
+        setFloatVector2(name: string, float2: number[] | Float32Array){
+            if( float2.length != 2 )
+                throw "Uniform '" + name + "' must be a number array of length 2";
+    
+            var location = this.getUniformLocation(name);
+    
+            var existingUniform = this.gl.getUniform(this.program, location);
+            if( !(existingUniform instanceof Float32Array) || existingUniform.length != 2 )
+                throw "Uniform " + name + " is not a vec2 in the shader";
+    
+            this.gl.uniform2fv(location, toFloatArray(float2));
+        }
+
     
         setFloatVector3(name: string, float3: number[] | Float32Array){
             if( float3.length != 3 )
@@ -69,6 +83,21 @@ namespace Util {
             this.gl.uniform4fv(location, toFloatArray(float4));
         }
 
+
+        setFloatMatrix2(name: string, float2x2: number[] | Float32Array){    
+            var flattened = toFloatArray(float2x2);
+
+            if( flattened.length != 4 )
+                throw "Uniform '" + name + "' must be a 2x2 matrix";
+    
+            var location = this.getUniformLocation(name);
+    
+            var existingUniform = this.gl.getUniform(this.program, location);
+            if( !(existingUniform instanceof Float32Array) || existingUniform.length != 4 )
+                throw "Uniform " + name + " is not a mat2 in the shader";
+    
+            this.gl.uniformMatrix2fv(location, false, flattened);
+        }
 
         setFloatMatrix4(name: string, float4x4: number[] | Float32Array){    
             var flattened = toFloatArray(float4x4);

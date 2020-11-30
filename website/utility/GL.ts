@@ -2,7 +2,7 @@ namespace Util {
 
 
     // Utility function which creates a canvas, and appends it to the document's body
-    export function appendGLCanvas(parent, width, height){
+    export function appendGLCanvas(parent, width, height): WebGLRenderingContext{
         var canvas = <HTMLCanvasElement> document.createElement("canvas");
         canvas.width = width;
         canvas.height = height;
