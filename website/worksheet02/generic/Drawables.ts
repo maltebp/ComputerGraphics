@@ -27,6 +27,14 @@ namespace Sheet2 {
                 this.color
             );
         }
+
+        getPosition() {
+            return [this.pos[0], this.pos[1]];
+        }
+
+        getColor() {
+            return this.color.copy();
+        }
     }
     
 

@@ -38,6 +38,10 @@ namespace Util {
         getValue() {
             return this.element.valueAsNumber;
         }
+
+        disable(toggle: boolean) {
+            this.element.disabled = toggle;
+        }
     }
 
 
@@ -91,8 +95,66 @@ namespace Util {
         }
     }
 
-    
+
+    /**
+     *  A logical group of radio buttons (HTML input element with type=radio), where
+     *  each button is bound to a value of generic type T
+     */
+    export class RadioGroup<T> {
+        private static nextGroupId = 0;
+
+        private groupId: string;
+        private buttons: HTMLInputElement[] = [];
+        private values: T[] = [];
+        private selected = -1;
+        private callback: (value: T) => void;
+
+        constructor(callback: (value: T) => void = null) {
+            // A (hopefully) unique id
+            this.groupId = "util-gui-radiogroup-id-" + (++RadioGroup.nextGroupId);
+            this.callback = callback;
+        }
 
 
+        addOption(string: string, value: T) {
+            let button = <HTMLInputElement> document.getElementById(string);
+            if( button.getAttribute("type") !== "radio" )
+                throw "Radio button must be an HTMLInputElement with type='radio'"
+
+            let id = this.buttons.length;
+            this.buttons.push(button);  
+            this.values.push(value);          
+
+            // Register change callback
+            let _this = this;
+            button.onchange = (e) => {
+                if( button.checked) {
+                    let fireCallback = _this.selected !== id;
+                    _this.selected = id;
+                    if( fireCallback && this.callback !== null )
+                        this.callback(_this.values[id]);                   
+                } 
+            }
+
+            // Add to group
+            button.name = this.groupId;
+            button.checked = false;            
+        }
+
+
+        check(index: number) {
+            if( index < 0 || index > this.buttons.length)
+                throw "Radio group index is out of bounds";
+            this.buttons.forEach(btn => btn.checked = false);
+            this.buttons[index].checked = true;
+            this.selected = index;
+        }
+
+
+        getChecked() {
+            return this.selected; 
+        }
+
+    }
 
 }
