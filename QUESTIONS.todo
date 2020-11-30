@@ -14,9 +14,9 @@ Questions:
         ✔ Er det okay, at jeg ikke bruger de præcis koordinater, men bare sikrer at der ser nognelunde ens ud?
 
 
-
-    Sheet 9:
-        ☐ Hvorfor sætter vi viewport på framebuffer, og hvad skal vi sætte den til?
-        ☐ Er det fint, at justere sig frem til størrelsen på kameraet?
-        ☐ SKAL vi lave det bitshifting show der?
-    
+    Sheet 10:
+        ☐ Jeg har ikke gimbal-lock problemet
+        ☐ Skal vi implementere panning i part 1?
+        ☐ Er det meningen at Part 2 og 3 er byttet rundt?
+        ☐ Forklar metoden - giver den mening?
+        ☐ Må jeg gerne implemnetere dolly og panning forskelligt?

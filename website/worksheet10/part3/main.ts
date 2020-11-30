@@ -1,6 +1,6 @@
 
 
-namespace Sheet10.Part2 {
+namespace Sheet10.Part3 {
 
     // Settings
     const CANVAS_SIZE = [720, 480];
@@ -42,7 +42,7 @@ namespace Sheet10.Part2 {
         frameTimer = new Util.FrameTimer("fps-text");
         
         // Cameras
-        camera = new QuaternionCamera(CANVAS_SIZE, [0,0,0], [0, 100, 350], 45 );
+        camera = new QuaternionCamera(CANVAS_SIZE, [0,0,0], [0, 100, 350], 45, 350 );
         lightCamera = new Util.PerspectiveCamera(CANVAS_SIZE, [0,0,0], [0,50,0], 35, 150, 700);
 
         // Creating point light
@@ -90,10 +90,14 @@ namespace Sheet10.Part2 {
                 camera.adjustRotation(-e.movementX, -e.movementY);
             }
         }
+        canvas.onwheel = (e) =>{
+            camera.adjustDistance(e.deltaY);
+            e.preventDefault();
+        }
 
         // Camera reset
         (<HTMLButtonElement>document.getElementById('camera-reset')).onclick = (e) => {
-            camera = new QuaternionCamera(CANVAS_SIZE, [0,0,0], [0, 100, 350], 45 );
+            camera = new QuaternionCamera(CANVAS_SIZE, [0,0,0], [0, 100, 350], 45, 350 );
         }
 
         // Model animation speed
@@ -178,7 +182,7 @@ namespace Sheet10.Part2 {
     }
 }
 
-Sheet10.Part2.start();
+Sheet10.Part3.start();
 
 
 

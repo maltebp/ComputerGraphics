@@ -1,4 +1,4 @@
-namespace Sheet10.Part2 {
+namespace Sheet10.Part3 {
 
     export class QuaternionCamera extends Util.Camera {
 
@@ -6,16 +6,18 @@ namespace Sheet10.Part2 {
         protected target: number[];
         protected fov: number;
         protected direction: number[];
+        protected distance: number;
 
         protected rotation: Quaternion;
         protected up: number[];
 
-        constructor(screenSize: number[], target: number[], initialEye: number[], fov: number ){
+        constructor(screenSize: number[], target: number[], initialEye: number[], fov: number, distance: number ){
             super();
 
             this.screenSize = screenSize;
             this.fov = fov;
             this.target = target;
+            this.distance = distance;
 
             // @ts-ignore
             let normalizedEye = normalize(subtract(initialEye, target));
@@ -39,6 +41,12 @@ namespace Sheet10.Part2 {
             this.dirty = true;
         }
 
+        adjustDistance(amount: number){
+            this.distance += amount;
+            if( this.distance < 0 ) this.distance = 0;
+            this.dirty = true;
+        }
+
 
         getDirection(){
             this.clean();
@@ -48,9 +56,8 @@ namespace Sheet10.Part2 {
 
         createViewMatrix() {
             // Hardcoded distance for this part
-            let distance = 350;
 
-            let eye = this.rotation.apply([0, 0, distance]);
+            let eye = this.rotation.apply([0, 0, this.distance]);
             this.position = eye;
 
             let up = this.rotation.apply(this.up);
