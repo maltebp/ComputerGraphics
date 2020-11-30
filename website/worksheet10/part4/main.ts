@@ -1,10 +1,11 @@
 
 
-namespace Sheet10.Part3 {
+namespace Sheet10.Part4 {
 
     // Settings
     const CANVAS_SIZE = [720, 480];
     const GROUND_SIZE = [300, 300];
+    const MOUSE_SPIN_DELAY = 25; // Milliseconds
 
     // Globals
     declare var gl: WebGLRenderingContext;
@@ -30,7 +31,10 @@ namespace Sheet10.Part3 {
     declare var rotateLight: boolean;
 
     declare var mousePressed: boolean;
-    
+
+    declare var mouseLastSpinAmount: number[];
+
+    declare var mouseLastSpinTime: number;
 
     function setup(){
 
@@ -70,7 +74,8 @@ namespace Sheet10.Part3 {
 
         // Mouse Events
         mousePressed = false;
-
+        mouseLastSpinTime = 0;
+        mouseLastSpinAmount = [0, 0];
         let canvas = <HTMLCanvasElement> document.getElementById("canvas");
         canvas.onmousedown = (e) => {
             mousePressed = true;
@@ -81,16 +86,21 @@ namespace Sheet10.Part3 {
             e.preventDefault();
         }
         canvas.onmouseup = (e) => {
-            mousePressed = false;     
+            mousePressed = false;
             e.preventDefault();
         }
         canvas.onmousemove = (e) => {
+            console.log("Mouse: ", e.movementX, e.movementY);
+
+
             if( mousePressed ) {
                 if( e.altKey )
                     camera.adjustPan(e.movementX, e.movementY);
-                else
+                else{
                     // Feels more natural to reverse the movement
-                    camera.adjustRotation(-e.movementX, -e.movementY);
+                    mouseLastSpinAmount = [-e.movementX, -e.movementY];
+                    mouseLastSpinTime = Date.now();
+                }
             }
         }
         canvas.onwheel = (e) =>{
@@ -129,6 +139,16 @@ namespace Sheet10.Part3 {
 
         gl.clearColor(ambientColor.getRed(), ambientColor.getGreen(), ambientColor.getBlue(), ambientColor.getAlpha()); 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+
+        // Spin camera
+        if( mouseLastSpinAmount[0] !== 0 || mouseLastSpinAmount[1] !== 0 ){
+            camera.adjustRotation(mouseLastSpinAmount[0], mouseLastSpinAmount[1]);
+        }
+        if( mousePressed ){
+            if( Date.now()-mouseLastSpinTime > MOUSE_SPIN_DELAY ) mouseLastSpinAmount = [0,0];
+        }
+
 
         // Rotate point light
         if( rotateLight )
@@ -185,7 +205,7 @@ namespace Sheet10.Part3 {
     }
 }
 
-Sheet10.Part3.start();
+Sheet10.Part4.start();
 
 
 
