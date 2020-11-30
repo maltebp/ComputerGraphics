@@ -98,6 +98,7 @@ namespace Util {
 
     export namespace Color {
         export const WHITE = new Color(1.0, 1.0, 1.0);
+        export const CORNFLOWER_BLUE = new Color(0.39, 0.58, 0.93);
     }
 
 

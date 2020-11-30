@@ -14,9 +14,8 @@ namespace Util {
     
     export class Slider {
         private element: HTMLInputElement;
-        private value: number;
 
-        constructor(id: string, min: number, max: number, initial: number, step: number, callback: (value: number) => void ) {
+        constructor(id: string, min: number, max: number, initial: number, step: number, callback: (value: number) => void = null ) {
 
             this.element = <HTMLInputElement> document.getElementById(id);
 
@@ -27,18 +26,17 @@ namespace Util {
             this.element.setAttribute("max", max.toString());
             this.element.setAttribute("step", step.toString());
             this.element.setAttribute("value", initial.toString());
-            let _this = this;
-            this.element.oninput = (e) => {
-                _this.value = this.element.valueAsNumber
-                callback(_this.value);
+            
+            if( callback !== null){
+                this.element.oninput = (e) => {
+                    callback(this.element.valueAsNumber);
+                }
+                callback(this.element.valueAsNumber);
             }
-
-            _this.value = this.element.valueAsNumber
-            callback(_this.value);
         }
     
         getValue() {
-            return this.value;
+            return this.element.valueAsNumber;
         }
     }
 
@@ -72,7 +70,7 @@ namespace Util {
     export class ColorPicker {
         private element: HTMLInputElement;
 
-        constructor(id: string, initial: Color, callback: (color: Color) => void ) {
+        constructor(id: string, initial: Color, callback: (color: Color) => void = null ) {
             this.element = <HTMLInputElement> document.getElementById(id);
             
             if( this.element.getAttribute("type") !== "color" )
@@ -80,11 +78,12 @@ namespace Util {
 
             this.element.setAttribute("value", initial.toHex(false) );
 
-            this.element.oninput = (e) => {
+            if( callback !== null ){
+                this.element.oninput = (e) => {
+                    callback(Util.Color.fromHex(this.element.value));
+                }
                 callback(Util.Color.fromHex(this.element.value));
             }
-
-            callback(Util.Color.fromHex(this.element.value));
         }
     
         getColor() {
