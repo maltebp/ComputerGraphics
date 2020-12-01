@@ -14,13 +14,15 @@
     <!-- Utility -->
     <script src="/utility/GL.js"></script>
     <script src="/utility/Color.js"></script>
-    <script src="/utility/FPS.js"></script>
+    <script src="/utility/FrameTimer.js"></script>
+    <script src="/utility/GUI.js"></script>
     <script src="/utility/FloatArrayList.js"></script>
     <script src="/utility/VertexBuffer.js"></script>
     <script src="/utility/IndexBuffer.js"></script>
     <script src="/utility/LinearAlgebraExtension.js"></script>
     <script src="/utility/ShaderProgram.js"></script>
     <script src="/utility/Camera.js"></script>
+    <script src="/utility/Texture.js"></script>
 
     <!-- Stylesheet -->
     <link rel="stylesheet" href="/general.css">
@@ -70,7 +72,7 @@
                 <!-- Light rotation checkbox -->
                 <tr class="toolbox-row"><td>
                     <b>Directional Light</b><br><br>
-                    <input type="checkbox" id="rotate_light" name="rotate"> Rotate<br><br>
+                    <input type="checkbox" id="rotate_light"> Rotate<br><br>
                     <input id="directional-light-color" type="color" value="#FFFFFF"> Color
                 </td></tr>
 
@@ -83,7 +85,7 @@
                 <!-- Globe rotation -->
                 <tr class="toolbox-row"><td>
                     <b>Globe</b><br><br>
-                    <input type="checkbox" id="globe-rotate" name="rotate"> Rotate<br>
+                    <input type="checkbox" id="globe-rotate"> Rotate<br>
                 </td></tr>
 
             </table></td>

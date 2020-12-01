@@ -15,13 +15,15 @@
     <!-- Utility -->
     <script src="/utility/GL.js"></script>
     <script src="/utility/Color.js"></script>
-    <script src="/utility/FPS.js"></script>
+    <script src="/utility/FrameTimer.js"></script>
+    <script src="/utility/GUI.js"></script>
     <script src="/utility/FloatArrayList.js"></script>
     <script src="/utility/VertexBuffer.js"></script>
     <script src="/utility/IndexBuffer.js"></script>
     <script src="/utility/LinearAlgebraExtension.js"></script>
     <script src="/utility/ShaderProgram.js"></script>
     <script src="/utility/Camera.js"></script>
+    <script src="/utility/Texture.js"></script>
 
     <!-- Stylesheet -->
     <link rel="stylesheet" href="/general.css">
@@ -49,18 +51,17 @@
             <td><table class="toolbox">
                 <!-- Camera -->
                 <tr class="toolbox-row"><td>
-                    <b>Camera</b><br><br>
-
-                    <br>Distance<br>
-                    <input id="camera-distance" class="slider" type="range" min="0" max="100" value="35">
-
-                    <br>Horizontal angle<br>
-                    <input id="camera-horizontal" class="slider" type="range" min="-180" max="180" value="0">
-
-                    <br>Vertical angle<br>
-                    <input id="camera-vertical" class="slider" type="range" min="-89" max="89" value="5">
-                </td></tr>
-
+                        <b>Camera</b><br><br>
+    
+                        <br>Distance<br>
+                        <input id="camera-distance" class="slider" type="range" min="0" max="100" value="35">
+    
+                        <br>Horizontal angle<br>
+                        <input id="camera-horizontal" class="slider" type="range" min="180" max="180" value="0">
+    
+                        <br>Vertical angle<br>
+                        <input id="camera-vertical" class="slider" type="range" min="-89" max="89" value="5">
+                    </td></tr>
             </table></td>
 
             <td>
@@ -72,24 +73,24 @@
 
                 <tr class="toolbox-row"><td>
                     <b>Wrap mode</b><br>
-                    <input id="wrap-mode-repeat" type="radio" name="wrap-mode-group" checked> Repeat <br>
-                    <input id="wrap-mode-clamp" type="radio" name="wrap-mode-group">  Clamped<br>
+                    <input id="wrap-mode-repeat" type="radio"> Repeat <br>
+                    <input id="wrap-mode-clamp" type="radio">  Clamped<br>
                 </td></tr>
 
                 <tr class="toolbox-row"><td>
                     <b>Minification filter</b><br>
-                    <input id="minfilter-mode-nearest" type="radio" name="min-filter-mode-group" checked> Nearest <br>
-                    <input id="minfilter-mode-linear" type="radio" name="min-filter-mode-group"> Linear <br>
-                    <input id="minfilter-mode-mipmap-n-l" type="radio" name="min-filter-mode-group"> Linear mipmap, nearest pixel <br>
-                    <input id="minfilter-mode-mipmap-l-l" type="radio" name="min-filter-mode-group"> Linear mipmap, linear pixel <br>
-                    <input id="minfilter-mode-mipmap-n-n" type="radio" name="min-filter-mode-group"> Nearest mipmap, nearest pixel <br>
-                    <input id="minfilter-mode-mipmap-l-n" type="radio" name="min-filter-mode-group"> Nearest mipmap, linear pixel <br>
+                    <input id="minfilter-mode-nearest" type="radio"> Nearest <br>
+                    <input id="minfilter-mode-linear" type="radio" > Linear <br>
+                    <input id="minfilter-mode-mipmap-n-l" type="radio" > Linear mipmap, nearest pixel <br>
+                    <input id="minfilter-mode-mipmap-l-l" type="radio" > Linear mipmap, linear pixel <br>
+                    <input id="minfilter-mode-mipmap-n-n" type="radio" > Nearest mipmap, nearest pixel <br>
+                    <input id="minfilter-mode-mipmap-l-n" type="radio" > Nearest mipmap, linear pixel <br>
                 </td></tr>
 
                 <tr class="toolbox-row"><td>
                     <b>Magnification filter</b><br>
-                    <input id="magfilter-mode-nearest" type="radio" name="mag-filter-mode-group" checked> Nearest <br>
-                    <input id="magfilter-mode-linear" type="radio" name="mag-filter-mode-group"> Linear <br>
+                    <input id="magfilter-mode-nearest" type="radio" > Nearest <br>
+                    <input id="magfilter-mode-linear" type="radio"> Linear <br>
                 </td></tr>
 
              

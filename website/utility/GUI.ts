@@ -138,7 +138,8 @@ namespace Util {
 
             // Add to group
             button.name = this.groupId;
-            button.checked = false;            
+            button.checked = false;
+            return this;          
         }
 
 

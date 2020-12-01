@@ -23,9 +23,47 @@ namespace Util {
             let currentSlot = this.gl.getParameter(this.gl.ACTIVE_TEXTURE);
             this.gl.activeTexture(this.gl.TEXTURE0 + slot);
             this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);     
-            // this.gl.activeTexture(currentSlot);   
+            this.gl.activeTexture(currentSlot);   
         }
 
+    
+        setWrap(wrapS: number, wrapT: number) {
+            let gl = this.gl;
+            this.update(() => {
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrapS);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrapT);
+            });
+        }
+
+
+        setFilter(minification: number, magnification: number) {
+            this.setMinificationFilter(minification);
+            this.setMagnificationFilter(magnification);
+        }
+
+        setMinificationFilter(filter: number) {
+            let gl = this.gl;
+            this.update(() => {
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
+            });
+        }
+
+        setMagnificationFilter(filter: number) {
+            let gl = this.gl;
+            this.update(() => {
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter);
+            });
+        }
+
+
+        // Utility method, which binds the texture, runs the update callback
+        // and rebinds the previous texture
+        private update(callback: () => void) {
+            let currentTexture = <WebGLTexture> gl.getParameter(gl.TEXTURE_BINDING_2D);
+            gl.bindTexture(gl.TEXTURE_2D, this.texture); 
+            callback();
+            gl.bindTexture(gl.TEXTURE_2D, currentTexture);        
+        }
 
         static createFromImage(gl: WebGLRenderingContext, imagePath: string) {
             return new Texture.Builder(gl, imagePath, null, 0, 0);
@@ -51,6 +89,7 @@ namespace Util {
             private numChannels = 4;
             private width: number;
             private height: number;
+            private generateMipmaps = false;
 
     
             constructor(gl: WebGLRenderingContext, imagePath: string, data: Uint8Array, width: number, height: number) {
@@ -65,6 +104,7 @@ namespace Util {
                 this.height = height;
             }
             
+
             setFilter(minification: number, magnification: number) {
                 this.minificationFilter = minification;
                 this.magnificationFilter = magnification;
@@ -82,6 +122,11 @@ namespace Util {
             setChannels(numChannels: number) {
                 if( numChannels < 1 || numChannels > 4) throw "Number of channels must be between 1 and 4"
                 this.numChannels = numChannels;
+                return this;
+            }
+
+            loadMipmaps() {
+                this.generateMipmaps = true;
                 return this;
             }
     
@@ -114,10 +159,15 @@ namespace Util {
                 let texture = gl.createTexture();
                 gl.bindTexture(gl.TEXTURE_2D, texture); 
 
+                let format;
+                if( this.numChannels == 3 ) format = gl.RGB;
+                else if( this.numChannels == 4 ) format = gl.RGBA;
+                else throw "Texture channel format is not support: " + this.numChannels;
+
                 if( image !== null )
-                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+                    gl.texImage2D(gl.TEXTURE_2D, 0, format, format, gl.UNSIGNED_BYTE, image);
                 else
-                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.width, this.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, this.imageData);
+                    gl.texImage2D(gl.TEXTURE_2D, 0, format, this.width, this.height, 0, format, gl.UNSIGNED_BYTE, this.imageData);
 
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, this.minificationFilter);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, this.magnificationFilter);
@@ -126,7 +176,8 @@ namespace Util {
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, this.wrapT);
 
                 // Generate mipmaps
-                if( this.minificationFilter === gl.LINEAR_MIPMAP_LINEAR ||
+                if( this.generateMipmaps ||
+                    this.minificationFilter === gl.LINEAR_MIPMAP_LINEAR ||
                     this.minificationFilter === gl.LINEAR_MIPMAP_NEAREST ||
                     this.minificationFilter === gl.NEAREST_MIPMAP_LINEAR ||
                     this.minificationFilter === gl.NEAREST_MIPMAP_NEAREST
