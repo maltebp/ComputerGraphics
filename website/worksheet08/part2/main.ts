@@ -1,69 +1,34 @@
 
 namespace Sheet8.Part2 {
+
+    const CANVAS_SIZE = [720, 480];
+
     declare var gl: WebGLRenderingContext;
-
+    declare var frameTimer: Util.FrameTimer;
     declare var camera: Util.OrbitalCamera;
+    
     declare var renderer: QuadRenderer;
-    declare var texturesLoaded: boolean;
-
-    declare var lightPosition: number[];
-    declare var lightRotate: boolean;
-
-    declare var previousTime: number;
+    declare var pointLight: Util.PointLight;
+    declare var rotateLight: boolean;
+    
+    declare var texturesLoaded: boolean;  
 
     
     function setup(){
 
-        const CANVAS_SIZE = [720, 480];
-    
-        // @ts-ignore
-        gl =Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
+        gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
+        gl.clearColor(1,1,1,1);
         gl.enable(gl.DEPTH_TEST);
-        gl.clearColor(1, 1, 1, 1.0); 
+
+        frameTimer = new Util.FrameTimer("fps-text");
         
-        camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 0, 0, 0 ); // Distance value is unused, as its set below
+        camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 0, 0, 0);
 
-        previousTime = Date.now();
-        
-       
+        pointLight = new Util.PointLight([40, 100, 0], Util.Color.WHITE);
+        renderer = new QuadRenderer(gl, pointLight);
 
-        // FPS
-        FPS.textElement = <HTMLParagraphElement> document.getElementById("fps-text");   
-
-        // Camera Zoom
-        let cameraDistanceSlider = <HTMLInputElement> document.getElementById("camera-distance");
-        cameraDistanceSlider.oninput =  (e) => {
-             camera.setDistance(cameraDistanceSlider.valueAsNumber);
-        };
-         camera.setDistance(cameraDistanceSlider.valueAsNumber);
-
-        // Camera Horizontal Angle
-        let cameraHorizontalSlider = <HTMLInputElement> document.getElementById("camera-horizontal");
-        cameraHorizontalSlider.oninput =  (e) => {
-            camera.setHorizontalRotation(cameraHorizontalSlider.valueAsNumber);
-        };
-        camera.setHorizontalRotation(cameraHorizontalSlider.valueAsNumber);
-
-        // Camera Vertical Angle
-        let cameraVerticalSlider = <HTMLInputElement> document.getElementById("camera-vertical");
-        cameraVerticalSlider.oninput =  (e) => {
-            camera.setVerticalRotation(cameraVerticalSlider.valueAsNumber);
-        };
-        camera.setVerticalRotation(cameraVerticalSlider.valueAsNumber);   
-
-
-         // Setting initial light position
-         lightPosition = [40, 100, 0, 1];
-         lightRotate = false;
-         // Light Rotation Check box
-         document.getElementById("light-rotate").onchange =  (e) => {
-             lightRotate = !lightRotate;
-         };  
-
-        renderer = new QuadRenderer(gl);
-        
         // Ground quad
-        renderer.setGroundPlane(new Quad(
+        renderer.addQuad(new Quad(
             [0,0,0], // Position
             [
                 // Corners
@@ -90,75 +55,49 @@ namespace Sheet8.Part2 {
         renderer.addQuad(new Quad(
             [-75, 0, 0 ], // Position
             [
-                // Corners
-                [0,   0, -25],
-                [0,  50, -25],
-                [0,  50,  25],
-                [0,   0,  25]
+                 // Corners
+                 [0,   0, -25],
+                 [0,  50, -25],
+                 [0,  50,  25],
+                 [0,   0,  25]
             ], 1 // Texture index
         )); 
 
-         // Loading xamp23.png
-         texturesLoaded = false;
-         var image = <HTMLImageElement> document.createElement('img');
-         image.crossOrigin = 'anonymous';
-         image.onload = function () {
-     
-             // Adding texture
-             let texture = gl.createTexture();
-             gl.activeTexture(gl.TEXTURE0);
-             gl.bindTexture(gl.TEXTURE_2D, texture); 
-     
-             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-     
-             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-     
-             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
- 
-             gl.generateMipmap(gl.TEXTURE_2D);
+        // Loading xamp23.png
+        texturesLoaded = false;
+        Util.Texture.createFromImage(gl, '../xamp23.png')
+            .setChannels(4)
+            .setFilter(gl.LINEAR_MIPMAP_LINEAR, gl.LINEAR)
+            .setWrap(gl.REPEAT, gl.REPEAT)
+            .build((tex) => {
+                tex.bind(0);
+                texturesLoaded = true;
+            });
 
-             texturesLoaded = true;
-         };
-         image.src = '../xamp23.png';
+        // Creating red texture
+        Util.Texture.createFromData(gl,new Uint8Array([255, 0, 0]), 1, 1)
+            .setChannels(3)
+            .setFilter(gl.NEAREST, gl.NEAREST)
+            .setWrap(gl.REPEAT, gl.REPEAT)
+            .build((tex) => tex.bind(1));
 
 
-         // Creating red texture
-        {
-            let texture = gl.createTexture();
-            gl.activeTexture(gl.TEXTURE1);
-            gl.bindTexture(gl.TEXTURE_2D, texture); 
+        // Camera controls
+        new Util.Slider("camera-distance", 25, 600, 350, 1, (value) => camera.setDistance(value) );
+        new Util.Slider("camera-horizontal", -360, 360, 0, 0.5, (value) => camera.setHorizontalRotation(value) );
+        new Util.Slider("camera-vertical", -89, 89, 20, 0.5, (value) => camera.setVerticalRotation(value) ); 
     
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 1, 1, 0, gl.RGB, gl.UNSIGNED_BYTE, new Uint8Array([255, 0, 0]));
-    
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-    
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-        }
-        
-
+        // Point light rotation
+        new Util.Checkbox("light-rotate", false, (rotate) => rotateLight = rotate);
     }
 
 
-
     function update(){
-        // Update time
-        var currentTime = Date.now();
-        var timeStep = (currentTime - previousTime)/1000.0;
-        previousTime = currentTime;
-
+        let timeStep = frameTimer.registerFrame();
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        FPS.registerFrame();
-
-        if( lightRotate )
-            // @ts-ignore
-            lightPosition = mult(rotateY(-60 * timeStep), lightPosition);      
-
-        renderer.setLightPosition(lightPosition.slice(0, 4));
+        if( rotateLight )
+            pointLight.rotateY([0,0,0], -60*timeStep)
 
         if( texturesLoaded )
             renderer.draw(camera);

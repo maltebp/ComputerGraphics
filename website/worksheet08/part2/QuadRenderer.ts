@@ -6,17 +6,15 @@ namespace Sheet8.Part2 {
 
         private gl: WebGLRenderingContext;
         private shader: Util.ShaderProgram;
-        private lightPosition: number[];
+        private pointLight: Util.PointLight;
 
         private vertexBuffer: Util.VertexBuffer;
 
         private groundPlaneBuffer: Util.VertexBuffer;
 
-        constructor(gl: WebGLRenderingContext){
-            if( gl == null )
-                throw "GL context cannot be null";
-    
+        constructor(gl: WebGLRenderingContext, pointLight: Util.PointLight){
             this.gl = gl;
+            this.pointLight = pointLight;
     
             this.groundPlaneBuffer = new Util.VertexBuffer(gl, 100);
             this.groundPlaneBuffer.addAttribute("a_Position", 3);
@@ -39,12 +37,7 @@ namespace Sheet8.Part2 {
 
         addQuad(quad: Quad){
             this.vertexBuffer.push(quad.getVertices());
-        }    
-
-
-        setLightPosition(position: number[]){
-            this.lightPosition = position;
-        }
+        }   
 
     
         draw(camera: Util.Camera){
@@ -54,10 +47,7 @@ namespace Sheet8.Part2 {
             this.shader.setInteger("u_TextureSampler0", 0);
             this.shader.setInteger("u_TextureSampler1", 1);
 
-
             this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());
-
-            
 
             // Draw the ground
             // @ts-ignore
@@ -69,18 +59,19 @@ namespace Sheet8.Part2 {
             this.vertexBuffer.bind();
 
             // Render shadows
+            let lightPosition = this.pointLight.getPosition();
             
             // @ts-ignore
             let modelLight = mat4();
-            let d = -this.lightPosition[1];
+            let d = -lightPosition[1];
             modelLight[3][1] = 1/d;
             modelLight[3][3] = 0;
 
             // @ts-ignore
-            let translation = translate(-this.lightPosition[0], -this.lightPosition[1], -this.lightPosition[2]);
+            let translation = translate(-lightPosition[0], -lightPosition[1], -lightPosition[2]);
 
             // @ts-ignore
-            let translationBack = translate(this.lightPosition[0], this.lightPosition[1], this.lightPosition[2]);
+            let translationBack = translate(lightPosition[0], lightPosition[1], lightPosition[2]);
 
             // @ts-ignore
             let shadow = mult(translationBack, mult(modelLight, mult(translation, model)));
@@ -88,7 +79,6 @@ namespace Sheet8.Part2 {
             this.shader.setFloatMatrix4("u_Model", shadow);        
             this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());                
         
-            
             // Render objects
             this.shader.setFloatMatrix4("u_Model", model);        
             this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());
