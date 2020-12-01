@@ -135,7 +135,7 @@ namespace Sheet10.Part4 {
 
     function update(){
         // Update time
-        var timeStep = frameTimer.registerFrame() / 1000.0;
+        var timeStep = frameTimer.registerFrame();
 
         gl.clearColor(ambientColor.getRed(), ambientColor.getGreen(), ambientColor.getBlue(), ambientColor.getAlpha()); 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -150,7 +150,7 @@ namespace Sheet10.Part4 {
         }
 
 
-        // Rotate point light
+        // Rotate point light   
         if( rotateLight )
             pointLight.rotateY([0,0,0], -60*timeStep);
 

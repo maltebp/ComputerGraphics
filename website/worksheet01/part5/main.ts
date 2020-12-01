@@ -88,7 +88,7 @@ namespace Sheet1.Part5 {
         gl.clear(gl.COLOR_BUFFER_BIT);
 
         // Physics
-        var timeStep = frameTimer.registerFrame()/1000.0;
+        var timeStep = frameTimer.registerFrame();
     
         ballVelocityY += gravity*timeStep;
         

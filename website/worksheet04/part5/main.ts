@@ -1,65 +1,51 @@
 
 namespace Sheet4.Part5 {
-    declare var gl;
+    const CANVAS_SIZE = [720, 480];
 
+    declare var gl: WebGLRenderingContext;
     declare var sphereRenderer: SphereRenderer;
-    declare var rotateCamera: boolean;
     declare var rotateLight: boolean;
     declare var camera: Util.OrbitalCamera;
-
     declare var lightDirection: number[];
-
-    declare var previousTime: number;
+    declare var frameTimer: Util.FrameTimer;
+    declare var ambientColor: Util.Color;
+    declare var lightColor: Util.Color;
 
     
     function setup(){
 
-        const CANVAS_SIZE = [720, 480];
-    
-        // @ts-ignore
         gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
         gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.CULL_FACE);
         gl.clearColor(0.3921, 0.5843, 0.9294, 1.0); 
         
-        camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 150, 0, 0 );
-
         lightDirection = [1.0, 0, 0, 0];
-
-        previousTime = Date.now();
-        
-        rotateCamera = false;
         rotateLight = false;
 
-        // FPS
-        FPS.textElement = <HTMLParagraphElement> document.getElementById("fps-text");
+        frameTimer = new Util.FrameTimer("fps-text");
         
-        // Camera Rotation Check box
-        document.getElementById("rotate_camera").onchange =  (e) => {
-            rotateCamera = !rotateCamera;
-        };
+        camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 150, 0, 0 );
+
+        sphereRenderer = new SphereRenderer(gl);
+
+        // Camera controls
+        new Util.Slider("camera-distance", 25, 600, 200, 1, (value) => camera.setDistance(value) );
+        new Util.Slider("camera-horizontal", -360, 360, 0, 1, (value) => camera.setHorizontalRotation(value) );
+        new Util.Slider("camera-vertical", -89, 89, 20, 0.5, (value) => camera.setVerticalRotation(value) );
+               
+        // Sub division
+        new Util.Slider("subdivisions", 0, 8, 0, 1, (numDivisions) => sphereRenderer.setSphere(new Sphere([0,0,0], 50, numDivisions)) );
 
         // Light Rotation Check box
-        document.getElementById("rotate_light").onchange =  (e) => {
-            rotateLight = !rotateLight;
-        };        
+        new Util.Checkbox("rotate_light", false, (rotate) => rotateLight = rotate);
 
-        // Camera height (lookat eye y component)
-        let cameraSlider = <HTMLInputElement>document.getElementById("camera-height");
-        cameraSlider.oninput =  (e) => {
-            camera.setVerticalRotation(cameraSlider.valueAsNumber);
-        };
-        camera.setVerticalRotation(cameraSlider.valueAsNumber);
-        
-        // Cube size slider
-        let subdivisionsSlider = <HTMLInputElement>document.getElementById("subdivisions");
-        subdivisionsSlider.oninput =  (e) => {
-            sphereRenderer.setSphere(new Sphere([0,0,0], 50, subdivisionsSlider.valueAsNumber));
-        };
+        // Directional light color picker
+        lightColor = null;
+        new Util.ColorPicker("directional-light-color", new Util.Color(0.5, 0.5, 0.5), (color) => lightColor = color);
 
-        // rotateCamera = false;
-        sphereRenderer = new SphereRenderer(gl);
-        sphereRenderer.setSphere(new Sphere([0,0,0], 50, subdivisionsSlider.valueAsNumber))
+        // Ambient light color picker
+        ambientColor = null;
+        new Util.ColorPicker("ambient-color", new Util.Color(0.25, 0.25, 0.25), (color) => ambientColor = color);
 
 
         // Material sliders
@@ -85,28 +71,20 @@ namespace Sheet4.Part5 {
 
 
     function update(){
-        // Update time
-        var currentTime = Date.now();
-        var timeStep = (currentTime - previousTime)/1000.0;
-        previousTime = currentTime;
-
+        let timeStep = frameTimer.registerFrame();
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        if( rotateCamera ) camera.adjustHorizontalRotation( -60 * timeStep);
 
         // @ts-ignore
         if( rotateLight ) lightDirection = mult(rotateY(-60 * timeStep), lightDirection);
 
-        var lightColor = Util.hexToRgb((<HTMLInputElement>document.getElementById("directional-light-color")).value);
         sphereRenderer.setDirectionalLight(
             lightDirection.slice(0, 3),
-            [lightColor.r/255, lightColor.g/255, lightColor.b/255]
+            lightColor.asList(false)
         );
 
-        var ambientColor = Util.hexToRgb((<HTMLInputElement> document.getElementById("ambient-color")).value);
-        sphereRenderer.setAmbientColor([ambientColor.r/255, ambientColor.g/255, ambientColor.b/255]);
+        sphereRenderer.setAmbientColor(ambientColor.asList(false));
 
         sphereRenderer.draw(camera);
-        FPS.registerFrame();
         requestAnimationFrame(update);
     }
 

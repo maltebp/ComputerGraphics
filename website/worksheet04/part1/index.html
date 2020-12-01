@@ -14,7 +14,8 @@
     <!-- Utility -->
     <script src="/utility/GL.js"></script>
     <script src="/utility/Color.js"></script>
-    <script src="/utility/FPS.js"></script>
+    <script src="/Utility/GUI.js"></script>
+    <script src="/Utility/FrameTimer.js"></script>
     <script src="/utility/FloatArrayList.js"></script>
     <script src="/utility/VertexBuffer.js"></script>
     <script src="/utility/Camera.js"></script>
@@ -44,9 +45,22 @@
 
     <table class="program-container">
         <tr>
-            <!-- Right toolbox -->
+            <!-- Left toolbox -->
             <td><table class="toolbox">
-                
+                <!-- Camera -->
+                <tr class="toolbox-row"><td>
+                    <b>Camera</b><br>
+        
+                    <br>Distance<br>
+                    <input id="camera-distance" class="slider" type="range" min="25" max="600" value="350">
+
+                    <br>Horizontal angle<br>
+                    <input id="camera-horizontal" class="slider" type="range" min="-360" max="360" value="0">
+
+                    <br>Vertical angle<br>
+                    <input id="camera-vertical" class="slider" type="range" min="-89" max="89" value="20">
+
+                </td></tr>
             </table></td>
 
             <td>
@@ -55,20 +69,10 @@
             
             <!-- Right toolbox -->
             <td><table class="toolbox">
-                 <!-- Rotation Checkbox -->
-                 <tr class="toolbox-row"><td>
-                    <input type="checkbox" id="rotate_camera" name="rotate"> Rotate
-                </td></tr>
-                
-                <!-- Camera Height Slider -->
-                <tr class="toolbox-row"><td>
-                    <br>Camera angle<br> 
-                    <input id="camera-height" class="slider" type="range" min="-180" max="180" value="0">
-                </td></tr>
-
                 <!-- Subdivisions Slider -->
                 <tr class="toolbox-row"><td>
-                    <br>Subdivisions<br> 
+                    <b>Sphere</b><br><br>
+                    Subdivisions<br> 
                     <input id="subdivisions" class="slider" type="range" min="0" max="8" value="0">
                 </td></tr>
             </table></td>
