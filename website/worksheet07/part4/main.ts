@@ -1,71 +1,44 @@
 
 namespace Sheet7.Part4 {
-    declare var gl: WebGLRenderingContext;
 
-    declare var sphere: Sphere;
-    declare var sphereRenderer: SphereRenderer;
-    declare var rotateLight: boolean;
-    declare var rotateGlobe: boolean;
+    const CANVAS_SIZE = [720, 480];
+
+    declare var gl: WebGLRenderingContext;
+    declare var frameTimer: Util.FrameTimer;
     declare var camera: Util.OrbitalCamera;
 
-    declare var previousTime: number;
+    declare var sphere: Sphere;
+    declare var renderer: SphereRenderer;
+    declare var rotateGlobe: boolean;
 
     declare var texture;
     declare var textureLoadCount: number;
     
     function setup(){
 
-        const CANVAS_SIZE = [720, 480];
-    
-        // @ts-ignore
-        gl =Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
+        gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.CULL_FACE);
-        gl.clearColor(0, 0.0, 0.0, 1.0); 
+
+        frameTimer = new Util.FrameTimer("fps-text");
         
-        camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 90, 150, 0, 0 );
-
-        previousTime = Date.now();
-        
-        rotateLight = false;
-        rotateGlobe = false;
-
-        // FPS
-        FPS.textElement = <HTMLParagraphElement> document.getElementById("fps-text");
-    
-        // Globe Rotation Check box
-        document.getElementById("globe-rotate").onchange =  (e) => {
-            rotateGlobe = !rotateGlobe;
-        };       
-
-        // Camera Zoom
-        let cameraDistanceSlider = <HTMLInputElement> document.getElementById("camera-distance");
-        cameraDistanceSlider.oninput =  (e) => {
-             camera.setDistance(cameraDistanceSlider.valueAsNumber);
-        };
-         camera.setDistance(cameraDistanceSlider.valueAsNumber);
-
-        // Camera Horizontal Angle
-        let cameraHorizontalSlider = <HTMLInputElement> document.getElementById("camera-horizontal");
-        cameraHorizontalSlider.oninput =  (e) => {
-            camera.setHorizontalRotation(cameraHorizontalSlider.valueAsNumber);
-        };
-        camera.setHorizontalRotation(cameraHorizontalSlider.valueAsNumber);
-
-        // Camera Vertical Angle
-        let cameraVerticalSlider = <HTMLInputElement> document.getElementById("camera-vertical");
-        cameraVerticalSlider.oninput =  (e) => {
-            camera.setVerticalRotation(cameraVerticalSlider.valueAsNumber);
-        };
-        camera.setVerticalRotation(cameraVerticalSlider.valueAsNumber);   
-
+        camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 90, 150, 0, 0);
 
         sphere = new Sphere([0,0,0], 50, 8);
-        sphereRenderer = new SphereRenderer(gl);
-        sphereRenderer.setSphere(sphere);
+        renderer = new SphereRenderer(gl);
+        renderer.setSphere(sphere);
 
+         // Camera controls
+         new Util.Slider("camera-distance", 60, 1000, 200, 1, (value) => camera.setDistance(value) );
+         new Util.Slider("camera-horizontal", -360, 360, 0, 0.5, (value) => camera.setHorizontalRotation(value) );
+         new Util.Slider("camera-vertical", -89, 89, 20, 0.5, (value) => camera.setVerticalRotation(value) );     
 
-        // Load sky box
+        // Globe Rotation Check box
+        rotateGlobe = false;
+        new Util.Checkbox("globe-rotate", false, (rotate) => rotateGlobe = rotate);
+
+        // Loading texture
         texture = null;
         textureLoadCount = 0;
 
@@ -95,55 +68,29 @@ namespace Sheet7.Part4 {
             image.src = cubemap[i];
         }
 
-
-        // Load normal map
-        texture = null;
-        var image = <HTMLImageElement> document.createElement('img');
-        image.crossOrigin = 'anonymous';
-        image.onload = function () {
-    
-            // Adding texture
-            texture = gl.createTexture();
-            gl.activeTexture(gl.TEXTURE1);
-            gl.bindTexture(gl.TEXTURE_2D, texture); 
-    
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-    
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-
-            gl.generateMipmap(gl.TEXTURE_2D);
-
-            
-        };
-        image.src = '/worksheet07/textures/normalmap.png';
-
+        
+        // Load the normal map
+        Util.Texture.createFromImage(gl, '/worksheet07/textures/normalmap.png')
+            .setChannels(4)
+            .setFilter(gl.LINEAR_MIPMAP_LINEAR, gl.LINEAR)
+            .setWrap(gl.REPEAT, gl.REPEAT)
+            .build((tex) => tex.bind(1));
 
     }
 
 
 
     function update(){
-        // Update time
-        var currentTime = Date.now();
-        var timeStep = (currentTime - previousTime)/1000.0;
-        previousTime = currentTime;
+        let timeStep = frameTimer.registerFrame();
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        FPS.registerFrame();
-
-        if( textureLoadCount < 6 ){
-            requestAnimationFrame(update);
-            return;
-        }
-
         if( rotateGlobe ) sphere.rotateY(-30 * timeStep);
 
-        sphereRenderer.draw(camera);
+        if( textureLoadCount >= 6 ){
+            renderer.draw(camera);
+        }
+
         requestAnimationFrame(update);
     }
 
@@ -155,6 +102,7 @@ namespace Sheet7.Part4 {
 }
 
 Sheet7.Part4.start();
+
 
 
 
