@@ -71,7 +71,6 @@ namespace Sheet9.Part2 {
         // Screen renderer to render shadow map as an image to screen
         imageRenderer = new Util.ImageRenderer(gl);
     
-
         // Camera distance
         new Util.Slider("camera-distance", 25, 600, 350, 1, (value) => camera.setDistance(value) );
 
@@ -105,13 +104,12 @@ namespace Sheet9.Part2 {
             modelRenderer.setAmbientColor(color);
         });
 
-        
     }
 
 
     function update(){
         // Update time
-        var timeStep = frameTimer.registerFrame() / 1000.0;
+        var timeStep = frameTimer.registerFrame();
 
         gl.clearColor(ambientColor.getRed(), ambientColor.getGreen(), ambientColor.getBlue(), ambientColor.getAlpha()); 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

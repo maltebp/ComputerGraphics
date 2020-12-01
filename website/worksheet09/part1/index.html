@@ -15,7 +15,8 @@
     <!-- Utility -->
     <script src="/utility/GL.js"></script>
     <script src="/utility/Color.js"></script>
-    <script src="/utility/FPS.js"></script>
+    <script src="/utility/GUI.js"></script>
+    <script src="/utility/FrameTimer.js"></script>
     <script src="/utility/FloatArrayList.js"></script>
     <script src="/utility/VertexBuffer.js"></script>
     <script src="/utility/IndexBuffer.js"></script>
@@ -23,6 +24,8 @@
     <script src="/utility/ShaderProgram.js"></script>
     <script src="/utility/Camera.js"></script>
     <script src="/utility/Obj.js"></script>
+    <script src="/utility/Texture.js"></script>
+    <script src="/utility/pointlight/PointLight.js"></script>
 
     <!-- Stylesheet -->
     <link rel="stylesheet" href="/general.css">
@@ -106,11 +109,12 @@
     
     <div class="seperator"></div>
     <p class="description">
-        Rendering a teapot which is lit using ambient and a point light. The ground is not lit.    
+        Rendering a teapot which is lit using ambient and a point light.
+        The ground plane is lit, using the same formula as the teapot, altough with a higher Phong Exponents.
     </p>
 
     <script src="../generic/Model.js"></script>
-    <script src="model/ModelRenderer.js"></script>
+    <script src="../generic/model/ModelRenderer.js"></script>
     <script src="ground/GroundRenderer.js"></script>
     <script src="main.js"></script>
 </body>

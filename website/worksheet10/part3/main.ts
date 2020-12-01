@@ -125,7 +125,7 @@ namespace Sheet10.Part3 {
 
     function update(){
         // Update time
-        var timeStep = frameTimer.registerFrame() / 1000.0;
+        var timeStep = frameTimer.registerFrame();
 
         gl.clearColor(ambientColor.getRed(), ambientColor.getGreen(), ambientColor.getBlue(), ambientColor.getAlpha()); 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

@@ -1,6 +1,6 @@
 
 
-namespace Sheet9.Part2 {
+namespace Sheet9 {
 
     export class ModelRenderer {
         private gl;
@@ -16,7 +16,7 @@ namespace Sheet9.Part2 {
 
         constructor(gl){
             this.gl = gl;            
-            this.shader = new Util.ShaderProgram(gl, "model/vertex.glsl", "model/fragment.glsl");
+            this.shader = new Util.ShaderProgram(gl, "../generic/model/vertex.glsl", "../generic/model/fragment.glsl");
         }
 
         
