@@ -1,18 +1,19 @@
 
 
-namespace Sheet2.Part3 {
+namespace Sheet2.Part4 {
 
     const CANVAS_SIZE = [720, 480];
 
     enum DrawMode {
         POINT = "point",
-        TRIANGLE = "triangle"
+        TRIANGLE = "triangle",
+        CIRCLE = "circle"
     };
 
     declare var gl: WebGLRenderingContext;
     declare var layerMenu: LayerMenu;
     declare var layers: Layer[];
-    declare var trianglePoints: Point[];
+    declare var drawingPoints: Point[];
     declare var drawMode: DrawMode;
     declare var pointSizeSlider: Util.Slider;
 
@@ -24,7 +25,7 @@ namespace Sheet2.Part3 {
 
         gl.enable(gl.DEPTH_TEST);
 
-        trianglePoints = [];
+        drawingPoints = [];
 
         // Setup layer menu, and create initial layer
         layerMenu = new LayerMenu("layer_menu_list");
@@ -59,6 +60,7 @@ namespace Sheet2.Part3 {
         });
         drawModeGroup.addOption("draw-mode-point", DrawMode.POINT);
         drawModeGroup.addOption("draw-mode-triangle", DrawMode.TRIANGLE);
+        drawModeGroup.addOption("draw-mode-circle", DrawMode.CIRCLE);
         drawModeGroup.check(0);
 
 
@@ -82,7 +84,7 @@ namespace Sheet2.Part3 {
                     clearAll(clearColorPicker.getColor());
                     break;
                 case 'KeyH':
-                    toggleLayerVisibility();
+                    layerMenu.toggleHidden(layerMenu.getSelectedLayer());
                     break;
                 case 'Escape':
                     clearDrawState(layerMenu.getSelectedLayer());
@@ -103,8 +105,11 @@ namespace Sheet2.Part3 {
             case DrawMode.TRIANGLE:
                 drawTriangle(layer, x, y, color);
                 break;
+            case DrawMode.CIRCLE:
+                drawCircle(layer, x, y, color);
+                break;
             default:
-                alert("Unknown draw mode!");
+                alert("Unknown draw mode: " + drawMode);
         }
     }
         
@@ -114,7 +119,7 @@ namespace Sheet2.Part3 {
         gl.clearColor(color.getRed(), color.getGreen(), color.getBlue(), 1.0); 
         layers.forEach(layer => layer.clear());
     }
-    
+
 
     function clearSelectedLayer(){
         clearDrawState(layerMenu.getSelectedLayer());
@@ -123,62 +128,79 @@ namespace Sheet2.Part3 {
         layer.clear();
     }
 
+    
+    // Create new layer and add to LayerMenu
     function createLayer(){
         var layer = new Layer(gl, CANVAS_SIZE);
         layerMenu.pushLayer(layer);
         layers.push(layer);
     }
 
-    function toggleLayerVisibility(){
-        
-        layerMenu.toggleHidden(layerMenu.getSelectedLayer());
-    }
 
-    
+    // Remove current layer from LayerMenu
     function deleteSelectedLayer(){
         clearDrawState();
-
         var layer = layerMenu.getSelectedLayer();
-        console.log(layer);
-
         layers.splice(layers.indexOf(layer), 1);
         layerMenu.deleteLayer(layer);
     }
 
 
     function drawTriangle(layer: Layer, x: number, y: number, color: Util.Color){
-        
         var newPoint = layer.addPoint([x,y], 5, color);
-        trianglePoints.push(newPoint);
+        drawingPoints.push(newPoint);
 
-        if( trianglePoints.length == 3 ){
+        if( drawingPoints.length == 3 ){
             var points = [];
-            trianglePoints.forEach( point => {
+            drawingPoints.forEach( point => {
                 points.push( new Triangle.Point(point.getPosition(), point.getColor()));
             });
             layer.addTriangle(points);
-            clearTrianglePoints(layer);
+            clearDrawingPoints(layer);
         }
     }
 
 
-    function clearTrianglePoints(layer: Layer){
-        // Remove triangle points
-        trianglePoints.forEach( point => layer.removeDrawable(point) );
-        trianglePoints = [];
+    function drawCircle(layer: Layer, x: number, y: number, color: Util.Color){
+        var newPoint = layer.addPoint([x,y], 5, color);
+        drawingPoints.push(newPoint);
+
+        if( drawingPoints.length == 2 ){
+
+            // Calculate radius
+            let centerPos = drawingPoints[0].getPosition();
+            let outerPos = drawingPoints[1].getPosition();
+            let xDiff = centerPos[0] - outerPos[0];
+            let yDiff = centerPos[1] - outerPos[1];
+            let radius = Math.sqrt(xDiff*xDiff + yDiff*yDiff);
+            
+            layer.addCircle(
+                centerPos,
+                radius,
+                drawingPoints[0].getColor().copy(), // Inner color
+                drawingPoints[1].getColor().copy()  // Outer color
+            );
+            clearDrawingPoints(layer);
+        }
     }
 
 
-    /**
-     * Clears the Triangle and circle draw states (removes existing point(s))
-     */
+    // Clears intermediate drawing points (for drawing triangles/circles)
+    function clearDrawingPoints(layer: Layer){
+        drawingPoints.forEach( point => layer.removeDrawable(point) );
+        drawingPoints = [];
+    }
+
+    
+    // Clears the Triangle and circle draw states (removes existing point(s))
     function clearDrawState(layer: Layer = null){
         if( layer === null )
             layer = layerMenu.getSelectedLayer();
-        clearTrianglePoints(layer);
+        clearDrawingPoints(layer);
     }
 
 
+    
     function drawPoint(layer: Layer, x: number, y: number, color: Util.Color){
         var size = pointSizeSlider.getValue();
         layer.addPoint([x, y], size, color);
@@ -199,6 +221,6 @@ namespace Sheet2.Part3 {
 
 }
 
-Sheet2.Part3.start();
+Sheet2.Part4.start();
 
 
