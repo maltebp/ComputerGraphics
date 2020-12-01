@@ -1,11 +1,13 @@
 
+
 namespace Sheet3.Part2 {
+
     declare var gl: any[];
     declare var cubeRenderer: any[];
-    declare var rotateCamera;
 
-    declare var cameras: PerspectiveCamera[];
+    declare var cameras: Util.PerspectiveCamera[];
     declare var cubes: Cube[];
+
 
     function update(){
         for( var i=0; i<3; i++){
@@ -14,6 +16,7 @@ namespace Sheet3.Part2 {
         }
         requestAnimationFrame(update);
     }
+
 
     function setup(){
         const CANVAS_SIZE = [300, 480];
@@ -32,9 +35,9 @@ namespace Sheet3.Part2 {
         gl[2].clearColor(0.3921, 0.5843, 0.9294, 1.0); 
         
         cameras = [
-            new PerspectiveCamera(CANVAS_SIZE, [0, 0, -100], [0,0,0], 45),
-            new PerspectiveCamera(CANVAS_SIZE, [-100, 0, -100], [0,0,0], 45),
-            new PerspectiveCamera(CANVAS_SIZE, [-90, 75, -100], [0,0,0], 45)
+            new Util.PerspectiveCamera(CANVAS_SIZE, [0, 0, -100], [0,0,0], 45),
+            new Util.PerspectiveCamera(CANVAS_SIZE, [-100, 0, -100], [0,0,0], 45),
+            new Util.PerspectiveCamera(CANVAS_SIZE, [-90, 75, -100], [0,0,0], 45)
         ]
 
         cubes = [
@@ -51,13 +54,12 @@ namespace Sheet3.Part2 {
         ];
         
         // Cube size slider
-        let sizeSlider = <HTMLInputElement>document.getElementById("cube-size");
-        sizeSlider.oninput =  (e) => {
-            for( var i=0; i<3; i++) cubes[i].setSize(sizeSlider.valueAsNumber);
-        };
-        for( var i=0; i<3; i++) cubes[i].setSize(sizeSlider.valueAsNumber);
+        new Util.Slider("cube-size", 10, 100, 20, 0.5, (size) => {
+            cubes.forEach(cube => cube.setSize(size));
+        });                    
     }
 
+    
     export function start(){
         setup();
         update();

@@ -26,7 +26,7 @@ namespace Sheet3 {
         }
         
     
-        drawWireFrame(cube: Cube, camera: Camera){
+        drawWireFrame(cube: Cube, camera: Util.Camera){
             this.gl.useProgram(this.program);
     
             var uViewProjection = this.gl.getUniformLocation(this.program, "u_ViewProjection");

@@ -13,8 +13,10 @@
 
     <!-- Utility -->
     <script src="/utility/GL.js"></script>
+    <script src="/utility/GUI.js"></script>
     <script src="/utility/Color.js"></script>
-    <script src="/utility/FPS.js"></script>
+    <script src="/utility/Camera.js"></script>
+    <script src="/utility/FrameTimer.js"></script>
     <script src="/utility/FloatArrayList.js"></script>
     <script src="/utility/VertexBuffer.js"></script>
     <script src="/utility/IndexBuffer.js"></script>
@@ -56,7 +58,7 @@
                 <!-- Clear canvas -->
                 <tr class="toolbox-row"><td>
                     <br>Cube size<br> 
-                    <input id="cube-size" class="slider" type="range" min="10" max="100" value="20">
+                    <input id="cube-size" class="slider" type="range">
                 </td></tr>
             </table></td>
         </tr>
@@ -70,7 +72,6 @@
     </p>
 
 
-    <script src="/IndexBuffer.js"></script>
     <script src="../generic/Camera.js"></script>
     <script src="../generic/Cube.js"></script>
     <script src="../generic/CubeRenderer/CubeRenderer.js"></script>
