@@ -22,11 +22,11 @@ namespace Sheet4.Part5 {
         lightDirection = [1.0, 0, 0, 0];
         rotateLight = false;
 
-        frameTimer = new Util.FrameTimer("fps-text");
-        
         camera = new Util.OrbitalCamera(CANVAS_SIZE, [0,0,0], 45, 150, 0, 0 );
-
+        
         sphereRenderer = new SphereRenderer(gl);
+        
+        frameTimer = new Util.FrameTimer("fps-text");
 
         // Camera controls
         new Util.Slider("camera-distance", 25, 600, 200, 1, (value) => camera.setDistance(value) );

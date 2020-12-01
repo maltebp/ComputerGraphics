@@ -15,13 +15,14 @@
     <!-- Utility -->
     <script src="/utility/GL.js"></script>
     <script src="/utility/Color.js"></script>
-    <script src="/utility/FPS.js"></script>
+    <script src="/Utility/GUI.js"></script>
+    <script src="/Utility/FrameTimer.js"></script>
     <script src="/utility/FloatArrayList.js"></script>
     <script src="/utility/VertexBuffer.js"></script>
+    <script src="/utility/Camera.js"></script>
     <script src="/utility/IndexBuffer.js"></script>
     <script src="/utility/LinearAlgebraExtension.js"></script>
     <script src="/utility/ShaderProgram.js"></script>
-    <script src="/utility/Camera.js"></script>
     <script src="/utility/Obj.js"></script>
 
     <!-- Stylesheet -->
@@ -45,9 +46,22 @@
 
     <table class="program-container">
         <tr>
-            <!-- Right toolbox -->
+            <!-- Left toolbox -->
             <td><table class="toolbox">
-                
+                <!-- Camera -->
+                <tr class="toolbox-row"><td>
+                        <b>Camera</b><br>
+            
+                        <br>Distance<br>
+                        <input id="camera-distance" class="slider" type="range">
+    
+                        <br>Horizontal angle<br>
+                        <input id="camera-horizontal" class="slider" type="range">
+    
+                        <br>Vertical angle<br>
+                        <input id="camera-vertical" class="slider" type="range">
+        
+                    </td></tr>
             </table></td>
 
             <td>
@@ -56,16 +70,6 @@
             
             <!-- Right toolbox -->
             <td><table class="toolbox">
-                 <!-- Rotation Checkbox -->
-                 <tr class="toolbox-row"><td>
-                    <input type="checkbox" id="rotate_camera" name="rotate"> Rotate
-                </td></tr>
-                
-                <!-- Camera Height Slider -->
-                <tr class="toolbox-row"><td>
-                    <br>Camera Angle<br> 
-                    <input id="camera-height" class="slider" type="range" min="-180" max="180" value="20">
-                </td></tr>
             </table></td>
         </tr>
     </table>

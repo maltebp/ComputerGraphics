@@ -3,20 +3,16 @@
 namespace Sheet5.Part3 {
 
     export class ModelRenderer {
-        private gl;
+        private gl: WebGLRenderingContext;
         private shader: Util.ShaderProgram;
 
-        constructor(gl){
-            if( gl == null )
-                throw "GL context cannot be null";
-    
+        constructor(gl: WebGLRenderingContext){
             this.gl = gl;
-            
             this.shader = new Util.ShaderProgram(gl, "vertex.glsl", "fragment.glsl");
         }
-
+        
     
-        draw(camera: Util.OrbitalCamera, model: Model){
+        draw(camera: Util.Camera, model: Model){
             this.shader.bind();
 
             this.shader.setFloatMatrix4("u_ViewProjection", camera.getViewProjectionMatrix());
