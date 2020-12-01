@@ -9,15 +9,17 @@ namespace Sheet8.Part2 {
     
     declare var renderer: QuadRenderer;
     declare var pointLight: Util.PointLight;
+    declare var pointLightRenderer: Util.PointLightRenderer;
     declare var rotateLight: boolean;
     
-    declare var texturesLoaded: boolean;  
+    declare var groundTexture: Util.Texture;
+    declare var redTexture: Util.Texture;
 
     
     function setup(){
 
         gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
-        gl.clearColor(1,1,1,1);
+        gl.clearColor(0.2, 0.2, 0.2, 1);
         gl.enable(gl.DEPTH_TEST);
 
         frameTimer = new Util.FrameTimer("fps-text");
@@ -26,6 +28,7 @@ namespace Sheet8.Part2 {
 
         pointLight = new Util.PointLight([40, 100, 0], Util.Color.WHITE);
         renderer = new QuadRenderer(gl, pointLight);
+        pointLightRenderer = new Util.PointLightRenderer(gl);
 
         // Ground quad
         renderer.addQuad(new Quad(
@@ -64,22 +67,20 @@ namespace Sheet8.Part2 {
         )); 
 
         // Loading xamp23.png
-        texturesLoaded = false;
+        groundTexture = null;
         Util.Texture.createFromImage(gl, '../xamp23.png')
             .setChannels(4)
             .setFilter(gl.LINEAR_MIPMAP_LINEAR, gl.LINEAR)
             .setWrap(gl.REPEAT, gl.REPEAT)
-            .build((tex) => {
-                tex.bind(0);
-                texturesLoaded = true;
-            });
+            .build((tex) => groundTexture = tex );
 
         // Creating red texture
+        redTexture = null;
         Util.Texture.createFromData(gl,new Uint8Array([255, 0, 0]), 1, 1)
             .setChannels(3)
             .setFilter(gl.NEAREST, gl.NEAREST)
             .setWrap(gl.REPEAT, gl.REPEAT)
-            .build((tex) => tex.bind(1));
+            .build((tex) => redTexture = tex);
 
 
         // Camera controls
@@ -99,8 +100,13 @@ namespace Sheet8.Part2 {
         if( rotateLight )
             pointLight.rotateY([0,0,0], -60*timeStep)
 
-        if( texturesLoaded )
+        if( groundTexture !== null && redTexture !== null ){
+            groundTexture.bind(0);
+            redTexture.bind(1);
             renderer.draw(camera);
+        }
+
+        pointLightRenderer.draw(camera, pointLight, 10);
 
         requestAnimationFrame(update);
     }

@@ -8,13 +8,13 @@ namespace Sheet8.Part1 {
     declare var camera: Util.OrbitalCamera;
     declare var renderer: QuadRenderer;
 
-    declare var texturesLoaded: boolean;
-    
+    declare var texturesLoaded: boolean;    
+
 
     function setup(){
     
         gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
-        gl.clearColor(1,1,1,1);
+        gl.clearColor(0.2, 0.2, 0.2, 1);
         gl.enable(gl.DEPTH_TEST);
 
         frameTimer = new Util.FrameTimer("fps-text");
