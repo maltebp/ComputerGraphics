@@ -1,7 +1,5 @@
 
 
-
-
 Questions:
     
 
@@ -15,9 +13,9 @@ Questions:
 
 
     Sheet 10:
-        ☐ Jeg har ikke gimbal-lock problemet
-        ☐ Skal vi implementere panning i part 1?
-        ☐ Er det meningen at Part 2 og 3 er byttet rundt?
-        ☐ Forklar metoden - giver den mening?
-        ☐ Er det okay at jeg har kopieret sphere projection fra trackball.js?
-        ☐ Må jeg gerne implemnetere dolly og panning forskelligt?
+        ✔ Skal vi implementere panning i part 1?
+        ✔ Er det meningen at Part 2 og 3 er byttet rundt?
+        ✔ Jeg har ikke gdimbal-lock problemet
+        ✔ Forklar metoden - giver den mening?
+        ✔ Er det okay at jeg har kopieret sphere projection fra trackball.js?
+        ✔ Må jeg gerne implemnetere dolly og panning forskelligt?

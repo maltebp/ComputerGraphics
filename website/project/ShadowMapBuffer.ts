@@ -1,8 +1,10 @@
 
-namespace Sheet9.Part2 {
+namespace Project {
 
-
-    export class ShadowMapBuffer {
+    /**
+     * A Framebuffer, renderbuffer and texture combined into a structure for a shadowmap
+     */
+    export class FrameBuffer {
 
         private gl: WebGLRenderingContext;
 
@@ -10,15 +12,8 @@ namespace Sheet9.Part2 {
         private renderbuffer: WebGLRenderbuffer;
         private texture: Util.Texture;
 
-        private width: number;
-        private height: number;
 
-        private unbindWidth: number;
-        private unbindHeight: number;
-
-        private bound: boolean = false;
-
-        constructor(gl: WebGLRenderingContext, width: number, height: number) {
+        constructor(gl: WebGLRenderingContext, width: size, channels: number) {
             this.gl = gl;
             this.width = width;
             this.height = height;
@@ -33,17 +28,12 @@ namespace Sheet9.Part2 {
             // Constructs framebuffer
             this.framebuffer = gl.createFramebuffer();
             gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffer);
-            
-            // Create and attach render buffer for depth component
-            this.renderbuffer = gl.createRenderbuffer();
-            gl.bindRenderbuffer(gl.RENDERBUFFER, this.renderbuffer);
-            gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, width, height);
-            gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, this.renderbuffer);
-
-            // Build target texture
+                
             let _this = this;
             Util.Texture.createFromData(gl, null, width, height)
-                .setChannels(1)
+                .setChannels(3) // TODO: This could be changed to a smaller texture
+                .setFilter(gl.NEAREST, gl.NEAREST)
+                .setWrap(gl.REPEAT, gl.REPEAT) // TODO: Probably should be clamp to border
                 .build((texture) => {
                     _this.texture = texture;
                 });
@@ -58,7 +48,6 @@ namespace Sheet9.Part2 {
 
             // Rebind default buffer
             gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-            gl.bindRenderbuffer(gl.RENDERBUFFER, null);
         }
 
 
@@ -80,13 +69,13 @@ namespace Sheet9.Part2 {
          *  Unbinds this framebuffer (and render buffer), and rebinds the default
          */
         unbind() {
-
             if( !this.bound ) return;
             this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
             this.gl.bindRenderbuffer(this.gl.RENDERBUFFER, null);
             this.gl.viewport(0, 0, this.unbindWidth, this.unbindHeight);
             this.bound = false;
         }
+
 
         bindTexture(textureSlot: number) {
             this.texture.bind(textureSlot); 
