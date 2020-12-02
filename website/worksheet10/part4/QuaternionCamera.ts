@@ -30,6 +30,7 @@ namespace Sheet10.Part4 {
             this.rotation = new Quaternion().make_rot_vec2vec([0,0,1], normalizedEye);
             
             // Up vector
+            // TODO: Should this be inverted?
             this.up = this.rotation.apply([0,1,0]);
         }
 
@@ -74,7 +75,6 @@ namespace Sheet10.Part4 {
 
             // @ts-ignore
             let right = normalize(this.rotation.apply([1, 0, 0]));
-
 
             let target = [
                 this.target[0] - right[0] * this.pan[0] - up[0]*this.pan[1],
