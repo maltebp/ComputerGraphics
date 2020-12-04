@@ -33,7 +33,7 @@ namespace Util {
 
         draw(textureSlot: number, screenWidth: number, screenHeight: number, textureWidth: number, textureHeight: number) {
             this.shader.bind();
-            this.shader.setInteger("u_TextureSampler", this.gl.TEXTURE0 + textureSlot);
+            this.shader.setInteger("u_TextureSampler", textureSlot);
             this.shader.setFloat("u_WidthScaling", textureWidth / screenWidth);
             this.shader.setFloat("u_HeightScaling", textureHeight / screenHeight);
 
