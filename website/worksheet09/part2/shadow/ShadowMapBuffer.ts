@@ -23,7 +23,7 @@ namespace Sheet9.Part2 {
             this.width = width;
             this.height = height;
 
-            // Check that size is power of 2 (required for texture).
+            // Check that size is power of 2 (required fo r texture).
             // This detail caused be A LOT of headaches
             if( Math.log2(this.width) % 1 !== 0 )
                 throw "ShadwMap: Width must be a power of 2";
