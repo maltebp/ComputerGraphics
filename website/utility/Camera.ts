@@ -130,10 +130,18 @@ namespace Util {
 
     
     export class OrthographicCamera extends LookAtCamera {
+        private nearPlane: number;
+        private farPlane: number;
+
+        constructor(screenSize: number[], pos: number[], target: number[], nearPlane = 0, farPlane = 10000){
+            super(screenSize, pos, target);
+            this.nearPlane = nearPlane;
+            this.farPlane = farPlane;
+        }
 
         createProjectionMatrix(){
             // @ts-ignore
-            this.projectionMatrix = ortho(-this.screensize[0]/2.0, this.screensize[0]/2.0, -this.screensize[1]/2.0, this.screensize[1]/2.0, 0,  10000);
+            this.projectionMatrix = ortho(-this.screensize[0]/2.0, this.screensize[0]/2.0, -this.screensize[1]/2.0, this.screensize[1]/2.0, nearPlane,  farPlane);
         };
     }
 
