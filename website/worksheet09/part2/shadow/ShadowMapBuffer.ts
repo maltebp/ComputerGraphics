@@ -43,7 +43,7 @@ namespace Sheet9.Part2 {
             // Build target texture
             let _this = this;
             Util.Texture.createFromData(gl, null, width, height)
-                .setChannels(1)
+                .setChannels(4)
                 .build((texture) => {
                     _this.texture = texture;
                 });

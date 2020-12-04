@@ -19,7 +19,7 @@ namespace Project {
         }
         
 
-        drawQuads( ...quads: Quad[] ) {
+        drawQuads( camera: Camera2D, ...quads: Quad[] ) {
             this.vertexBuffer.clear();
             this.indexBuffer.clear();
 
@@ -66,6 +66,9 @@ namespace Project {
             }
 
             this.shader.bind();
+            this.shader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
+
+
             this.vertexBuffer.bind();
             this.indexBuffer.bind();
 

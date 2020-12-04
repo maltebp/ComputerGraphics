@@ -10,7 +10,7 @@ namespace Util {
         private vertices: VertexBuffer;
         private shader: ShaderProgram;
 
-        constructor(gl: WebGLRenderingContext, ) {
+        constructor(gl: WebGLRenderingContext) {
             this.gl = gl;
 
             this.vertices = new VertexBuffer(gl);

@@ -99,6 +99,23 @@ namespace Util {
             this.gl.uniformMatrix2fv(location, false, flattened);
         }
 
+
+        setFloatMatrix3(name: string, float3x3: number[] | Float32Array){    
+            var flattened = toFloatArray(float3x3);
+
+            if( flattened.length != 9 )
+                throw "Uniform '" + name + "' must be a 3x3 matrix";
+    
+            var location = this.getUniformLocation(name);
+    
+            var existingUniform = this.gl.getUniform(this.program, location);
+            if( !(existingUniform instanceof Float32Array) || existingUniform.length != 9 )
+                throw "Uniform " + name + " is not a mat3 in the shader";
+    
+            this.gl.uniformMatrix3fv(location, false, flattened);
+        }
+
+
         setFloatMatrix4(name: string, float4x4: number[] | Float32Array){    
             var flattened = toFloatArray(float4x4);
 
