@@ -25,12 +25,6 @@ namespace Project {
             this.indexBuffer = new Util.IndexBuffer(gl);
             this.shader = new Util.ShaderProgram(gl, "/project/occlusionrenderer/vertex.glsl", "/project/occlusionrenderer/fragment.glsl");    
 
-            // Check that size is power of 2 (required for texture).
-            // This detail caused be A LOT of headaches
-            if( Math.log2(this.width) % 1 !== 0 )
-                throw "ShadwMap: Width must be a power of 2";
-            if( Math.log2(this.height) % 1 !== 0 )
-                throw "ShadwMap: Height must be a power of 2";
 
             // Constructs framebuffer
             this.framebuffer = gl.createFramebuffer();
@@ -40,7 +34,10 @@ namespace Project {
             Util.Texture.createFromData(gl, null, width, height)
                 .setChannels(3) // TODO: This could be changed to a smaller texture
                 .setFilter(gl.NEAREST, gl.NEAREST)
-                .setWrap(gl.REPEAT, gl.REPEAT) // TODO: Probably should be clamp to border
+
+                // Note: We can't use REPEAT if we use texture 
+                // which is not a power of 2
+                .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE) // TODO: Probably should be clamp to border
                 .build((texture) => {
                     _this.texture = texture;
                 });

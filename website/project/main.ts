@@ -24,7 +24,7 @@ namespace Project {
         gl.enable(gl.DEPTH_TEST);
 
         imageRenderer = new Util.ImageRenderer(gl);
-        occlusionRenderer = new OcclusionRenderer(gl, 256, 256);
+        occlusionRenderer = new OcclusionRenderer(gl, 300, 300);
 
         quadRenderer = new QuadRenderer(gl);
         camera = new Camera2D(CANVAS_SIZE, [0, 0]);
@@ -47,7 +47,7 @@ namespace Project {
         if( renderOcclusionMap ) {
             occlusionRenderer.drawQuads([0,0], ...quads);
             occlusionRenderer.bindTexture(0);
-            imageRenderer.draw(0, CANVAS_SIZE[0], CANVAS_SIZE[1], 256, 256 );
+            imageRenderer.draw(0, CANVAS_SIZE[0], CANVAS_SIZE[1], 300, 300 );
         }else{
             quadRenderer.drawQuads(camera, ...quads);
         }
