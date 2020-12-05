@@ -106,6 +106,7 @@ namespace Project {
             // Adjust viewport
             let originalViewport = this.gl.getParameter(this.gl.VIEWPORT);
             this.gl.viewport(0, 0, this.width, this.height);
+            this.gl.disable(gl.BLEND);
 
             // Bind framebuffer
             this.texture.bind(0);
@@ -128,6 +129,8 @@ namespace Project {
 
             // Rebind original viewport 
             this.gl.viewport(0, 0, originalViewport[2], originalViewport[3]);
+            this.gl.enable(gl.BLEND);
+            this.gl.enable(gl.BLEND);
 
         }
 

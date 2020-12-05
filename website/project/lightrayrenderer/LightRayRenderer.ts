@@ -39,7 +39,7 @@ namespace Project {
             );
 
             // Shader
-            this.shader = new Util.ShaderProgram(gl, "/project/lightrayrenderer/vertex.glsl", "/project/lightrayrenderer/fragment.glsl");    
+            this.shader = new Util.ShaderProgram(gl, "/project/lightrayrenderer/vertex.glsl", "/project/lightrayrenderer/fragment.glsl");  
 
             // Constructs framebuffer
             this.framebuffer = gl.createFramebuffer();
@@ -67,6 +67,9 @@ namespace Project {
 
             // Rebind default buffer
             gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+
+            
         }
 
         
@@ -84,6 +87,9 @@ namespace Project {
             this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
             this.shader.bind();
+            this.shader.setInteger("u_NumRays", this.numRays);
+            this.shader.setInteger("u_SamplesPerRay", 200);
+            this.shader.setInteger("u_OcclusionMap", 1);
 
             this.vertexBuffer.bind();
 
