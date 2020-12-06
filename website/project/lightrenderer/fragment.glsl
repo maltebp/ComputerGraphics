@@ -33,46 +33,65 @@ void main() {
 	
 	//we multiply the blur amount by our distance from center
 	//this leads to more blurriness as the shadow "fades away"
-	float blur = (1./100.0)  * smoothstep(0., 1., radius); 
+	float blur = (1./200.0)  * smoothstep(0., 1., radius); 
 	
 	//now we use a simple gaussian blur
-	float sum = 0.0;
+    float sum = 0.0;
+    sum = center;
+
+    // if( center > 0.95 ){
+
+    // } else {
+
+    //     sum += sample(vec2(tc.x - 4.0*blur, tc.y), radius) * 0.05;
+    //     sum += sample(vec2(tc.x - 3.0*blur, tc.y), radius) * 0.09;
+    //     sum += sample(vec2(tc.x - 2.0*blur, tc.y), radius) * 0.12;
+    //     sum += sample(vec2(tc.x - 1.0*blur, tc.y), radius) * 0.15;
+
+    //     // sum += center * 0.16;
+
+    //     sum += sample(vec2(tc.x + 1.0*blur, tc.y), radius) * 0.15;
+    //     sum += sample(vec2(tc.x + 2.0*blur, tc.y), radius) * 0.12;
+    //     sum += sample(vec2(tc.x + 3.0*blur, tc.y), radius) * 0.09;
+    //     sum += sample(vec2(tc.x + 4.0*blur, tc.y), radius) * 0.05;
+
+    //     sum *= 2.0;
+    // }
+
+    // if( center > 0.95 ){
+    //     sum = center;
+    // } else {
+    //     float sum1 = 0.0;
+    //     sum1 += sample(vec2(tc.x - 6.0*blur, 0), radius) * 0.005;
+    //     sum1 += sample(vec2(tc.x - 5.5*blur, 0), radius) * 0.010;
+    //     sum1 += sample(vec2(tc.x - 5.0*blur, 0), radius) * 0.015;
+    //     sum1 += sample(vec2(tc.x - 4.5*blur, 0), radius) * 0.020;
+    //     sum1 += sample(vec2(tc.x - 4.0*blur, 0), radius) * 0.025;
+    //     sum1 += sample(vec2(tc.x - 3.5*blur, 0), radius) * 0.030;
+    //     sum1 += sample(vec2(tc.x - 3.0*blur, 0), radius) * 0.035;
+    //     sum1 += sample(vec2(tc.x - 2.5*blur, 0), radius) * 0.040;
+    //     sum1 += sample(vec2(tc.x - 2.0*blur, 0), radius) * 0.045;
+    //     sum1 += sample(vec2(tc.x - 1.5*blur, 0), radius) * 0.050;
+    //     sum1 += sample(vec2(tc.x - 1.0*blur, 0), radius) * 0.055;
 
 
-    if( center > 0.95 ){
-        sum = center;
-    } else {
-        float sum1 = 0.0;
-        sum1 += sample(vec2(tc.x - 6.0*blur, 0), radius) * 0.005;
-        sum1 += sample(vec2(tc.x - 5.5*blur, 0), radius) * 0.010;
-        sum1 += sample(vec2(tc.x - 5.0*blur, 0), radius) * 0.015;
-        sum1 += sample(vec2(tc.x - 4.5*blur, 0), radius) * 0.020;
-        sum1 += sample(vec2(tc.x - 4.0*blur, 0), radius) * 0.025;
-        sum1 += sample(vec2(tc.x - 3.5*blur, 0), radius) * 0.030;
-        sum1 += sample(vec2(tc.x - 3.0*blur, 0), radius) * 0.035;
-        sum1 += sample(vec2(tc.x - 2.5*blur, 0), radius) * 0.040;
-        sum1 += sample(vec2(tc.x - 2.0*blur, 0), radius) * 0.045;
-        sum1 += sample(vec2(tc.x - 1.5*blur, 0), radius) * 0.050;
-        sum1 += sample(vec2(tc.x - 1.0*blur, 0), radius) * 0.055;
+    //     float sum2 = 0.0;
+    //     sum2 += sample(vec2(tc.x + 1.0*blur, 0), radius) * 0.055;
+    //     sum2 += sample(vec2(tc.x + 1.5*blur, 0), radius) * 0.050;
+    //     sum2 += sample(vec2(tc.x + 2.0*blur, 0), radius) * 0.045;
+    //     sum2 += sample(vec2(tc.x + 2.5*blur, 0), radius) * 0.040;
+    //     sum2 += sample(vec2(tc.x + 3.0*blur, 0), radius) * 0.035;
+    //     sum2 += sample(vec2(tc.x + 3.5*blur, 0), radius) * 0.030;
+    //     sum2 += sample(vec2(tc.x + 4.0*blur, 0), radius) * 0.025;
+    //     sum2 += sample(vec2(tc.x + 4.5*blur, 0), radius) * 0.020;
+    //     sum2 += sample(vec2(tc.x + 5.0*blur, 0), radius) * 0.015;
+    //     sum2 += sample(vec2(tc.x + 5.5*blur, 0), radius) * 0.010;
+    //     sum2 += sample(vec2(tc.x + 6.0*blur, 0), radius) * 0.005;
 
-
-        float sum2 = 0.0;
-        sum2 += sample(vec2(tc.x + 1.0*blur, 0), radius) * 0.055;
-        sum2 += sample(vec2(tc.x + 1.5*blur, 0), radius) * 0.050;
-        sum2 += sample(vec2(tc.x + 2.0*blur, 0), radius) * 0.045;
-        sum2 += sample(vec2(tc.x + 2.5*blur, 0), radius) * 0.040;
-        sum2 += sample(vec2(tc.x + 3.0*blur, 0), radius) * 0.035;
-        sum2 += sample(vec2(tc.x + 3.5*blur, 0), radius) * 0.030;
-        sum2 += sample(vec2(tc.x + 4.0*blur, 0), radius) * 0.025;
-        sum2 += sample(vec2(tc.x + 4.5*blur, 0), radius) * 0.020;
-        sum2 += sample(vec2(tc.x + 5.0*blur, 0), radius) * 0.015;
-        sum2 += sample(vec2(tc.x + 5.5*blur, 0), radius) * 0.010;
-        sum2 += sample(vec2(tc.x + 6.0*blur, 0), radius) * 0.005;
-
-        sum1 *= 4.0;
-        sum2 *= 4.0;
-        sum = sum1 + sum2;
-    }
+    //     sum1 *= 4.0;
+    //     sum2 *= 4.0;
+    //     sum = sum1 + sum2;
+    // }
 	
 	
 	

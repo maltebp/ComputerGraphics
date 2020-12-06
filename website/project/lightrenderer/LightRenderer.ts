@@ -44,6 +44,39 @@ namespace Project {
         }
 
         
+
+        // private createFramebuffer() {
+
+        //     // Constructs framebuffer
+        //     let framebuffer = gl.createFramebuffer();
+        //     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+                
+        //     let _this = this;
+        //     Util.Texture.createFromData(gl, null, width, height)
+        //         .setChannels(3) // TODO: This could be changed to a smaller texture
+        //         .setFilter(gl.NEAREST, gl.NEAREST)
+
+        //         // Note: We can't use REPEAT if we use texture 
+        //         // which is not a power of 2
+        //         .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE) // TODO: Probably should be clamp to border
+        //         .build((texture) => {
+        //             _this.texture = texture;
+        //         });
+
+        //     // I know the texture build is synchronous, so I know I can build use it here already
+        //     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.texture.getGLTexture(), 0);
+      
+        //     var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+        //     if (status !== gl.FRAMEBUFFER_COMPLETE) {
+        //         throw "Framebuffer creation failed: " + status.toString();
+        //     }
+
+        //     // Rebind default buffer
+        //     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+        //     return returnObject;
+
+        // }
     }
 
 }

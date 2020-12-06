@@ -7,10 +7,23 @@ namespace Util {
     export class Texture {
         private gl: WebGLRenderingContext;
         private texture: WebGLTexture;
+        private width: number;
+        private height: number;
 
-        private constructor(gl: WebGLRenderingContext, texture: WebGLTexture) {
+        private constructor(gl: WebGLRenderingContext, texture: WebGLTexture, width: number, height: number) {
             this.gl = gl;
             this.texture = texture;
+            this.width = width;
+            this.height = height;
+        }
+
+
+        getWidth() {
+            return this.width;
+        }
+
+        getHeight() {
+            return this.height;
         }
 
 
@@ -136,16 +149,17 @@ namespace Util {
 
                 if( this.imagePath !== null ) {
                 // Build from image source
+                    let _this = this;
                     let image = <HTMLImageElement> document.createElement('img');
                     image.crossOrigin = 'anonymous';
                     image.onload = function () {
-                        onLoad(new Texture(builder.gl, builder.buildTexture(image)));
+                        onLoad(new Texture(builder.gl, builder.buildTexture(image), _this.width, _this.height));
                     };
                     image.src = this.imagePath;
 
                 }else{
                 // Build from raw data
-                    onLoad(new Texture(builder.gl, builder.buildTexture()));
+                    onLoad(new Texture(builder.gl, builder.buildTexture(), this.width, this.height));
                 }  
             }
 
@@ -193,33 +207,6 @@ namespace Util {
 
         
         }       
-    }
-
-
-    // groundRenderer = null;
-    // {
-    //     let image = <HTMLImageElement> document.createElement('img');
-    //     image.crossOrigin = 'anonymous';
-    //     image.onload = function () {
-    //         // Adding texture
-    //         let texture = gl.createTexture();
-    //         gl.activeTexture(gl.TEXTURE0);
-    //         gl.bindTexture(gl.TEXTURE_2D, texture); 
-    
-    //         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-    
-    //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-    //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    
-    //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-    //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-
-    //         gl.generateMipmap(gl.TEXTURE_2D);
-
-    //     groundRenderer = new GroundRenderer(gl, texture, 300, 300);
-            
-    //     };
-    //     image.src = '../generic/xamp23.png';
-    
+    }    
 
 }

@@ -11,8 +11,8 @@ namespace Project {
 
     const CANVAS_SIZE = [720, 480];
 
-    const LIGHT_SAMPLES = 400;
-    const LIGHT_RADIUS = 900;
+    const LIGHT_SAMPLES = 1000;
+    const LIGHT_RADIUS = 500;
     
     const FRAME_TIMER = new Util.FrameTimer("fps-text");
     
@@ -69,12 +69,13 @@ namespace Project {
         gl.clear(gl.COLOR_BUFFER_BIT);
         FRAME_TIMER.registerFrame();
 
-        quadRenderer.drawQuads(camera, ...quads);
+        // quadRenderer.drawQuads(camera, ...quads);
 
+        
         occlusionRenderer.drawQuads([0,0], ...quads);
         occlusionRenderer.bindTexture(1);
         rayRenderer.draw();
-
+        
         if( drawMode == DrawMode.OCCLUSION ) {
             occlusionRenderer.bindTexture(0);
             imageRenderer.draw(0, CANVAS_SIZE[0], CANVAS_SIZE[1], LIGHT_RADIUS, LIGHT_RADIUS );

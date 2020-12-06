@@ -8,7 +8,7 @@ namespace Project {
         private vertexBuffer: Util.VertexBuffer;
         private indexBuffer: Util.IndexBuffer;
         private shader: Util.ShaderProgram;
-        private framebuffer: WebGLFramebuffer;
+        private framebuffer: Framebuffer;
         private texture: Util.Texture;
         private width: number; 
         private height: number;
@@ -25,11 +25,6 @@ namespace Project {
             this.indexBuffer = new Util.IndexBuffer(gl);
             this.shader = new Util.ShaderProgram(gl, "/project/occlusionrenderer/vertex.glsl", "/project/occlusionrenderer/fragment.glsl");    
 
-
-            // Constructs framebuffer
-            this.framebuffer = gl.createFramebuffer();
-            gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffer);
-                
             let _this = this;
             Util.Texture.createFromData(gl, null, width, height)
                 .setChannels(3) // TODO: This could be changed to a smaller texture
@@ -42,16 +37,7 @@ namespace Project {
                     _this.texture = texture;
                 });
 
-            // I know the texture build is synchronous, so I know I can build use it here already
-            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.texture.getGLTexture(), 0);
-      
-            var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
-            if (status !== gl.FRAMEBUFFER_COMPLETE) {
-                throw "Framebuffer creation failed: " + status.toString();
-            }
-
-            // Rebind default buffer
-            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+            this.framebuffer = new Framebuffer(gl, this.texture);
         }
 
         
@@ -103,35 +89,23 @@ namespace Project {
             }
 
 
-            // Adjust viewport
-            let originalViewport = this.gl.getParameter(this.gl.VIEWPORT);
-            this.gl.viewport(0, 0, this.width, this.height);
-            this.gl.disable(gl.BLEND);
+            this.framebuffer.drawTo(() => {
+                this.gl.disable(gl.BLEND);
 
-            // Bind framebuffer
-            this.texture.bind(0);
-            this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.framebuffer);
-            this.gl.clearColor(1, 1, 1, 1);
-            this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+                this.gl.clearColor(1, 1, 1, 1);
+                this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
-            let camera = new Camera2D([this.width, this.height], [0, 0]);
-            this.shader.bind();
-            this.shader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
+                let camera = new Camera2D([this.width, this.height], [0, 0]);
+                this.shader.bind();
+                this.shader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
 
+                this.vertexBuffer.bind();
+                this.indexBuffer.bind();
 
-            this.vertexBuffer.bind();
-            this.indexBuffer.bind();
+                this.gl.drawElements(this.gl.TRIANGLES, this.indexBuffer.length(), this.gl.UNSIGNED_SHORT, 0);
 
-            this.gl.drawElements(this.gl.TRIANGLES, this.indexBuffer.length(), this.gl.UNSIGNED_SHORT, 0);
-
-            // Unbind the framebuffer
-            this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
-
-            // Rebind original viewport 
-            this.gl.viewport(0, 0, originalViewport[2], originalViewport[3]);
-            this.gl.enable(gl.BLEND);
-            this.gl.enable(gl.BLEND);
-
+                this.gl.enable(gl.BLEND);
+            });
         }
 
         
