@@ -42,7 +42,7 @@ namespace Project {
         occlusionRenderer = new OcclusionRenderer(gl, LIGHT_RADIUS, LIGHT_RADIUS);
         rayRenderer = new LightRayRenderer(gl, LIGHT_SAMPLES);
 
-        lightRenderer = new LightRenderer(gl);
+        lightRenderer = new LightRenderer(gl, LIGHT_RADIUS);
 
         quadRenderer = new QuadRenderer(gl);
         camera = new Camera2D(CANVAS_SIZE, [0, 0]);
@@ -87,6 +87,8 @@ namespace Project {
         if( drawMode ==DrawMode.LIGHT ) {
             rayRenderer.bindTexture(0);
             lightRenderer.draw(camera, [0,0], LIGHT_RADIUS);
+            lightRenderer.bindTexture(0);
+            imageRenderer.draw(0, CANVAS_SIZE[0], CANVAS_SIZE[1], LIGHT_RADIUS, LIGHT_RADIUS);
         }
         
         requestAnimationFrame(update);

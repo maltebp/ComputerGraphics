@@ -22,7 +22,7 @@ float sample(vec2 coord, float radius) {
 void main() {
     
     // Radius in interval of [0, 1.0]
-    float radius = length(o_Position*2.0) + 0.001;
+    float radius = length(o_Position) + 0.001;
     float angle = atan(o_Position.y, o_Position.x);
     if( angle < 0.0 ) angle += PI2; 
 

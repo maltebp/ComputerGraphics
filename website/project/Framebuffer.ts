@@ -39,6 +39,10 @@ namespace Project {
             this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, originalFramebuffer);
             this.gl.viewport(originalViewport[0], originalViewport[1], originalViewport[2], originalViewport[3]);
         }
+
+        getTexture() {
+            return this.texture;
+        }
     }
 
 }
