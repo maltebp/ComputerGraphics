@@ -86,7 +86,7 @@ namespace Project {
         }
         if( drawMode ==DrawMode.LIGHT ) {
             rayRenderer.bindTexture(0);
-            lightRenderer.draw(camera, [0,0], LIGHT_RADIUS);
+            lightRenderer.draw();
             lightRenderer.bindTexture(0);
             imageRenderer.draw(0, CANVAS_SIZE[0], CANVAS_SIZE[1], LIGHT_RADIUS, LIGHT_RADIUS);
         }

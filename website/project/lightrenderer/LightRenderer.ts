@@ -8,7 +8,10 @@ namespace Project {
 
         private vertexBuffer: Util.VertexBuffer;
         private shader: Util.ShaderProgram;
+        private gaussianShader: Util.ShaderProgram;
         
+        private currentFramebuffer: Framebuffer;
+
         private framebuffer1: Framebuffer;
         private framebuffer2: Framebuffer;
 
@@ -18,7 +21,7 @@ namespace Project {
             this.gl = gl;
             this.lightSize = lightSize;
 
-            // Setup vertex buffer            
+            // Vertex buffer: Two triangles filling entire screen           
             this.vertexBuffer = new Util.VertexBuffer(gl);
             this.vertexBuffer.addAttribute("a_Position", 2);
             this.vertexBuffer .push(
@@ -34,15 +37,20 @@ namespace Project {
             // Shader
             this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/vertex.glsl", "/project/lightrenderer/fragment.glsl"); 
             
+            // Gaussian shader
+            this.gaussianShader = new Util.ShaderProgram(gl, "/project/lightrenderer/gaussian/vertex.glsl", "/project/lightrenderer/gaussian/fragment.glsl");
+
             // Create framebuffers 
             this.framebuffer1 = new Framebuffer(gl, this.createTexture());
             this.framebuffer2 = new Framebuffer(gl, this.createTexture());
+
+            this.currentFramebuffer = this.framebuffer1;
         }
 
 
-        draw(camera: Camera2D, position: number[], radius: number) {
+        draw() {
 
-            this.framebuffer1.drawTo(() => {
+            this.currentFramebuffer.drawTo(() => {
                 this.gl.clearColor(0,0,0,0);
                 this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
@@ -55,13 +63,45 @@ namespace Project {
     
                 this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
             });
+
+            this.gaussianBlur();
         }
 
         bindTexture(textureSlot: number) {
-            this.framebuffer1.getTexture().bind(textureSlot);
+            this.currentFramebuffer.getTexture().bind(textureSlot);
         }
 
 
+
+        private gaussianBlur() {
+            
+            this.gaussianShader.bind();
+            this.gaussianShader.setInteger("u_SourceTexture", 0);
+            this.gaussianShader.setInteger("u_TextureSize", this.lightSize);
+            
+            // We can reuse the same vertexbuffer
+            this.vertexBuffer.bind();
+            
+            for(let i=0; i<3; i++){
+                this.framebuffer1.getTexture().bind(0);
+                this.gaussianShader.setInteger("u_Horizontal", 0);
+                this.framebuffer2.drawTo(() => {
+                    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
+                });
+    
+                this.framebuffer2.getTexture().bind(0);
+                this.gaussianShader.setInteger("u_Horizontal", 1);
+                this.framebuffer1.drawTo(() => {
+                    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());
+                });
+            }
+            
+            
+        }
+
+      
+        // Have to create two identical textures, so why not put
+        // it in a function?
         private createTexture() {
             var texture = null;
             Util.Texture.createFromData(gl, null, this.lightSize, this.lightSize)
