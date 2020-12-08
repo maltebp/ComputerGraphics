@@ -7,7 +7,9 @@ precision mediump float;
 // #define BLUE_
 
 // uniform sampler2D u_RayMap;
-uniform sampler2D u_ShadowTexture;
+uniform sampler2D u_ShadowMap;
+uniform sampler2D u_DiffuseMap;
+
 
 uniform vec3 u_Color;
 
@@ -15,6 +17,7 @@ uniform vec3 u_Color;
 // varying vec2 o_Position;
 
 varying vec2 o_TextureCoordinates;
+varying vec2 o_DiffuseMapCoordinates;
 
 // //sample from the 1D distance map
 // // Returns 0 if samples distance is less than radius and 1 otherwise
@@ -111,9 +114,10 @@ void main() {
     // float alphaFactor = 1.0 - smoothstep(0.0, 1.0, radius);
     // float alphaFactor = 1.0-radius;// - smoothstep(0.0, 1.0, radius);
     float lightAlpha = 1.0 - smoothstep(0.0, 1.0, dist);
-    vec4 shadow = texture2D(u_ShadowTexture, o_TextureCoordinates);
+    float shadowAlpha = texture2D(u_ShadowMap, o_TextureCoordinates).r;
+    float diffuseAlpha = texture2D(u_DiffuseMap, o_DiffuseMapCoordinates).r;
 
-    gl_FragColor = vec4(u_Color, lightAlpha * shadow.r);
+    gl_FragColor = vec4(u_Color * (lightAlpha * (shadowAlpha+diffuseAlpha)), 1.0);
 
  	// gl_FragColor = vec4(1,0,0,1) * vec4(1, 1, 1, sum * alphaFactor );
 

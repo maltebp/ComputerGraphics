@@ -67,6 +67,8 @@ namespace Project {
          */
         draw(light: Light, occlusionMapSlot: number, occlusionMapMatrix: number[] ) {
             
+            this.gl.disable(gl.BLEND);
+
             // Calculate light center and radius in occlusion map texture space
             // @ts-ignore
             let lightCenter = vec2(mult(occlusionMapMatrix, vec3(light.getPosition(), 1)));

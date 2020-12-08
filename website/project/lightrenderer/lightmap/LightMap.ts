@@ -50,6 +50,11 @@ namespace Project {
                 gl.clear(gl.COLOR_BUFFER_BIT);
             });
         }
+
+
+        drawTo(drawCallback: () => void) {
+            this.framebuffer.drawTo(drawCallback);
+        }
         
 
         draw() {

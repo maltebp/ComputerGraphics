@@ -102,6 +102,8 @@ namespace Util {
         export const RED        = new Color(1.0, 0.0, 0.0);
         export const GREEN      = new Color(0.0, 1.0, 0.0);
         export const BLUE       = new Color(0.0, 0.0, 1.0);
+        export const YELLOW     = new Color(1.0, 1.0, 0.0);
+
         export const CORNFLOWER_BLUE = new Color(0.39, 0.58, 0.93);
     }
 

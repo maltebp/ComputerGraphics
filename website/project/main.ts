@@ -50,7 +50,10 @@ namespace Project {
 
 
         lights = [];
+        lights.push(new Light([-125,-100], 200, Util.Color.BLUE));
         lights.push(new Light([0,0], 300, Util.Color.GREEN));
+        lights.push(new Light([150,-75], 200, Util.Color.YELLOW));
+        lights.push(new Light([-200, 250], 200, Util.Color.RED));
         lightRenderer = new LightRenderer(gl);
 
 
@@ -125,6 +128,7 @@ namespace Project {
         // occlusionRenderer.drawOccluders(camera, ...quads);
         // rayRenderer.draw();
         
+        gl.disable(gl.BLEND);
 
         if( drawMode == DrawMode.OCCLUSION ) {
             lightRenderer.drawOcclusionMap(CANVAS_SIZE);

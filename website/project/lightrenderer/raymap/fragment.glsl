@@ -37,7 +37,7 @@ void main() {
         
         vec4 occlusion = texture2D(u_OcclusionMap, samplePoint);
 
-        if( occlusion.r < 0.98 ){
+        if( occlusion.r > 0.02 ){
             finalRadius = distanceFactor ;
             break;
         }

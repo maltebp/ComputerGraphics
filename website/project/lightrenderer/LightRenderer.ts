@@ -9,7 +9,7 @@ namespace Project {
         private vertexBuffer: Util.VertexBuffer;
         // private shader: Util.ShaderProgram;
         private gaussianShader: Util.ShaderProgram;
-        // private lightShader: Util.ShaderProgram;
+        private lightShader: Util.ShaderProgram;
 
         private occlusionMap: OcclusionMap;
         private occlusionCamera: Camera2D;
@@ -62,7 +62,7 @@ namespace Project {
             // this.gaussianShader = new Util.ShaderProgram(gl, "/project/lightrenderer/gaussian/vertex.glsl", "/project/lightrenderer/gaussian/fragment.glsl");
 
             // Light shader
-            // this.lightShader = new Util.ShaderProgram(gl, "/project/lightrenderer/light/vertex.glsl", "/project/lightrenderer/light/fragment.glsl");
+            this.lightShader = new Util.ShaderProgram(gl, "/project/lightrenderer/lightshader/vertex.glsl", "/project/lightrenderer/lightshader/fragment.glsl");
 
             // Create framebuffers 
             // this.framebuffer1 = new Framebuffer(gl, this.createTexture());
@@ -110,14 +110,37 @@ namespace Project {
                 this.occlusionCamera.getMatrix()               
             );
 
-            this.occlusionMap.bindTexture(0);
             lights.forEach(light => {
+                this.occlusionMap.bindTexture(0);
+
                 this.rayMap.draw(light, 0, occlusionMatrix);
                 this.rayMap.bindTexture(0);
+                
                 this.shadowMap.draw(0);
+
+                this.shadowMap.bindTexture(0);
+                this.occlusionMap.bindTexture(1);
+
+                this.lightShader.bind();
+                this.lightShader.setInteger("u_ShadowMap", 0);
+                this.lightShader.setInteger("u_DiffuseMap", 1);
+                this.lightShader.setFloatVector3("u_Color", light.getColor().asList(false) );
+                this.lightShader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
+                this.lightShader.setFloatVector2("u_LightPosition", light.getPosition());
+                this.lightShader.setFloat("u_LightRadius", light.getRadius());
+                this.lightShader.setFloatMatrix3("u_DiffuseMapMatrix", occlusionMatrix);
+
+                this.vertexBuffer.bind();
+
+                this.gl.enable(gl.BLEND);
+                this.gl.blendFunc(gl.ONE, gl.ONE);
+
+                this.lightMap.drawTo(() => {
+                    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
+                });                
             });
 
-
+            this.lightMap.draw();
         }
 
 

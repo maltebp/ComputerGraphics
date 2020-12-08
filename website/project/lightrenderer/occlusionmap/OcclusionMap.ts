@@ -21,6 +21,7 @@ namespace Project {
             // Setup vertex buffer            
             this.vertexBuffer = new Util.VertexBuffer(gl);
             this.vertexBuffer.addAttribute("a_Position", 2);
+            this.vertexBuffer.addAttribute("a_Diffuse", 1);
             this.indexBuffer = new Util.IndexBuffer(gl);
             this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/occlusionmap/vertex.glsl", "/project/lightrenderer/occlusionmap/fragment.glsl");    
 
@@ -77,9 +78,10 @@ namespace Project {
                 // @ts-ignore
                 points.map( (point) => mult(rotationMatrix, point) );
 
+                let diffuse = 0.75; // TODO: Add this to the objects
                 let vertexBuffer = this.vertexBuffer;
                 points.forEach(point => {
-                    vertexBuffer.push(point);
+                    vertexBuffer.push(point, diffuse);
                 });
                 let offset = i * 4;
                 this.indexBuffer.push(
@@ -90,7 +92,7 @@ namespace Project {
 
 
             this.gl.disable(gl.BLEND);
-            this.gl.clearColor(1, 1, 1, 1);
+            this.gl.clearColor(0, 0, 0, 1);
 
             this.shader.bind();
             this.shader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
