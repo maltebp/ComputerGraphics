@@ -16,6 +16,8 @@ namespace Project {
 
         private lightMap: LightMap;
 
+        private rayMap: RayMap;
+
         
         private currentFramebuffer: Framebuffer;
 
@@ -44,8 +46,12 @@ namespace Project {
                  1.0, -1.0
             );
 
-            this.occlusionMap = new OcclusionMap(gl, 2160, 2160);
-            this.occlusionCamera = new Camera2D([this.occlusionMap.getWidth(), this.occlusionMap.getHeight()], [0,0]);
+            // Occlusion map
+            this.occlusionMap = new OcclusionMap(gl, 2160);
+            this.occlusionCamera = new Camera2D([this.occlusionMap.getSize(), this.occlusionMap.getSize()], [0,0]);
+
+            // Ray map (calculates distances to occluders)
+            this.rayMap = new RayMap(gl, 256);
 
             // Shader
             this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/vertex.glsl", "/project/lightrenderer/fragment.glsl"); 
@@ -87,15 +93,29 @@ namespace Project {
             this.occlusionCamera.setPosition(camera.getPosition());
             this.occlusionMap.drawOccluders(this.occlusionCamera, ...occluders);
 
+            // Matrix to move from world space to occlusion map's texture space
+            // @ts-ignore 
+            let occlusionMatrix = mult(
+                // NDC to texture matrix
+                // @ts-ignore
+                mat3(
+                    0.5,   0, 0.5,
+                      0, 0.5, 0.5,
+                      0,   0,   1
+                ),
+                this.occlusionCamera.getMatrix()               
+            );
 
-
-
+            this.occlusionMap.bindTexture(0);
+            lights.forEach(light => {
+                this.rayMap.draw(light, 0, occlusionMatrix);
+            });
 
 
         }
 
 
-        private drawLight(camera: Camera2D, light: Light) {
+        private drawLight(camera: Camera2D, light: Light, occlusionMatrix: number[]) {
             this.gl.clearColor(0,0,0,0);
 
 
@@ -124,8 +144,9 @@ namespace Project {
             this.lightShader.bind();
             this.lightShader.setInteger("u_ShadowTexture", 0);
             this.lightShader.setFloatVector3("u_Color", [0,1,0]); 
+
             // this.lightShader.setFloat("u_LightSize", this.lightSize);
-            this.lightShader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
+            // this.lightShader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
 
 
             this.vertexBuffer.bind();
@@ -153,6 +174,14 @@ namespace Project {
         drawOcclusionMap(screenSize: number[]) {
             this.occlusionMap.bindTexture(0);
             this.imageRenderer.draw(0, screenSize[0], screenSize[1], screenSize[1]*0.9, screenSize[1]*0.9 );
+        }
+
+        
+        // Just for debugging
+        // Draws the last ray map calculated
+        drawRayMap(screenSize: number[]){
+            this.rayMap.bindTexture(0);
+            this.imageRenderer.draw(0, screenSize[0], screenSize[1], screenSize[1]*0.9, screenSize[1]*0.02 );
         }
 
 

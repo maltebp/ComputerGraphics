@@ -97,7 +97,11 @@ namespace Util {
     }
 
     export namespace Color {
-        export const WHITE = new Color(1.0, 1.0, 1.0);
+        export const WHITE      = new Color(1.0, 1.0, 1.0);
+        export const BLACK      = new Color(0.0, 0.0, 0.0);
+        export const RED        = new Color(1.0, 0.0, 0.0);
+        export const GREEN      = new Color(0.0, 1.0, 0.0);
+        export const BLUE       = new Color(0.0, 0.0, 1.0);
         export const CORNFLOWER_BLUE = new Color(0.39, 0.58, 0.93);
     }
 

@@ -8,7 +8,11 @@ precision mediump float;
 
 uniform int u_NumRays;
 uniform int u_SamplesPerRay;
-// uniform float u_LightRadius;
+
+// The light's position and radius in the
+// occlusion map's texture space
+uniform vec2 u_LightPosition;
+uniform float u_LightRadius;
 
 uniform sampler2D u_OcclusionMap;
 
@@ -20,21 +24,21 @@ void main() {
     float rayAngle = gl_FragCoord.x / float(u_NumRays) * PI2;
     vec2 rayDirection = vec2( cos(rayAngle), sin(rayAngle) );
 
-    float stepSize = 0.5 / float(u_SamplesPerRay);
-
     for( int i=0; i < MAX_SAMPLES; i++ ) {
         if( i >= u_SamplesPerRay){
             break;
         }
 
-        float rayRadius = stepSize * float(i);
+        // Goes from 0 to 1
+        float distanceFactor = float(i+1) /  float(u_SamplesPerRay);
+        float dist = distanceFactor * u_LightRadius;
 
-        vec2 samplePoint = rayDirection * rayRadius + 0.5;
+        vec2 samplePoint = rayDirection * dist + u_LightPosition;
         
         vec4 occlusion = texture2D(u_OcclusionMap, samplePoint);
 
-        if( occlusion.r < 0.9 ){
-            finalRadius = rayRadius * 2.0;
+        if( occlusion.r < 0.98 ){
+            finalRadius = distanceFactor ;
             break;
         }
 

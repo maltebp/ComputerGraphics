@@ -10,7 +10,7 @@
 
 namespace Project {
 
-    export class LightRayRenderer {
+    export class RayMap {
 
         private gl: WebGLRenderingContext;
 
@@ -39,7 +39,7 @@ namespace Project {
             );
 
             // Shader
-            this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/lightray/vertex.glsl", "/project/lightrenderer/lightray/fragment.glsl");  
+            this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/raymap/vertex.glsl", "/project/lightrenderer/raymap/fragment.glsl");  
 
             let _this = this;
             Util.Texture.createFromData(gl, null, numRays, 1)
@@ -55,23 +55,40 @@ namespace Project {
 
             this.framebuffer = new Framebuffer(gl, this.texture);
         }
-0
         
 
-        draw() {
+        /**
+         * "Draw" the distance for each ray to the nearest occluder for the given light.
+         * Occlusion map must already be bound to the given slot.
+         * 
+         * @param light Light to check distances for
+         * @param occlusionMapSlot Which slot the occlusion map is bound to
+         * @param occlusionMapMatrix Matrix to transform world coordinate to occlusion map texture space
+         */
+        draw(light: Light, occlusionMapSlot: number, occlusionMapMatrix: number[] ) {
+            
+            // Calculate light center and radius in occlusion map texture space
+            // @ts-ignore
+            let lightCenter = vec2(mult(occlusionMapMatrix, vec3(light.getPosition(), 1)));
+            // @ts-ignore
+            let outerPoint = vec2(mult(occlusionMapMatrix, vec3(add(light.getPosition(), vec2(light.getRadius(),0)), 1)));
+            // @ts-ignore
+            let lightRadius = length(subtract(lightCenter, outerPoint));
+            // Note: Above relies on the occlusion map being square (same width and height)
+
+            this.shader.bind();
+            this.shader.setInteger("u_NumRays", this.numRays);
+            this.shader.setInteger("u_SamplesPerRay", 250);
+            this.shader.setInteger("u_OcclusionMap", occlusionMapSlot);
+            this.shader.setFloatVector2("u_LightPosition", lightCenter);
+            this.shader.setFloat("u_LightRadius", lightRadius);
+
+            this.vertexBuffer.bind();
+
             this.framebuffer.drawTo(() => {
-                // Bind framebuffer
                 this.gl.clearColor(1, 1, 1, 1);
-                this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-
-                this.shader.bind();
-                this.shader.setInteger("u_NumRays", this.numRays);
-                this.shader.setInteger("u_SamplesPerRay", 1000);
-                this.shader.setInteger("u_OcclusionMap", 1);
-
-                this.vertexBuffer.bind();
-
-                // TODO: Can we draw line instead?
+                this.gl.clear(this.gl.COLOR_BUFFER_BIT);                
+                // Can probably just draw a line instead, but better safe than sorry
                 this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
             });
         }

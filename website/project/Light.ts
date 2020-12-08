@@ -3,12 +3,12 @@ namespace Project {
 
     export class Light {
 
-        private position: number;
+        private position: number[];
         private radius: number;
         private color: Util.Color;
 
         
-        constructor(position: number, radius: number, color: Util.Color) {
+        constructor(position: number[], radius: number, color: Util.Color) {
             this.position = position;
             this.radius = radius;
             this.color = color;

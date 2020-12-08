@@ -1,4 +1,6 @@
-uniform mat3 u_CameraMatrix;
+
+// Just draw full screen (the 1 dimensional array),
+// so no transformations here
 
 attribute vec2 a_Position;
 

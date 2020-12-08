@@ -24,6 +24,7 @@ namespace Project {
     declare var backgroundRenderer: BackgroundRenderer;
 
 
+    declare var lights: Light[];
     declare var quads: Quad[];
     declare var drawMode: DrawMode;
 
@@ -46,6 +47,9 @@ namespace Project {
         // imageRenderer = new Util.ImageRenderer(gl);
         // rayRenderer = new LightRayRenderer(gl, LIGHT_SAMPLES);
 
+
+        lights = [];
+        lights.push(new Light([0,0], 300, Util.Color.GREEN));
         lightRenderer = new LightRenderer(gl);
 
 
@@ -103,7 +107,7 @@ namespace Project {
         
     }
 
-
+    
     function update() {
         gl.clearColor(0.2, 0.2, 0.2, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT);
@@ -113,7 +117,9 @@ namespace Project {
         gl.disable(gl.BLEND);
         backgroundRenderer.drawBackground(camera);
         
-        lightRenderer.draw(camera, quads, null);
+        quadRenderer.drawQuads(camera, ...quads);
+
+        lightRenderer.draw(camera, quads, lights);
 
         // occlusionRenderer.drawOccluders(camera, ...quads);
         // rayRenderer.draw();
@@ -122,10 +128,9 @@ namespace Project {
         if( drawMode == DrawMode.OCCLUSION ) {
             lightRenderer.drawOcclusionMap(CANVAS_SIZE);
         }
-        // if( drawMode ==DrawMode.RAYS ) {
-        //     rayRenderer.bindTexture(0);
-        //     imageRenderer.draw(0, CANVAS_SIZE[0], CANVAS_SIZE[1], LIGHT_RADIUS, 1 );
-        // }
+        if( drawMode ==DrawMode.RAYS ) {
+            lightRenderer.drawRayMap(CANVAS_SIZE);
+        }
         // if( drawMode ==DrawMode.LIGHT ) {
         //     rayRenderer.bindTexture(0);
         //     lightRenderer.draw(camera);
@@ -133,7 +138,6 @@ namespace Project {
         //     // imageRenderer.draw(0, CANVAS_SIZE[0], CANVAS_SIZE[1], LIGHT_RADIUS, LIGHT_RADIUS);
         // }
 
-        // quadRenderer.drawQuads(camera, ...quads);
 
         
         requestAnimationFrame(update);

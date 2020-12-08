@@ -10,14 +10,13 @@ namespace Project {
         private shader: Util.ShaderProgram;
         private framebuffer: Framebuffer;
         private texture: Util.Texture;
-        private width: number; 
-        private height: number;
+
+        private size: number;
 
 
-        constructor(gl: WebGLRenderingContext, width: number, height: number) {
+        constructor(gl: WebGLRenderingContext, size: number) {
             this.gl = gl;
-            this.width = width;
-            this.height = height;
+            this.size = size;
 
             // Setup vertex buffer            
             this.vertexBuffer = new Util.VertexBuffer(gl);
@@ -26,9 +25,9 @@ namespace Project {
             this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/occlusionmap/vertex.glsl", "/project/lightrenderer/occlusionmap/fragment.glsl");    
 
             let _this = this;
-            Util.Texture.createFromData(gl, null, width, height)
+            Util.Texture.createFromData(gl, null, size, size)
                 .setChannels(3) // TODO: This could be changed to a smaller texture
-                .setFilter(gl.NEAREST, gl.NEAREST)
+                .setFilter(gl.LINEAR, gl.LINEAR)
 
                 // Note: We can't use REPEAT if we use texture 
                 // which is not a power of 2
@@ -112,14 +111,10 @@ namespace Project {
         }
 
 
-        getWidth() : number {
-            return this.width;
+        getSize() {
+            return this.size;
         }
 
-        getHeight() : number {
-            return this.height;
-        }
-    
     }
 
 }
