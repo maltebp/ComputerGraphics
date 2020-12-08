@@ -1,7 +1,7 @@
 
-uniform mat3 u_CameraMatrix;
+// uniform mat3 u_CameraMatrix;
 
-uniform float u_Radius;
+// uniform float u_Radius;
 
 attribute vec2 a_Position;
 

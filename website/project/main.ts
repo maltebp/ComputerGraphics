@@ -6,6 +6,7 @@ namespace Project {
         NORMAL,
         OCCLUSION,
         RAYS,
+        SHADOW,
         LIGHT
     }
 
@@ -68,7 +69,7 @@ namespace Project {
             .addOption("draw-mode-normal", DrawMode.NORMAL)
             .addOption("draw-mode-occlusion", DrawMode.OCCLUSION)
             .addOption("draw-mode-rays", DrawMode.RAYS)
-            .addOption("draw-mode-light", DrawMode.LIGHT)
+            .addOption("draw-mode-shadow", DrawMode.SHADOW)
             .check(0)
             ;
 
@@ -130,6 +131,9 @@ namespace Project {
         }
         if( drawMode ==DrawMode.RAYS ) {
             lightRenderer.drawRayMap(CANVAS_SIZE);
+        }
+        if( drawMode == DrawMode.SHADOW ) {
+            lightRenderer.drawShadowMap(CANVAS_SIZE);
         }
         // if( drawMode ==DrawMode.LIGHT ) {
         //     rayRenderer.bindTexture(0);

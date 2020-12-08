@@ -7,9 +7,9 @@ namespace Project {
         private gl: WebGLRenderingContext;
 
         private vertexBuffer: Util.VertexBuffer;
-        private shader: Util.ShaderProgram;
+        // private shader: Util.ShaderProgram;
         private gaussianShader: Util.ShaderProgram;
-        private lightShader: Util.ShaderProgram;
+        // private lightShader: Util.ShaderProgram;
 
         private occlusionMap: OcclusionMap;
         private occlusionCamera: Camera2D;
@@ -17,6 +17,8 @@ namespace Project {
         private lightMap: LightMap;
 
         private rayMap: RayMap;
+
+        private shadowMap: ShadowMap;
 
         
         private currentFramebuffer: Framebuffer;
@@ -54,21 +56,23 @@ namespace Project {
             this.rayMap = new RayMap(gl, 256);
 
             // Shader
-            this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/vertex.glsl", "/project/lightrenderer/fragment.glsl"); 
+            // this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/vertex.glsl", "/project/lightrenderer/fragment.glsl"); 
             
             // Gaussian shader
-            this.gaussianShader = new Util.ShaderProgram(gl, "/project/lightrenderer/gaussian/vertex.glsl", "/project/lightrenderer/gaussian/fragment.glsl");
+            // this.gaussianShader = new Util.ShaderProgram(gl, "/project/lightrenderer/gaussian/vertex.glsl", "/project/lightrenderer/gaussian/fragment.glsl");
 
             // Light shader
-            this.lightShader = new Util.ShaderProgram(gl, "/project/lightrenderer/light/vertex.glsl", "/project/lightrenderer/light/fragment.glsl");
+            // this.lightShader = new Util.ShaderProgram(gl, "/project/lightrenderer/light/vertex.glsl", "/project/lightrenderer/light/fragment.glsl");
 
             // Create framebuffers 
-            this.framebuffer1 = new Framebuffer(gl, this.createTexture());
-            this.framebuffer2 = new Framebuffer(gl, this.createTexture());
+            // this.framebuffer1 = new Framebuffer(gl, this.createTexture());
+            // this.framebuffer2 = new Framebuffer(gl, this.createTexture());
 
-            this.currentFramebuffer = this.framebuffer1;
+            // this.currentFramebuffer = this.framebuffer1;
 
             this.lightMap = new LightMap(gl, [1280, 720]);
+
+            this.shadowMap = new ShadowMap(gl, 1080);
 
             this.imageRenderer = new Util.ImageRenderer(gl);
         }
@@ -109,52 +113,55 @@ namespace Project {
             this.occlusionMap.bindTexture(0);
             lights.forEach(light => {
                 this.rayMap.draw(light, 0, occlusionMatrix);
+                this.rayMap.bindTexture(0);
+                this.shadowMap.draw(0);
             });
 
 
         }
 
 
-        private drawLight(camera: Camera2D, light: Light, occlusionMatrix: number[]) {
-            this.gl.clearColor(0,0,0,0);
+        // private drawLight(camera: Camera2D, light: Light, occlusionMatrix: number[]) {
+        //     this.gl.clearColor(0,0,0,0);
 
 
-            this.framebuffer2.drawTo(() => {
-                this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-            })
-            this.currentFramebuffer.drawTo(() => {
-                this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+        //     this.framebuffer2.drawTo(() => {
+        //         this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+        //     })
+        //     this.currentFramebuffer.drawTo(() => {
+        //         this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
-                this.shader.bind();
-                // this.shader.setFloat("u_Radius", radius);
-                // this.shader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
-                this.shader.setInteger("u_RayMap", 0);
+        //         this.shader.bind();
+        //         this.shader.setFloat("u_Radius", radius);
+        //         // this.shader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
+        //         this.shader.setInteger("u_RayMap", 0);
     
-                this.vertexBuffer.bind();
+        //         this.vertexBuffer.bind();
     
-                this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
-            });
+        //         this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
+        //     });
 
-            this.gaussianBlur();
+        //     this.gaussianBlur();
 
-            // this.gl.enable(gl.BLEND);
+        //     // this.gl.enable(gl.BLEND);
 
-            this.framebuffer1.getTexture().bind(0);
-
-            this.lightShader.bind();
-            this.lightShader.setInteger("u_ShadowTexture", 0);
-            this.lightShader.setFloatVector3("u_Color", [0,1,0]); 
-
-            // this.lightShader.setFloat("u_LightSize", this.lightSize);
-            // this.lightShader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
+        //     this.framebuffer1.getTexture().bind(0);
 
 
-            this.vertexBuffer.bind();
-            this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
 
-            // this.gl.disable(gl.BLEND);
+        //     this.lightShader.bind();
+        //     this.lightShader.setInteger("u_ShadowTexture", 0);
+        //     this.lightShader.setFloatVector3("u_Color", [0,1,0]); 
 
-        }
+        //     // this.lightShader.setFloat("u_LightSize", this.lightSize);
+        //     // this.lightShader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
+
+        //     this.vertexBuffer.bind();
+        //     this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
+
+        //     // this.gl.disable(gl.BLEND);
+
+        // }
 
 
         // Flushes the light map, causing it render the lights on top
@@ -167,7 +174,6 @@ namespace Project {
         bindTexture(textureSlot: number) {
             this.currentFramebuffer.getTexture().bind(textureSlot);
         }
-
 
 
         // Just a debugging function
@@ -185,49 +191,57 @@ namespace Project {
         }
 
 
-        private gaussianBlur() {
-            
-            this.gaussianShader.bind();
-            this.gaussianShader.setInteger("u_SourceTexture", 0);
-            // this.gaussianShader.setInteger("u_TextureSize", this.lightSize);
-            
-            // We can reuse the same vertexbuffer
-            this.vertexBuffer.bind();
-            
-            for(let i=0; i<1; i++){
-                this.framebuffer1.getTexture().bind(0);
-                this.gaussianShader.setInteger("u_Horizontal", 0);
-                this.framebuffer2.drawTo(() => {
-                    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
-                });
-    
-                this.framebuffer2.getTexture().bind(0);
-                this.gaussianShader.setInteger("u_Horizontal", 1);
-                this.framebuffer1.drawTo(() => {
-                    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());
-                });
-            }
-            
-            
+        // Just for debugging
+        // Draws the last shadow map calculated
+        drawShadowMap(screenSize: number[]) {
+            this.shadowMap.bindTexture(0);
+            this.imageRenderer.draw(0, screenSize[0], screenSize[1], screenSize[1]*0.9, screenSize[1]*0.9 );
         }
+
+
+        // private gaussianBlur() {
+            
+        //     this.gaussianShader.bind();
+        //     this.gaussianShader.setInteger("u_SourceTexture", 0);
+        //     // this.gaussianShader.setInteger("u_TextureSize", this.lightSize);
+            
+        //     // We can reuse the same vertexbuffer
+        //     this.vertexBuffer.bind();
+            
+        //     for(let i=0; i<1; i++){
+        //         this.framebuffer1.getTexture().bind(0);
+        //         this.gaussianShader.setInteger("u_Horizontal", 0);
+        //         this.framebuffer2.drawTo(() => {
+        //             this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
+        //         });
+    
+        //         this.framebuffer2.getTexture().bind(0);
+        //         this.gaussianShader.setInteger("u_Horizontal", 1);
+        //         this.framebuffer1.drawTo(() => {
+        //             this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());
+        //         });
+        //     }
+            
+            
+        // }
 
       
-        // Have to create two identical textures, so why not put
-        // it in a function?
-        private createTexture() {
-            var texture = null;
-            Util.Texture.createFromData(gl, null, 1337, 1337) // TODO: Fix this
-                .setChannels(4)
-                .setFilter(gl.NEAREST, gl.NEAREST)
+        // // Have to create two identical textures, so why not put
+        // // it in a function?
+        // private createTexture() {
+        //     var texture = null;
+        //     Util.Texture.createFromData(gl, null, 1337, 1337) // TODO: Fix this
+        //         .setChannels(4)
+        //         .setFilter(gl.NEAREST, gl.NEAREST)
 
-                // Note: We can't use REPEAT if we use texture 
-                // which is not a power of 2
-                .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE)
-                .build((createdTexture) => {
-                    texture = createdTexture;
-            });
-            return texture;
-        }
+        //         // Note: We can't use REPEAT if we use texture 
+        //         // which is not a power of 2
+        //         .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE)
+        //         .build((createdTexture) => {
+        //             texture = createdTexture;
+        //     });
+        //     return texture;
+        // }
 
         
 
