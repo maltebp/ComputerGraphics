@@ -41,7 +41,7 @@ namespace Project {
             if( this.texture === null ) return;
 
             // @ts-ignore
-            let inverseCamera = inverse(camera.getMatrix());
+            let inverseCamera = camera.getMatrix(true);
 
             
             // @ts-ignore 

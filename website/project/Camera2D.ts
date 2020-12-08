@@ -4,24 +4,26 @@ namespace Project {
     export class Camera2D {
 
         private position: number[];
-        private screenSize: number[];
-        private matrix: number[];
-        private dirty = true;
         private zoom = 0;
+        private screenSize: number[];
+
+        private matrix: number[];
+        private matrixInverse: number[];
+        private dirty = true;
+
 
         constructor(screensize, position) {
             this.screenSize = [screensize[0], screensize[1]];
             this.position = [position[0], position[1]];
         }
 
-
-        getMatrix() {
+        getMatrix(inversed = false) {
             if( this.dirty ){
 
                 // @ts-ignore
                 let translationMatrix = mat3( [1, 0, -this.position[0]], [0, 1, -this.position[1]], [0, 0, 1] );
 
-                
+
                 let zoomFactor = this.zoom < 0 ? -1 / (this.zoom-1) : this.zoom + 1;
                 // @ts-ignore
                 let zoomMatrix = mat3(
@@ -36,11 +38,18 @@ namespace Project {
                 // @ts-ignore
                 this.matrix = mult(projectionMatrix, mult(zoomMatrix, translationMatrix));
 
+                // @ts-ignore
+                this.matrixInverse = inverse(this.matrix);
+
                 this.dirty = false;
             }
+
+            if( inversed )
+                return this.matrixInverse;
             
             return this.matrix;
         }
+
 
 
 
@@ -80,7 +89,6 @@ namespace Project {
         getScreenHeight() {
             return this.screenSize[1];
         }
-
 
     }
 

@@ -54,12 +54,23 @@
 
             <!-- Right toolbox -->
             <td><table class="toolbox">
-                <b>Draw mode</b><br>
-                <input id="draw-mode-normal" type="radio"> Normal<br>
-                <input id="draw-mode-occlusion" type="radio"> Occlusion map<br>
-                <input id="draw-mode-rays" type="radio"> Light rays<br>               
-                <input id="draw-mode-light" type="radio"> Light<br>               
-                            </table></td>
+
+                 <!-- Ambient color -->
+                 <tr class="toolbox-row"><td>
+                    <b>Ambient light</b><br>
+                    <input id="ambient-color" type="color"> Color<br>
+                </td></tr>
+
+                <!-- Draw mode -->
+                <tr class="toolbox-row"><td>
+                    <b>Draw mode</b><br>
+                    <input id="draw-mode-normal" type="radio"> Normal<br>
+                    <input id="draw-mode-occlusion" type="radio"> Occlusion map<br>
+                    <input id="draw-mode-rays" type="radio"> Light rays<br>               
+                    <input id="draw-mode-light" type="radio"> Light<br>               
+                </td></tr>
+
+            </table></td>
         </tr>
     </table>
     
@@ -68,10 +79,11 @@
     <script src="Quad.js"></script>
     <script src="Camera2D.js"></script>
     <script src="Framebuffer.js"></script>
+    <script src="lightmap/LightMap.js"></script>
     <script src="background/BackgroundRenderer.js"></script>
     <script src="lightrayrenderer/LightRayRenderer.js"></script>
     <script src="lightrenderer/LightRenderer.js"></script>
-    <script src="occlusionrenderer/OcclusionRenderer.js"></script>
+    <script src="occlusionmap/OcclusionMap.js"></script>
     <script src="quadrenderer/QuadRenderer.js"></script>
 
 

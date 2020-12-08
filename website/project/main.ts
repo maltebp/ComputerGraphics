@@ -21,10 +21,12 @@ namespace Project {
     declare var imageRenderer: Util.ImageRenderer;
     declare var quadRenderer: QuadRenderer;
     declare var camera: Camera2D;
-    declare var occlusionRenderer: OcclusionRenderer;
+    declare var occlusionRenderer: OcclusionMap;
     declare var rayRenderer: LightRayRenderer;
     declare var lightRenderer: LightRenderer;
     declare var backgroundRenderer: BackgroundRenderer;
+    declare var lightMap: LightMap;
+
 
     declare var quads: Quad[];
     declare var drawMode: DrawMode;
@@ -43,9 +45,11 @@ namespace Project {
         gl.depthFunc(gl.ALWAYS); //TODO: Remove this at some point
         
         backgroundRenderer = new BackgroundRenderer(gl);
+        
+        lightMap = new LightMap(gl, CANVAS_SIZE);
 
         imageRenderer = new Util.ImageRenderer(gl);
-        occlusionRenderer = new OcclusionRenderer(gl, LIGHT_RADIUS, LIGHT_RADIUS);
+        occlusionRenderer = new OcclusionMap(gl, 2160, 2160);
         rayRenderer = new LightRayRenderer(gl, LIGHT_SAMPLES);
 
         lightRenderer = new LightRenderer(gl, LIGHT_RADIUS);
@@ -60,6 +64,7 @@ namespace Project {
         quads.push(new Quad(10, 10, [100,10], 0, Util.Color.WHITE));
         quads.push(new Quad(5, 600, [-200,-100], 30, Util.Color.WHITE));
 
+        // Drawing mode radio group
         drawMode = DrawMode.NORMAL;
         new Util.RadioGroup<DrawMode>((mode) => drawMode = mode )
             .addOption("draw-mode-normal", DrawMode.NORMAL)
@@ -69,7 +74,8 @@ namespace Project {
             .check(0)
             ;
 
-
+        // Ambient color picker
+        new Util.ColorPicker("ambient-color", new Util.Color(0.15, 0.15, 0.15), (newColor) => lightMap.setAmbient(newColor));
         
         // Mouse Events
         mousePressed = false;
@@ -87,15 +93,12 @@ namespace Project {
             e.preventDefault();
         }
         canvas.onmousemove = (e) => {
-            console.log(e.offsetX, e.offsetY);
             if( mousePressed ) {
-                console.log("Moving");
                 if( e.altKey ) {
                     camera.adjustZoom(e.movementY  / 100.0);
                 }else{
                     camera.adjustPosition(-e.movementX, e.movementY);
                 }
-                
             }
         }
         // canvas.onwheel = (e) =>{
@@ -111,18 +114,21 @@ namespace Project {
         gl.clearColor(0.2, 0.2, 0.2, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT);
         FRAME_TIMER.registerFrame();
-
-        backgroundRenderer.drawBackground(camera);
         
-        // occlusionRenderer.drawQuads([0,0], ...quads);
-        // occlusionRenderer.bindTexture(1);
+        lightMap.clear();
+
+        gl.disable(gl.BLEND);
+        backgroundRenderer.drawBackground(camera);
+        lightMap.draw();
+        
+        occlusionRenderer.drawOccluders(camera, ...quads);
         // rayRenderer.draw();
         
 
-        // if( drawMode == DrawMode.OCCLUSION ) {
-        //     occlusionRenderer.bindTexture(0);
-        //     imageRenderer.draw(0, CANVAS_SIZE[0], CANVAS_SIZE[1], LIGHT_RADIUS, LIGHT_RADIUS );
-        // }
+        if( drawMode == DrawMode.OCCLUSION ) {
+            occlusionRenderer.bindTexture(0);
+            imageRenderer.draw(0, CANVAS_SIZE[0], CANVAS_SIZE[1], 700, 700);
+        }
         // if( drawMode ==DrawMode.RAYS ) {
         //     rayRenderer.bindTexture(0);
         //     imageRenderer.draw(0, CANVAS_SIZE[0], CANVAS_SIZE[1], LIGHT_RADIUS, 1 );

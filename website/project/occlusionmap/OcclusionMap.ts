@@ -1,7 +1,7 @@
 
 namespace Project {
 
-    export class OcclusionRenderer {
+    export class OcclusionMap {
 
         private gl: WebGLRenderingContext;
 
@@ -23,7 +23,7 @@ namespace Project {
             this.vertexBuffer = new Util.VertexBuffer(gl);
             this.vertexBuffer.addAttribute("a_Position", 2);
             this.indexBuffer = new Util.IndexBuffer(gl);
-            this.shader = new Util.ShaderProgram(gl, "/project/occlusionrenderer/vertex.glsl", "/project/occlusionrenderer/fragment.glsl");    
+            this.shader = new Util.ShaderProgram(gl, "/project/occlusionmap/vertex.glsl", "/project/occlusionmap/fragment.glsl");    
 
             let _this = this;
             Util.Texture.createFromData(gl, null, width, height)
@@ -42,14 +42,15 @@ namespace Project {
 
         
 
-        drawQuads( origin: number[], ...quads: Quad[] ) {
+        drawOccluders( camera: Camera2D, ...occluders: Quad[] ) {            
+            
             this.vertexBuffer.clear();
             this.indexBuffer.clear();
 
-            this.vertexBuffer.reserve(quads.length * 7 * 6);
+            this.vertexBuffer.reserve(occluders.length * 7 * 6);
 
-            for( let i=0; i<quads.length; i++ ){
-                let quad = quads[i];
+            for( let i=0; i<occluders.length; i++ ){
+                let quad = occluders[i];
             
                 let x = quad.position[0];
                 let y = quad.position[1];
@@ -89,24 +90,21 @@ namespace Project {
             }
 
 
+            this.gl.disable(gl.BLEND);
+            this.gl.clearColor(1, 1, 1, 1);
+
+            this.shader.bind();
+            this.shader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
+
+            this.vertexBuffer.bind();
+            this.indexBuffer.bind();
+            
             this.framebuffer.drawTo(() => {
-                this.gl.disable(gl.BLEND);
-
-                this.gl.clearColor(1, 1, 1, 1);
                 this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-
-                let camera = new Camera2D([this.width, this.height], [0, 0]);
-                this.shader.bind();
-                this.shader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
-
-                this.vertexBuffer.bind();
-                this.indexBuffer.bind();
-
-                this.gl.drawElements(this.gl.TRIANGLES, this.indexBuffer.length(), this.gl.UNSIGNED_SHORT, 0);
-
-                this.gl.enable(gl.BLEND);
+                this.gl.drawElements(this.gl.TRIANGLES, this.indexBuffer.length(), this.gl.UNSIGNED_SHORT, 0);                
             });
         }
+
 
         
         bindTexture(textureSlot: number) {
