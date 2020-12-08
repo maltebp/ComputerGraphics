@@ -55,7 +55,7 @@ namespace Project {
 
             this.framebuffer = new Framebuffer(gl, this.texture);
         }
-
+0
         
 
         draw() {

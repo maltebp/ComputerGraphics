@@ -7,6 +7,7 @@ precision mediump float;
   
 
 uniform sampler2D u_SourceTexture;
+uniform sampler2D u_OcclusionMap;
 uniform int u_Horizontal;
 uniform int u_TextureSize;
 
@@ -21,6 +22,7 @@ void main() {
     // Source: http://dev.theomader.com/gaussian-kernel-calculator/
     float WEIGHTS[9];
     
+    // WEIGHTS[0] = 1.0;
     WEIGHTS[0] = 0.102934;
     WEIGHTS[1] = 0.099783;
     WEIGHTS[2] = 0.090898;
@@ -29,27 +31,44 @@ void main() {
     WEIGHTS[5] = 0.047318;
     WEIGHTS[6] = 0.033613;
     WEIGHTS[7] = 0.022439;
-    WEIGHTS[8] = 0.014076;
-               
+    WEIGHTS[8] = 0.014076;      
 
-    float tex_offset = 1.0 / float(u_TextureSize); //textureSize(u_SourceTexture, 0); // gets size of single texel // TODO: Calculate this as uniform
-    vec3 result = texture2D(u_SourceTexture, o_TextureCoordinates).rgb * WEIGHTS[0]; // current fragment's contribution
-    if(u_Horizontal == 1)
-    {
-        for(int i = 1; i < 9; ++i)
+    float dist = length(o_TextureCoordinates * 2.0 - 1.0);
+
+    float tex_offset = 12.0 / float(u_TextureSize); //textureSize(u_SourceTexture, 0); // gets size of single texel // TODO: Calculate this as uniform
+    vec3 result = texture2D(u_SourceTexture, o_TextureCoordinates).rgb; 
+    
+    float factorPositive = 0.0;
+    float factorNegative = 0.0;
+    
+    float distFactor = dist*dist;
+    float weightFactor = 1.8;
+
+    // vec3 result = vec3(0,0,0);
+    if( result.r < 0.99) {
+        result *= WEIGHTS[0];  
+        if(u_Horizontal == 1)
+                {
+                    
+            for(int i = 1; i < 9; ++i)
+            {
+                result += texture2D(u_SourceTexture, o_TextureCoordinates + vec2(tex_offset * float(i) * distFactor, 0.0)).rgb * WEIGHTS[i] * weightFactor;
+                result += texture2D(u_SourceTexture, o_TextureCoordinates - vec2(tex_offset * float(i) * distFactor, 0.0)).rgb * WEIGHTS[i] * weightFactor;
+            }
+        }
+        else
         {
-            result += texture2D(u_SourceTexture, o_TextureCoordinates + vec2(tex_offset * float(i), 0.0)).rgb * WEIGHTS[i];
-            result += texture2D(u_SourceTexture, o_TextureCoordinates - vec2(tex_offset * float(i), 0.0)).rgb * WEIGHTS[i];
+            for(int i = 1; i < 9; ++i)
+            {
+                result += texture2D(u_SourceTexture, o_TextureCoordinates + vec2(0.0, tex_offset * float(i) * distFactor)).rgb * WEIGHTS[i] * weightFactor;
+                result += texture2D(u_SourceTexture, o_TextureCoordinates - vec2(0.0, tex_offset * float(i) * distFactor)).rgb * WEIGHTS[i] * weightFactor;
+            }
         }
     }
-    else
-    {
-        for(int i = 1; i < 9; ++i)
-        {
-            result += texture2D(u_SourceTexture, o_TextureCoordinates + vec2(0.0, tex_offset * float(i))).rgb * WEIGHTS[i];
-            result += texture2D(u_SourceTexture, o_TextureCoordinates - vec2(0.0, tex_offset * float(i))).rgb * WEIGHTS[i];
-        }
-    }
+   
+
+    
+
     gl_FragColor = vec4(result, 1.0);
 }
 

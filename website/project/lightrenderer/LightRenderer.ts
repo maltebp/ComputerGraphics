@@ -9,11 +9,14 @@ namespace Project {
         private vertexBuffer: Util.VertexBuffer;
         private shader: Util.ShaderProgram;
         private gaussianShader: Util.ShaderProgram;
+        private lightShader: Util.ShaderProgram;
         
         private currentFramebuffer: Framebuffer;
 
         private framebuffer1: Framebuffer;
         private framebuffer2: Framebuffer;
+    
+
 
         private lightSize: number;
         
@@ -40,6 +43,9 @@ namespace Project {
             // Gaussian shader
             this.gaussianShader = new Util.ShaderProgram(gl, "/project/lightrenderer/gaussian/vertex.glsl", "/project/lightrenderer/gaussian/fragment.glsl");
 
+            // Light shader
+            this.lightShader = new Util.ShaderProgram(gl, "/project/lightrenderer/light/vertex.glsl", "/project/lightrenderer/light/fragment.glsl");
+
             // Create framebuffers 
             this.framebuffer1 = new Framebuffer(gl, this.createTexture());
             this.framebuffer2 = new Framebuffer(gl, this.createTexture());
@@ -48,10 +54,14 @@ namespace Project {
         }
 
 
-        draw() {
+        draw(camera: Camera2D) {
+            this.gl.clearColor(0,0,0,0);
 
+
+            this.framebuffer2.drawTo(() => {
+                this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+            })
             this.currentFramebuffer.drawTo(() => {
-                this.gl.clearColor(0,0,0,0);
                 this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
                 this.shader.bind();
@@ -65,6 +75,23 @@ namespace Project {
             });
 
             this.gaussianBlur();
+
+            // this.gl.enable(gl.BLEND);
+
+            this.framebuffer1.getTexture().bind(0);
+
+            this.lightShader.bind();
+            this.lightShader.setInteger("u_ShadowTexture", 0);
+            this.lightShader.setFloatVector3("u_Color", [0,1,0]); 
+            this.lightShader.setFloat("u_LightSize", this.lightSize);
+            this.lightShader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
+
+
+            this.vertexBuffer.bind();
+            this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
+
+            // this.gl.disable(gl.BLEND);
+
         }
 
         bindTexture(textureSlot: number) {
@@ -82,7 +109,7 @@ namespace Project {
             // We can reuse the same vertexbuffer
             this.vertexBuffer.bind();
             
-            for(let i=0; i<3; i++){
+            for(let i=0; i<1; i++){
                 this.framebuffer1.getTexture().bind(0);
                 this.gaussianShader.setInteger("u_Horizontal", 0);
                 this.framebuffer2.drawTo(() => {

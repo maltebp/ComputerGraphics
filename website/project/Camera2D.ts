@@ -7,6 +7,7 @@ namespace Project {
         private screenSize: number[];
         private matrix: number[];
         private dirty = true;
+        private zoom = 0;
 
         constructor(screensize, position) {
             this.screenSize = [screensize[0], screensize[1]];
@@ -17,21 +18,67 @@ namespace Project {
         getMatrix() {
             if( this.dirty ){
 
-                let translation;
                 // @ts-ignore
-                translation = mat3( [1, 0, -this.position[0]], [0, 1, -this.position[1]], [0, 0, 1] );
+                let translationMatrix = mat3( [1, 0, -this.position[0]], [0, 1, -this.position[1]], [0, 0, 1] );
 
-                let projection;
+                
+                let zoomFactor = this.zoom < 0 ? -1 / (this.zoom-1) : this.zoom + 1;
                 // @ts-ignore
-                projection = mat3( [2/this.screenSize[0], 0, 0], [0, 2/this.screenSize[1], 0], [0, 0, 1] );
+                let zoomMatrix = mat3(
+                        zoomFactor,          0,  0,
+                                 0, zoomFactor,  0,
+                                 0,          0,  1
+                    );
 
                 // @ts-ignore
-                this.matrix = mult(projection, translation);
+                let projectionMatrix = mat3( [2/this.screenSize[0], 0, 0], [0, 2/this.screenSize[1], 0], [0, 0, 1] );
+
+                // @ts-ignore
+                this.matrix = mult(projectionMatrix, mult(zoomMatrix, translationMatrix));
 
                 this.dirty = false;
             }
             
             return this.matrix;
+        }
+
+
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Setters and adjusters
+
+        adjustPosition(x: number, y: number){
+            this.position[0] += x;
+            this.position[1] += y;
+            this.dirty = true;
+        }
+
+        adjustZoom(amount: number){
+            this.zoom += amount;
+            this.dirty = true;
+        }
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Getters for camera data
+
+        getPosition() {
+            return [this.position[0], this.position[1]];
+        }
+
+        getPositionX() {
+            return this.position[0];
+        }
+
+        getPositionY() {
+            return this.position[1];
+        }
+
+        getScreenWidth() {
+            return this.screenSize[0];
+        }
+
+        getScreenHeight() {
+            return this.screenSize[1];
         }
 
 
