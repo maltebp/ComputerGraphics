@@ -18,14 +18,10 @@ namespace Project {
     
     declare var gl: WebGLRenderingContext;
 
-    declare var imageRenderer: Util.ImageRenderer;
     declare var quadRenderer: QuadRenderer;
     declare var camera: Camera2D;
-    declare var occlusionRenderer: OcclusionMap;
-    declare var rayRenderer: LightRayRenderer;
     declare var lightRenderer: LightRenderer;
     declare var backgroundRenderer: BackgroundRenderer;
-    declare var lightMap: LightMap;
 
 
     declare var quads: Quad[];
@@ -46,13 +42,11 @@ namespace Project {
         
         backgroundRenderer = new BackgroundRenderer(gl);
         
-        lightMap = new LightMap(gl, CANVAS_SIZE);
 
-        imageRenderer = new Util.ImageRenderer(gl);
-        occlusionRenderer = new OcclusionMap(gl, 2160, 2160);
-        rayRenderer = new LightRayRenderer(gl, LIGHT_SAMPLES);
+        // imageRenderer = new Util.ImageRenderer(gl);
+        // rayRenderer = new LightRayRenderer(gl, LIGHT_SAMPLES);
 
-        lightRenderer = new LightRenderer(gl, LIGHT_RADIUS);
+        lightRenderer = new LightRenderer(gl);
 
 
         quadRenderer = new QuadRenderer(gl);
@@ -75,7 +69,7 @@ namespace Project {
             ;
 
         // Ambient color picker
-        new Util.ColorPicker("ambient-color", new Util.Color(0.15, 0.15, 0.15), (newColor) => lightMap.setAmbient(newColor));
+        new Util.ColorPicker("ambient-color", new Util.Color(0.15, 0.15, 0.15), (newColor) => lightRenderer.setAmbient(newColor));
         
         // Mouse Events
         mousePressed = false;
@@ -115,19 +109,18 @@ namespace Project {
         gl.clear(gl.COLOR_BUFFER_BIT);
         FRAME_TIMER.registerFrame();
         
-        lightMap.clear();
 
         gl.disable(gl.BLEND);
         backgroundRenderer.drawBackground(camera);
-        lightMap.draw();
         
-        occlusionRenderer.drawOccluders(camera, ...quads);
+        lightRenderer.draw(camera, quads, null);
+
+        // occlusionRenderer.drawOccluders(camera, ...quads);
         // rayRenderer.draw();
         
 
         if( drawMode == DrawMode.OCCLUSION ) {
-            occlusionRenderer.bindTexture(0);
-            imageRenderer.draw(0, CANVAS_SIZE[0], CANVAS_SIZE[1], 700, 700);
+            lightRenderer.drawOcclusionMap(CANVAS_SIZE);
         }
         // if( drawMode ==DrawMode.RAYS ) {
         //     rayRenderer.bindTexture(0);

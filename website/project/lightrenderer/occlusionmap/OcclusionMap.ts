@@ -23,7 +23,7 @@ namespace Project {
             this.vertexBuffer = new Util.VertexBuffer(gl);
             this.vertexBuffer.addAttribute("a_Position", 2);
             this.indexBuffer = new Util.IndexBuffer(gl);
-            this.shader = new Util.ShaderProgram(gl, "/project/occlusionmap/vertex.glsl", "/project/occlusionmap/fragment.glsl");    
+            this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/occlusionmap/vertex.glsl", "/project/lightrenderer/occlusionmap/fragment.glsl");    
 
             let _this = this;
             Util.Texture.createFromData(gl, null, width, height)

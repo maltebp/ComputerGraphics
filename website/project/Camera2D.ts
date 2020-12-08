@@ -51,8 +51,6 @@ namespace Project {
         }
 
 
-
-
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Setters and adjusters
 
@@ -62,8 +60,19 @@ namespace Project {
             this.dirty = true;
         }
 
+        setPosition(position: number[]) {
+            this.position[0] = position[0];
+            this.position[1] = position[1];
+            this.dirty = true;
+        }
+
         adjustZoom(amount: number){
             this.zoom += amount;
+            this.dirty = true;
+        }
+
+        setZoom(zoom: number) {
+            this.zoom = zoom;
             this.dirty = true;
         }
 
@@ -88,6 +97,11 @@ namespace Project {
 
         getScreenHeight() {
             return this.screenSize[1];
+        }
+
+
+        getZoom() {
+            return this.zoom;
         }
 
     }

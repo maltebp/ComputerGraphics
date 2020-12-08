@@ -33,7 +33,7 @@ namespace Project {
             .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE)
             .build((texture) => this.framebuffer =  new Framebuffer(gl, texture));
 
-            this.shader = new Util.ShaderProgram(gl, "/project/lightmap/vertex.glsl", "/project/lightmap/fragment.glsl");          
+            this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/lightmap/vertex.glsl", "/project/lightrenderer/lightmap/fragment.glsl");          
         }
 
 

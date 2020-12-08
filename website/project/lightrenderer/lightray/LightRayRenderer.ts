@@ -30,7 +30,7 @@ namespace Project {
             this.vertexBuffer.addAttribute("a_Position", 2);
             this.vertexBuffer .push(
                 -1, -1,
-                -1,  1,
+                -1,  1, 
                  1, -1,
 
                 -1,  1,
@@ -39,7 +39,7 @@ namespace Project {
             );
 
             // Shader
-            this.shader = new Util.ShaderProgram(gl, "/project/lightrayrenderer/vertex.glsl", "/project/lightrayrenderer/fragment.glsl");  
+            this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/lightray/vertex.glsl", "/project/lightrenderer/lightray/fragment.glsl");  
 
             let _this = this;
             Util.Texture.createFromData(gl, null, numRays, 1)

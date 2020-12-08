@@ -10,19 +10,26 @@ namespace Project {
         private shader: Util.ShaderProgram;
         private gaussianShader: Util.ShaderProgram;
         private lightShader: Util.ShaderProgram;
+
+        private occlusionMap: OcclusionMap;
+        private occlusionCamera: Camera2D;
+
+        private lightMap: LightMap;
+
         
         private currentFramebuffer: Framebuffer;
 
         private framebuffer1: Framebuffer;
         private framebuffer2: Framebuffer;
     
+        // For debugging the framebuffers
+        private imageRenderer: Util.ImageRenderer;
 
-
-        private lightSize: number;
+        // private lightSize: number;
         
-        constructor(gl: WebGLRenderingContext, lightSize: number) {
+        constructor(gl: WebGLRenderingContext) {
             this.gl = gl;
-            this.lightSize = lightSize;
+            // this.lightSize = lightSize;
 
             // Vertex buffer: Two triangles filling entire screen           
             this.vertexBuffer = new Util.VertexBuffer(gl);
@@ -36,6 +43,9 @@ namespace Project {
                  1.0,  1.0,
                  1.0, -1.0
             );
+
+            this.occlusionMap = new OcclusionMap(gl, 2160, 2160);
+            this.occlusionCamera = new Camera2D([this.occlusionMap.getWidth(), this.occlusionMap.getHeight()], [0,0]);
 
             // Shader
             this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/vertex.glsl", "/project/lightrenderer/fragment.glsl"); 
@@ -51,10 +61,41 @@ namespace Project {
             this.framebuffer2 = new Framebuffer(gl, this.createTexture());
 
             this.currentFramebuffer = this.framebuffer1;
+
+            this.lightMap = new LightMap(gl, [1280, 720]);
+
+            this.imageRenderer = new Util.ImageRenderer(gl);
         }
 
 
-        draw(camera: Camera2D) {
+        setAmbient(color: Util.Color) {
+            this.lightMap.setAmbient(color);
+        }
+
+
+
+        draw(camera: Camera2D, occluders: Quad[], lights: Light[]) {
+
+            // Clear maps
+            this.lightMap.clear();
+        
+            // - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            // Draw occluders
+
+            // Update occlusion camera
+            this.occlusionCamera.setZoom(camera.getZoom());
+            this.occlusionCamera.setPosition(camera.getPosition());
+            this.occlusionMap.drawOccluders(this.occlusionCamera, ...occluders);
+
+
+
+
+
+
+        }
+
+
+        private drawLight(camera: Camera2D, light: Light) {
             this.gl.clearColor(0,0,0,0);
 
 
@@ -83,7 +124,7 @@ namespace Project {
             this.lightShader.bind();
             this.lightShader.setInteger("u_ShadowTexture", 0);
             this.lightShader.setFloatVector3("u_Color", [0,1,0]); 
-            this.lightShader.setFloat("u_LightSize", this.lightSize);
+            // this.lightShader.setFloat("u_LightSize", this.lightSize);
             this.lightShader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
 
 
@@ -94,17 +135,32 @@ namespace Project {
 
         }
 
+
+        // Flushes the light map, causing it render the lights on top
+        // of the currently drawn screen
+        flush() {
+            // TODO: Render lights here
+        }
+
+
         bindTexture(textureSlot: number) {
             this.currentFramebuffer.getTexture().bind(textureSlot);
         }
 
 
 
+        // Just a debugging function
+        drawOcclusionMap(screenSize: number[]) {
+            this.occlusionMap.bindTexture(0);
+            this.imageRenderer.draw(0, screenSize[0], screenSize[1], screenSize[1]*0.9, screenSize[1]*0.9 );
+        }
+
+
         private gaussianBlur() {
             
             this.gaussianShader.bind();
             this.gaussianShader.setInteger("u_SourceTexture", 0);
-            this.gaussianShader.setInteger("u_TextureSize", this.lightSize);
+            // this.gaussianShader.setInteger("u_TextureSize", this.lightSize);
             
             // We can reuse the same vertexbuffer
             this.vertexBuffer.bind();
@@ -131,7 +187,7 @@ namespace Project {
         // it in a function?
         private createTexture() {
             var texture = null;
-            Util.Texture.createFromData(gl, null, this.lightSize, this.lightSize)
+            Util.Texture.createFromData(gl, null, 1337, 1337) // TODO: Fix this
                 .setChannels(4)
                 .setFilter(gl.NEAREST, gl.NEAREST)
 
