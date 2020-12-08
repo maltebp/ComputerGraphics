@@ -66,6 +66,8 @@ namespace Project {
                 this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );    
             });
 
+            this.gaussianBlur();
+
         }
 
 
@@ -116,31 +118,34 @@ namespace Project {
             this.framebuffer1.getTexture().bind(textureSlot);
         }
 
-        // private gaussianBlur() {
+        private gaussianBlur() {
+
+            this.gl.enable(this.gl.BLEND);
+            this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
             
-        //     this.gaussianShader.bind();
-        //     this.gaussianShader.setInteger("u_SourceTexture", 0);
-        //     // this.gaussianShader.setInteger("u_TextureSize", this.lightSize);
+            this.gaussianShader.bind();
+            this.gaussianShader.setInteger("u_SourceTexture", 0);
+            this.gaussianShader.setInteger("u_TextureSize", this.textureSize);
             
-        //     // We can reuse the same vertexbuffer
-        //     this.vertexBuffer.bind();
+            // We can reuse the same vertexbuffer
+            this.vertexBuffer.bind();
             
-        //     for(let i=0; i<1; i++){
-        //         this.framebuffer1.getTexture().bind(0);
-        //         this.gaussianShader.setInteger("u_Horizontal", 0);
-        //         this.framebuffer2.drawTo(() => {
-        //             this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
-        //         });
+            for(let i=0; i<1; i++){
+                this.framebuffer1.getTexture().bind(0);
+                this.gaussianShader.setInteger("u_Horizontal", 0);
+                this.framebuffer2.drawTo(() => {
+                    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
+                });
     
-        //         this.framebuffer2.getTexture().bind(0);
-        //         this.gaussianShader.setInteger("u_Horizontal", 1);
-        //         this.framebuffer1.drawTo(() => {
-        //             this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());
-        //         });
-        //     }
+                this.framebuffer2.getTexture().bind(0);
+                this.gaussianShader.setInteger("u_Horizontal", 1);
+                this.framebuffer1.drawTo(() => {
+                    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());
+                });
+            }
             
             
-        // }
+        }
 
       
         // Have to create two identical textures, so why not put
