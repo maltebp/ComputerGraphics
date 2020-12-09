@@ -5,7 +5,7 @@
 
 namespace Project {
 
-    export class Quad {
+    export class Quad implements Selectable {
         
         public width: number;
         public height: number;
@@ -36,9 +36,22 @@ namespace Project {
             return this.position[1];
         }
 
+        
+        getPosition(){
+            return [this.position[0], this.position[1]];
+        }
+
 
         setPosition(position: number[]) {
             this.position = [position[0], position[1]];
+            this.dirty = true;
+        }
+
+
+        adjustRotation(rotation: number) {
+            let newRotation = rotation % 360;
+            if( newRotation < 0 ) newRotation += 360;
+            this.rotation = newRotation;
             this.dirty = true;
         }
 
@@ -53,9 +66,14 @@ namespace Project {
         }
 
 
-        getPoints(){
+        getPoints() {
             if( this.dirty ) this.clean();
             return this.worldPoints;
+        }
+
+
+        getCollisionPoints() {
+            return this.getPoints();
         }
         
         

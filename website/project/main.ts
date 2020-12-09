@@ -24,6 +24,8 @@ namespace Project {
     declare var lightRenderer: LightRenderer;
     declare var backgroundRenderer: BackgroundRenderer;
 
+    declare var selectionRenderer: SelectionRenderer;
+
     // The mouse's position in world coordinates
     declare var mouseWorldPosition: number[];
 
@@ -31,15 +33,23 @@ namespace Project {
     declare var quads: Quad[];
     declare var drawMode: DrawMode;
 
+
+    declare var hasDragged: boolean;
     declare var dragOffset: number[];
-    declare var draggingQuad: Quad;
+    declare var dragSelectable: Selectable;
+    declare var hoverSelectable: Selectable;
+    declare var selected: Selectable;
     
     declare var mousePressed: boolean;    
 
 
     function setup() {
+
+        hasDragged = false;
         dragOffset = [0,0];
-        draggingQuad = null;
+        dragSelectable = null;
+        hoverSelectable = null;
+        selected = null;
 
         gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
         gl.enable(gl.DEPTH_TEST);
@@ -48,6 +58,8 @@ namespace Project {
         gl.depthFunc(gl.ALWAYS); //TODO: Remove this at some point
         
         backgroundRenderer = new BackgroundRenderer(gl);
+
+        selectionRenderer = new SelectionRenderer(gl);
         
 
         // imageRenderer = new Util.ImageRenderer(gl);
@@ -90,38 +102,49 @@ namespace Project {
         canvas.onmousedown = (e) => {
             mousePressed = true;
 
-            let collidedQuad = checkQuadCollision();
-            if( collidedQuad !== null ){
-                draggingQuad = collidedQuad;
-                dragOffset = [draggingQuad.getPositionX()-mouseWorldPosition[0], draggingQuad.getPositionY()-mouseWorldPosition[1]];
+            hasDragged = false;
+            dragSelectable = checkCollisions();
+            if( dragSelectable !== null ){
+                //@ts-ignore
+                dragOffset = subtract(dragSelectable.getPosition(), mouseWorldPosition);
+                hoverSelectable = null;
             }
-            if( collidedQuad === null ){
-                // Check light quad
-            }
+
 
             e.preventDefault(); 
         }
         canvas.onmouseleave = (e) => {
             mousePressed = false;
-            draggingQuad = null;
+            dragSelectable = null;
             e.preventDefault();
         }
         canvas.onmouseup = (e) => {
             mousePressed = false;     
-            draggingQuad = null;
+            if( dragSelectable !== null && !hasDragged ){
+                selected = dragSelectable;
+            } else {
+                hoverSelectable = checkCollisions(); 
+            }
+            dragSelectable = null;
             e.preventDefault();
         }
         canvas.onmousemove = (e) => {
             mouseWorldPosition = camera.screenToWorld([e.offsetX,e.offsetY]);
 
+            // Make sure we don't get hover effects when dragging
+            hoverSelectable = null;
+
             if( mousePressed ) {
-                if( draggingQuad !== null )
-                    draggingQuad.setPosition([mouseWorldPosition[0]+dragOffset[0], mouseWorldPosition[1]+dragOffset[1]]);
-                else if( e.altKey ) {
+                if( dragSelectable !== null ){
+                    dragSelectable.setPosition([mouseWorldPosition[0]+dragOffset[0], mouseWorldPosition[1]+dragOffset[1]]);
+                    hasDragged = true;
+                }else if( e.altKey ) {
                     camera.adjustZoom(e.movementY  / 100.0);
                 }else{
                     camera.adjustPosition(-e.movementX, e.movementY);
                 }
+            } else {
+                hoverSelectable = checkCollisions(); 
             }
         }
         // canvas.onwheel = (e) =>{
@@ -131,11 +154,21 @@ namespace Project {
     }
 
 
+    function checkCollisions(){
+        for( let i=0; i<lights.length; i++){
+            let light = lights[i];
+            let points = light.getCollisionPoints();
+            
+            let collision = 
+                pointCollidesWithTriangle(mouseWorldPosition, [points[0], points[1], points[2]]) ||
+                pointCollidesWithTriangle(mouseWorldPosition, [points[0], points[2], points[3]]);
 
-    function checkQuadCollision(){
+            if( collision ) return light;
+        }
+
         for( let i=0; i<quads.length; i++){
             let quad = quads[i];
-            let points = quad.getPoints();
+            let points = quad.getCollisionPoints();
             
             let collision = 
                 pointCollidesWithTriangle(mouseWorldPosition, [points[0], points[1], points[2]]) ||
@@ -145,9 +178,6 @@ namespace Project {
         }
         return null;
     }
-
-
-
 
 
     /**
@@ -208,6 +238,15 @@ namespace Project {
         //     // imageRenderer.draw(0, CANVAS_SIZE[0], CANVAS_SIZE[1], LIGHT_RADIUS, LIGHT_RADIUS);
         // }
 
+
+        if( hoverSelectable !== null )
+            selectionRenderer.draw(camera, hoverSelectable.getCollisionPoints(), new Util.Color(1,1,1,0.75));
+
+        if( dragSelectable !== null )
+            selectionRenderer.draw(camera, dragSelectable.getCollisionPoints(), new Util.Color(1,1,1,0.75));
+
+        if( selected !== null )
+            selectionRenderer.draw(camera, selected.getCollisionPoints(), Util.Color.WHITE);
 
         
         requestAnimationFrame(update);
