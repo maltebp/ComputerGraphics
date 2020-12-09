@@ -69,7 +69,7 @@ namespace Project {
                             numQuads = 0;
                         }
                         textureSlot = textures.size+1;
-                        textures.set(texture, textureSlot-1);
+                        textures.set(texture, textureSlot);
                         texture.bind(textureSlot-1);
                     }
                 }
