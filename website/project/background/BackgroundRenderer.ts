@@ -49,6 +49,7 @@ namespace Project {
         drawBackground( camera: Camera2D ) {
             if( this.texture === null ) return;
 
+
             // Matrix to move NDC coordinates to world coordinates
             // @ts-ignore
             let inverseCamera = camera.getMatrix(true);
@@ -79,6 +80,9 @@ namespace Project {
             // @ts-ignore 
             let textureMatrix = mult(worldToTexture, inverseCamera);
     
+            // No reason to blend
+            this.gl.disable(this.gl.BLEND);
+
             this.shader.bind();
             this.shader.setInteger("u_Texture", 0);
             this.shader.setFloatMatrix3("u_TextureMatrix", textureMatrix);

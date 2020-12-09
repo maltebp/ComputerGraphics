@@ -24,6 +24,7 @@ namespace Project {
     declare var spriteRenderer: SpriteRenderer;
     declare var lightRenderer: LightRenderer;
     declare var selectionRenderer: SelectionRenderer;
+    declare var lightIconRenderer: LightIconRenderer;
 
     // Settings menus for objects
     declare var lightSettings: LightSettings;
@@ -31,6 +32,7 @@ namespace Project {
 
     declare var drawMode: DrawMode;
     declare var enableLights: boolean;
+    declare var drawLightIcons: boolean;
     
     // The mouse's position in world coordinates
     declare var mouseWorldPosition: number[];
@@ -72,6 +74,7 @@ namespace Project {
         selectionRenderer = new SelectionRenderer(gl);
         lightRenderer = new LightRenderer(gl, CANVAS_SIZE);
         spriteRenderer = new SpriteRenderer(gl);
+        lightIconRenderer = new LightIconRenderer(gl);
 
         // Setup initial lights and sprites
         lights = [];
@@ -103,11 +106,14 @@ namespace Project {
         // Light toggle checkbox
         new Util.Checkbox("enable-lights", true, (enable) => enableLights = enable);
 
+        // Light icons checkbox
+        new Util.Checkbox("light-icons", true, (enable) => drawLightIcons = enable);
+
         // Ambient color picker
         new Util.ColorPicker("ambient-color", new Util.Color(0.15, 0.15, 0.15), (newColor) => lightRenderer.setAmbient(newColor));
 
         // Num rays slider
-        new Util.Slider("light-renderer-num-rays", 20, 2000, 300, 1, (numRays) => lightRenderer.setNumRays(numRays));
+        new Util.Slider("light-renderer-num-rays", 20, 2000, 800, 1, (numRays) => lightRenderer.setNumRays(numRays));
 
         // Samples per ray 
         new Util.Slider("light-renderer-num-ray-samples", 20, 2000, 300, 1, (numSamples) => lightRenderer.setNumRaySamples(numSamples));
@@ -245,11 +251,11 @@ namespace Project {
     // Update function
     
     function update() {
+        FRAME_TIMER.registerFrame();
+        
         gl.clearColor(0.2, 0.2, 0.2, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT);
-        FRAME_TIMER.registerFrame();
 
-        gl.disable(gl.BLEND);
         backgroundRenderer.drawBackground(camera);
         
         spriteRenderer.drawQuads(camera, ...sprites);
@@ -257,18 +263,21 @@ namespace Project {
         if( enableLights)
             lightRenderer.draw(camera, sprites, lights);
 
-        gl.disable(gl.BLEND);
-       
-
+        // Draw selection boxes
         if( hoverSelectable !== null )
             selectionRenderer.draw(camera, hoverSelectable.getCollisionPoints(), new Util.Color(1,1,1,0.75));
-
+        
         if( dragSelectable !== null )
             selectionRenderer.draw(camera, dragSelectable.getCollisionPoints(), new Util.Color(1,1,1,0.75));
 
         if( selected !== null )
             selectionRenderer.draw(camera, selected.getCollisionPoints(), Util.Color.WHITE);
 
+        // Draw light icons
+        if( drawLightIcons )
+            lightIconRenderer.draw(camera, ...lights);
+
+        // Draw debug images
         if( drawMode == DrawMode.OCCLUSION ) {
             lightRenderer.drawOcclusionMap(CANVAS_SIZE);
         }
