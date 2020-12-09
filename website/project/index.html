@@ -49,16 +49,28 @@
                     <button id="camera-center">Center</button><br>
                 </td></tr>
                 
-                 <!-- Ambient color -->
-                 <tr class="toolbox-row"><td>
-                    <b>Ambient light</b><br>
-                    <input id="ambient-color" type="color"> Color<br>
+
+                <!-- Light renderer -->
+                <tr class="toolbox-row"><td>
+                    <b>Light renderer</b><br>
+
+                    <br><input id="enable-lights" type="checkbox">Enable<br>
+
+                    <br><input id="ambient-color" type="color"> Ambient light<br>
+
+                    <br>Number of rays<br>
+                    <input id="light-renderer-num-rays" type="range"><br>
+
+                    <br>Samples per ray<br>
+                    <input id="light-renderer-num-ray-samples" type="range"><br>
+
+                    <br><button id="draw-occlusionmap">Draw occlusion map</button><br>
+
+
                 </td></tr>
 
                 <!-- Other settings -->
                 <tr class="toolbox-row"><td>
-                    <br><input id="enable-lights" type="checkbox">Enable lighting<br>
-                    <br><button id="draw-occlusionmap">Draw occlusion map</button><br>
                 </td></tr>
 
             </table></td>            
@@ -74,9 +86,6 @@
                     <b>Create new</b><br><br>
                     <button id="create-sprite" style="margin-right: 10px;">Sprite</button>   <button id="create-light">Light</button>
                 </td></tr>
-
-
-            
 
 
                 <!-- Light settings -->

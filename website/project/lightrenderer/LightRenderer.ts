@@ -23,14 +23,10 @@ namespace Project {
         
         private currentFramebuffer: Framebuffer;
 
-        private framebuffer1: Framebuffer;
-        private framebuffer2: Framebuffer;
-    
         // For debugging the framebuffers
         private imageRenderer: Util.ImageRenderer;
 
-        // private lightSize: number;
-        
+
         constructor(gl: WebGLRenderingContext) {
             this.gl = gl;
             // this.lightSize = lightSize;
@@ -53,22 +49,11 @@ namespace Project {
             this.occlusionCamera = new Camera2D([this.occlusionMap.getSize(), this.occlusionMap.getSize()], [0,0]);
 
             // Ray map (calculates distances to occluders)
-            this.rayMap = new RayMap(gl, 1000);
-
-            // Shader
-            // this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/vertex.glsl", "/project/lightrenderer/fragment.glsl"); 
-            
-            // Gaussian shader
-            // this.gaussianShader = new Util.ShaderProgram(gl, "/project/lightrenderer/gaussian/vertex.glsl", "/project/lightrenderer/gaussian/fragment.glsl");
+            this.rayMap = new RayMap(gl, 250, 250);
 
             // Light shader
             this.lightShader = new Util.ShaderProgram(gl, "/project/lightrenderer/lightshader/vertex.glsl", "/project/lightrenderer/lightshader/fragment.glsl");
 
-            // Create framebuffers 
-            // this.framebuffer1 = new Framebuffer(gl, this.createTexture());
-            // this.framebuffer2 = new Framebuffer(gl, this.createTexture());
-
-            // this.currentFramebuffer = this.framebuffer1;
 
             this.lightMap = new LightMap(gl, [1280, 720]);
 
@@ -78,11 +63,23 @@ namespace Project {
         }
 
 
-        setAmbient(color: Util.Color) {
-            this.lightMap.setAmbient(color);
+        setNumRays(rays: number) {
+            this.rayMap.setNumRays(rays);
+        }
+
+        setNumRaySamples(samples: number) {
+            this.rayMap.setNumSamples(samples);
+        }
+
+        setShadowMapSize(size: number){
+            this.shadowMap = new ShadowMap(gl, size);
         }
 
 
+        setAmbient(color: Util.Color) {
+            this.lightMap.setAmbient(color);
+        }
+        
 
         draw(camera: Camera2D, occluders: Quad[], lights: Light[]) {
 

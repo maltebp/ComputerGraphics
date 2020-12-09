@@ -81,15 +81,22 @@ namespace Project {
         // Re-center camera button
         new Util.Button("camera-center", () => camera.setPosition([0,0]));
 
-        // Draw occlusion map
-        new Util.Button("draw-occlusionmap", () => drawMode = DrawMode.OCCLUSION );
-
-        // Ambient color picker
-        new Util.ColorPicker("ambient-color", new Util.Color(0.15, 0.15, 0.15), (newColor) => lightRenderer.setAmbient(newColor));
 
         // Light toggle checkbox
         new Util.Checkbox("enable-lights", true, (enable) => enableLights = enable);
 
+        // Ambient color picker
+        new Util.ColorPicker("ambient-color", new Util.Color(0.15, 0.15, 0.15), (newColor) => lightRenderer.setAmbient(newColor));
+
+        // Num rays
+        new Util.Slider("light-renderer-num-rays", 20, 2000, 300, 1, (numRays) => lightRenderer.setNumRays(numRays));
+
+        // Samples per ray 
+        new Util.Slider("light-renderer-num-ray-samples", 20, 2000, 300, 1, (numSamples) => lightRenderer.setNumRaySamples(numSamples));
+
+        // Draw occlusion map
+        new Util.Button("draw-occlusionmap", () => drawMode = DrawMode.OCCLUSION );
+     
         // Create sprite button
         new Util.Button("create-sprite", () => {
             let newSprite = new Quad(100, 100, camera.screenToWorld([CANVAS_SIZE[0]/2, CANVAS_SIZE[1]/2]), 0);

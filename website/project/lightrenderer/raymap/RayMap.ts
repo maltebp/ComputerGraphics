@@ -20,10 +20,12 @@ namespace Project {
         private texture: Util.Texture;
 
         private numRays: number;
+        private numSamples: number;
 
-        constructor(gl: WebGLRenderingContext, numRays: number) {
+        constructor(gl: WebGLRenderingContext, numRays: number, numSamples: number) {
             this.gl = gl;
             this.numRays = numRays;
+            this.numSamples = numSamples;
 
             // Setup vertex buffer            
             this.vertexBuffer = new Util.VertexBuffer(gl);
@@ -41,19 +43,20 @@ namespace Project {
             // Shader
             this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/raymap/vertex.glsl", "/project/lightrenderer/raymap/fragment.glsl");  
 
-            let _this = this;
-            Util.Texture.createFromData(gl, null, numRays, 1)
-                .setChannels(3) // TODO: This could be changed to a smaller texture
-                .setFilter(gl.NEAREST, gl.NEAREST)
+            // Frame buffer
+            this.createTexture();
+        }
 
-                // Note: We can't use REPEAT if we use texture 
-                // which is not a power of 2
-                .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE) // TODO: Probably should be clamp to border
-                .build((texture) => {
-                    _this.texture = texture;
-                });
+        
+        setNumRays(rays: number) {
+            this.numRays = rays;
+            // Recreate texture
+            this.createTexture();
+        }
 
-            this.framebuffer = new Framebuffer(gl, this.texture);
+
+        setNumSamples(samples: number){
+            this.numSamples = samples;
         }
         
 
@@ -80,7 +83,7 @@ namespace Project {
 
             this.shader.bind();
             this.shader.setInteger("u_NumRays", this.numRays);
-            this.shader.setInteger("u_SamplesPerRay", 250);
+            this.shader.setInteger("u_SamplesPerRay", this.numSamples);
             this.shader.setInteger("u_OcclusionMap", occlusionMapSlot);
             this.shader.setFloatVector2("u_LightPosition", lightCenter);
             this.shader.setFloat("u_LightRadius", lightRadius);
@@ -98,6 +101,24 @@ namespace Project {
         
         bindTexture(textureSlot: number) {
             this.texture.bind(textureSlot); 
+        }
+
+
+        private createTexture() {
+            Util.Texture.createFromData(gl, null, this.numRays, 1)
+                .setChannels(3) // TODO: This could be changed to a smaller texture
+                .setFilter(gl.NEAREST, gl.NEAREST)
+
+                // Note: We can't use REPEAT if we use texture 
+                // which is not a power of 2
+                .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE)
+                .build((texture) => {
+                    this.texture = texture;
+                });
+
+            // Haven't checked if recreating the framebuffer so often
+            // is a problem
+            this.framebuffer = new Framebuffer(gl, this.texture);
         }
     
     }
