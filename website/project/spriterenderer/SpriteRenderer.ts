@@ -1,7 +1,7 @@
 
 namespace Project {
 
-    export class QuadRenderer {
+    export class SpriteRenderer {
 
         private gl: WebGLRenderingContext;
         private shader: Util.ShaderProgram;
@@ -17,11 +17,11 @@ namespace Project {
             this.vertexBuffer.addAttribute("a_TextureSlot", 1);
             this.vertexBuffer.addAttribute("a_TextureCoordinates", 2);
             this.indexBuffer = new Util.IndexBuffer(gl);
-            this.shader = new Util.ShaderProgram(gl, "/project/quadrenderer/vertex.glsl", "/project/quadrenderer/fragment.glsl");                  
+            this.shader = new Util.ShaderProgram(gl, "/project/spriterenderer/vertex.glsl", "/project/spriterenderer/fragment.glsl");                  
         }
         
 
-        drawQuads( camera: Camera2D, ...quads: Quad[] ) {
+        drawQuads( camera: Camera2D, ...sprites: Sprite[] ) {
             
             // Utility function to flush the drawing buffers,
             // effectively drawing everything
@@ -46,16 +46,16 @@ namespace Project {
             // Cleanup buffers
             let textures = new Map<Util.Texture, number>();
 
-            // Push quads' data
-            let numQuads = 0; // Number of quads added to buffer
-            for( let i=0; i<quads.length; i++ ){
-                let quad = quads[i];
+            // Push sprites' data
+            let numQuads = 0; // Number of sprites added to buffer
+            for( let i=0; i<sprites.length; i++ ){
+                let sprite = sprites[i];
 
                 // Check if is already bound, otherwise add it if space
                 // If all slots are in use, we flush the buffer
                 // Note: first texture slot is reserved to signal that
-                // the quad has no texture
-                let texture = quad.getTexture();
+                // the sprite has no texture
+                let texture = sprite.getTexture();
                 let textureSlot = 0;
                 if( texture !== null ) {
                     if( textures.has(texture) ){
@@ -75,14 +75,14 @@ namespace Project {
                 }
 
                 // Vertices
-                let quadColor = quad.getColor().asList(false);
-                let quadPoints = quad.getPoints();
+                let spriteColor = sprite.getColor().asList(false);
+                let spritePoints = sprite.getPoints();
                 this.vertexBuffer.push(
                     // Note: texture coordinates flip the sprite
-                    quadPoints[0], quadColor, textureSlot, 0, 1,
-                    quadPoints[1], quadColor, textureSlot, 1, 1,
-                    quadPoints[2], quadColor, textureSlot, 1, 0,
-                    quadPoints[3], quadColor, textureSlot, 0, 0,
+                    spritePoints[0], spriteColor, textureSlot, 0, 1,
+                    spritePoints[1], spriteColor, textureSlot, 1, 1,
+                    spritePoints[2], spriteColor, textureSlot, 1, 0,
+                    spritePoints[3], spriteColor, textureSlot, 0, 0,
                 );
 
                 // Indices

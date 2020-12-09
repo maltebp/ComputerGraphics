@@ -15,7 +15,7 @@ namespace Project {
     
     declare var gl: WebGLRenderingContext;
 
-    declare var quadRenderer: QuadRenderer;
+    declare var spriteRenderer: SpriteRenderer;
     declare var camera: Camera2D;
     declare var lightRenderer: LightRenderer;
     declare var backgroundRenderer: BackgroundRenderer;
@@ -24,7 +24,7 @@ namespace Project {
 
 
     declare var lights: Light[];
-    declare var quads: Quad[];
+    declare var sprites: Sprite[];
 
     declare var drawMode: DrawMode;
     declare var enableLights: boolean;
@@ -69,14 +69,14 @@ namespace Project {
         lights.push(new Light([-200, 250], 200, Util.Color.RED));
         lightRenderer = new LightRenderer(gl);
 
-        quadRenderer = new QuadRenderer(gl);
+        spriteRenderer = new SpriteRenderer(gl);
         camera = new Camera2D(CANVAS_SIZE, [0, 0]);
 
-        quads = [];
-        quads.push(new Quad(100, 100, [0,-120], 0));
-        quads.push(new Quad(30, 40, [50,50], 0));
-        quads.push(new Quad(10, 10, [100,10], 0));
-        quads.push(new Quad(5, 200, [-200,-100], 0));
+        sprites = [];
+        sprites.push(new Sprite(100, 100, [0,-120], 0));
+        sprites.push(new Sprite(30, 40, [50,50], 0));
+        sprites.push(new Sprite(10, 10, [100,10], 0));
+        sprites.push(new Sprite(5, 200, [-200,-100], 0));
 
         // Re-center camera button
         new Util.Button("camera-center", () => camera.setPosition([0,0]));
@@ -99,8 +99,8 @@ namespace Project {
      
         // Create sprite button
         new Util.Button("create-sprite", () => {
-            let newSprite = new Quad(100, 100, camera.screenToWorld([CANVAS_SIZE[0]/2, CANVAS_SIZE[1]/2]), 0);
-            quads.push(newSprite);
+            let newSprite = new Sprite(100, 100, camera.screenToWorld([CANVAS_SIZE[0]/2, CANVAS_SIZE[1]/2]), 0);
+            sprites.push(newSprite);
             selectObject(newSprite);
         });
 
@@ -190,7 +190,7 @@ namespace Project {
             if( e.code == "Delete") {
                 if( selected != null ) {
                     if( selected instanceof Light) lights.splice(lights.indexOf(selected), 1);
-                    if( selected instanceof Quad) quads.splice(quads.indexOf(selected), 1);
+                    if( selected instanceof Sprite) sprites.splice(sprites.indexOf(selected), 1);
                     
                     selectObject(null);
                     hoverSelectable = null;
@@ -213,15 +213,15 @@ namespace Project {
             if( collision ) return light;
         }
 
-        for( let i=quads.length-1; i>=0; i--){
-            let quad = quads[i];
-            let points = quad.getCollisionPoints();
+        for( let i=sprites.length-1; i>=0; i--){
+            let sprite = sprites[i];
+            let points = sprite.getCollisionPoints();
             
             let collision = 
                 pointCollidesWithTriangle(mouseWorldPosition, [points[0], points[1], points[2]]) ||
                 pointCollidesWithTriangle(mouseWorldPosition, [points[0], points[2], points[3]]);
 
-            if( collision ) return quad;
+            if( collision ) return sprite;
         }
         return null;
     }
@@ -263,9 +263,9 @@ namespace Project {
             lightSettings.setLight(<Light>object);
         }
 
-        if( object instanceof Quad ){
+        if( object instanceof Sprite ){
             spriteSettings.hide(false);
-            spriteSettings.setSprite(<Quad>object);
+            spriteSettings.setSprite(<Sprite>object);
         }
 
         selected = object;
@@ -280,10 +280,10 @@ namespace Project {
         gl.disable(gl.BLEND);
         backgroundRenderer.drawBackground(camera);
         
-        quadRenderer.drawQuads(camera, ...quads);
+        spriteRenderer.drawQuads(camera, ...sprites);
 
         if( enableLights)
-            lightRenderer.draw(camera, quads, lights);
+            lightRenderer.draw(camera, sprites, lights);
 
         gl.disable(gl.BLEND);
        
@@ -385,38 +385,38 @@ namespace Project {
         private diffuse: Util.Slider;
         private occluder: Util.Checkbox;
         
-        private quad: Quad = null;
+        private sprite: Sprite = null;
 
         constructor(){
             this.htmlGroup = <HTMLElement>document.getElementById("sprite-settings");
 
             this.width = new Util.Slider("sprite-settings-width", 2, 1000, 100, 1, width => {
-                if( this.quad !== null ) this.quad.setWidth(width);
+                if( this.sprite !== null ) this.sprite.setWidth(width);
             });
 
             this.height = new Util.Slider("sprite-settings-height", 2, 1000, 100, 1, height => {
-                if( this.quad !== null ) this.quad.setHeight(height);
+                if( this.sprite !== null ) this.sprite.setHeight(height);
             });
 
             this.rotation = new Util.Slider("sprite-settings-rotation", 0, 360, 0, 0.25, rotation => {
-                if( this.quad !== null ) this.quad.setRotation(rotation);
+                if( this.sprite !== null ) this.sprite.setRotation(rotation);
             });
 
             this.texture = new Util.DropdownMenu<Util.Texture>("sprite-settings-texture", (texture) => {
-                if( this.quad !== null ) this.quad.setTexture(texture);
+                if( this.sprite !== null ) this.sprite.setTexture(texture);
             });
             this.texture.addOption("None", null);
 
             this.color = new Util.ColorPicker("sprite-settings-color", Util.Color.WHITE, newColor => {
-                if( this.quad !== null ) this.quad.setColor(newColor);
+                if( this.sprite !== null ) this.sprite.setColor(newColor);
             });
 
             this.diffuse = new Util.Slider("sprite-settings-diffuse", 0, 1, 0.8, 0.01, diffuse => {
-                if( this.quad !== null ) this.quad.setDiffuseFactor(diffuse);
+                if( this.sprite !== null ) this.sprite.setDiffuseFactor(diffuse);
             });
 
             this.occluder = new Util.Checkbox("sprite-settings-occluder", true, occlude => {
-                if( this.quad !== null ) this.quad.setOccluder(occlude);
+                if( this.sprite !== null ) this.sprite.setOccluder(occlude);
             });
 
            
@@ -433,8 +433,8 @@ namespace Project {
         }
 
 
-        setSprite(sprite: Quad){
-            this.quad = null;
+        setSprite(sprite: Sprite){
+            this.sprite = null;
             this.width.setValue(sprite.getWidth());
             this.height.setValue(sprite.getHeight());
             this.rotation.setValue(sprite.getRotation());
@@ -442,7 +442,7 @@ namespace Project {
             this.color.setColor(sprite.getColor());
             this.diffuse.setValue(sprite.getDiffuseFactor());
             this.occluder.check(sprite.isOccluder());
-            this.quad = sprite;
+            this.sprite = sprite;
         }
 
         hide(toggle: boolean) {

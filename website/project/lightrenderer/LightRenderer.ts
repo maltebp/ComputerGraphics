@@ -81,7 +81,7 @@ namespace Project {
         }
         
 
-        draw(camera: Camera2D, occluders: Quad[], lights: Light[]) {
+        draw(camera: Camera2D, occluders: Sprite[], lights: Light[]) {
 
             // Clear maps
             this.lightMap.clear();

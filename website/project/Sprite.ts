@@ -1,7 +1,11 @@
 
 namespace Project {
 
-    export class Quad implements Selectable {
+    /**
+     * Represents a Sprite (image) which may be draw on the screen.
+     * Sprite's can occlude the lights, causing shadows
+     */
+    export class Sprite implements Selectable {
         
         public position: number[];
 
@@ -36,6 +40,23 @@ namespace Project {
             this.width = width;
             this.height = height;
             this.rotation = rotation;
+        }
+
+        setPosition(position: number[]) {
+            this.position = [position[0], position[1]];
+            this.dirty = true;
+        }
+
+        getPosition(){
+            return [this.position[0], this.position[1]];
+        }
+        
+        getPositionX(){
+            return this.position[0];
+        }
+
+        getPositionY(){
+            return this.position[1];
         }
 
 
@@ -90,7 +111,6 @@ namespace Project {
             return this.diffuseFactor;
         }
 
-
         setOccluder(toggle: boolean){
             this.occluder = toggle;
         }
@@ -107,26 +127,6 @@ namespace Project {
         getColor(){
             return this.color.copy();
         }
-
-        getPositionX(){
-            return this.position[0];
-        }
-
-        getPositionY(){
-            return this.position[1];
-        }
-
-
-        getPosition(){
-            return [this.position[0], this.position[1]];
-        }
-
-
-        setPosition(position: number[]) {
-            this.position = [position[0], position[1]];
-            this.dirty = true;
-        }
-
 
         adjustRotation(rotation: number) {
             let newRotation = rotation % 360;
@@ -157,6 +157,10 @@ namespace Project {
         }
         
         
+        /**
+         * Constructs the model matrix for this Sprite,
+         * and pre-calculate the its 4 vertex positions
+         */
         private clean(){
             // @ts-ignore
             let scaling = mat3(
@@ -196,7 +200,6 @@ namespace Project {
                 vec2(mult(this.matrix, vec3(-1, 1, 1))),
             ]
             
-
             this.dirty = false;
         }
 

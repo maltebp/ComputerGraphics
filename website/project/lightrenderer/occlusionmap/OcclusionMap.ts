@@ -111,7 +111,7 @@ namespace Project {
 
         
 
-        drawOccluders( camera: Camera2D, ...occluders: Quad[] ) {
+        drawOccluders( camera: Camera2D, ...occluders: Sprite[] ) {
             
             // Utility function to flush the drawing buffers,
             // effectively drawing everything
@@ -176,15 +176,15 @@ namespace Project {
                 }
 
                 // Vertices
-                let quadColor = occluder.getColor().asList(false);
-                let quadPoints = occluder.getPoints();
-                let quadDiffuseFactor = occluder.getDiffuseFactor();
+                let spriteColor = occluder.getColor().asList(false);
+                let spritePoints = occluder.getPoints();
+                let spriteDiffuseFactor = occluder.getDiffuseFactor();
                 this.vertexBuffer.push(
                     // Note: texture coordinates flip the sprite
-                    quadPoints[0], quadColor, quadDiffuseFactor, textureSlot, 0, 1,
-                    quadPoints[1], quadColor, quadDiffuseFactor, textureSlot, 1, 1,
-                    quadPoints[2], quadColor, quadDiffuseFactor, textureSlot, 1, 0,
-                    quadPoints[3], quadColor, quadDiffuseFactor, textureSlot, 0, 0,
+                    spritePoints[0], spriteColor, spriteDiffuseFactor, textureSlot, 0, 1,
+                    spritePoints[1], spriteColor, spriteDiffuseFactor, textureSlot, 1, 1,
+                    spritePoints[2], spriteColor, spriteDiffuseFactor, textureSlot, 1, 0,
+                    spritePoints[3], spriteColor, spriteDiffuseFactor, textureSlot, 0, 0,
                 );
 
                 // Indices
