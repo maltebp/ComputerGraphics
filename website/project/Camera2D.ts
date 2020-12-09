@@ -51,6 +51,25 @@ namespace Project {
         }
 
 
+        /**
+         * Converts a pair of screen coordinates to world coordinates, using
+         * the camera's (inverted) matrix
+         * 
+         * @param vector Vector in screen coordinates (canvas size)
+         * @returns Vector in world coordinates 
+         */
+        screenToWorld(vector: number[]){
+            let ndc = [
+                (vector[0] / this.screenSize[0] - 0.5) * 2,
+                (0.5 - vector[1] / this.screenSize[1]) * 2
+            ];
+
+            // Conversion to world coordinates
+            // @ts-ignore
+            return vec2(mult(this.matrixInverse, vec3(ndc, 1.0)));
+        }
+
+
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Setters and adjusters
 

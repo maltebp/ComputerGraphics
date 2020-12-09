@@ -24,14 +24,15 @@ namespace Project {
     declare var lightRenderer: LightRenderer;
     declare var backgroundRenderer: BackgroundRenderer;
 
+    // The mouse's position in world coordinates
+    declare var mouseWorldPosition: number[];
 
     declare var lights: Light[];
     declare var quads: Quad[];
     declare var drawMode: DrawMode;
 
     
-    declare var mousePressed: boolean;
-    
+    declare var mousePressed: boolean;    
 
 
     function setup() {
@@ -61,10 +62,10 @@ namespace Project {
         camera = new Camera2D(CANVAS_SIZE, [0, 0]);
 
         quads = [];
-        quads.push(new Quad(100, 100, [0,-120], 0, Util.Color.WHITE));
-        quads.push(new Quad(30, 40, [50,50], 0, Util.Color.WHITE));
-        quads.push(new Quad(10, 10, [100,10], 0, Util.Color.WHITE));
-        quads.push(new Quad(5, 600, [-200,-100], 30, Util.Color.WHITE));
+        // quads.push(new Quad(100, 100, [0,-120], 0, Util.Color.WHITE));
+        // quads.push(new Quad(30, 40, [50,50], 0, Util.Color.WHITE));
+        // quads.push(new Quad(10, 10, [100,10], 0, Util.Color.WHITE));
+        quads.push(new Quad(5, 200, [-200,-100], 0, Util.Color.WHITE));
 
         // Drawing mode radio group
         drawMode = DrawMode.NORMAL;
@@ -95,6 +96,9 @@ namespace Project {
             e.preventDefault();
         }
         canvas.onmousemove = (e) => {
+            mouseWorldPosition = camera.screenToWorld([e.offsetX,e.offsetY]);
+            checkCollisions();
+
             if( mousePressed ) {
                 if( e.altKey ) {
                     camera.adjustZoom(e.movementY  / 100.0);
@@ -107,8 +111,48 @@ namespace Project {
         //     camera.adjustDistance(e.deltaY);
         //     e.preventDefault();
         // }
+    }
 
+
+
+    function checkCollisions() {
+
+        for( let i=0; i<quads.length; i++){
+            let quad = quads[i];
+            let points = quad.getPoints();
+            
+            let collision = 
+                pointCollidesWithTriangle(mouseWorldPosition, [points[0], points[1], points[2]]) ||
+                pointCollidesWithTriangle(mouseWorldPosition, [points[0], points[2], points[3]]);
+
+            if( collision )
+                console.log("Collision!");
+        }
+
+    }
+
+
+    /**
+     * Checks if a the given points collides with given triangle, which is defined
+     * by 3 points.
+     */
+    function pointCollidesWithTriangle(point: number[], triangle: number[][]) {
+        let triangleArea = Math.abs( 
+            (triangle[1][0]-triangle[0][0])*(triangle[2][1]-triangle[0][1])
+            - 
+            (triangle[2][0]-triangle[0][0])*(triangle[1][1]-triangle[0][1])
+        );;
+
+        let area1 =    Math.abs( (triangle[0][0]-point[0])*(triangle[1][1]-point[1]) - (triangle[1][0]-point[0])*(triangle[0][1]-point[1]) );
+        let area2 =    Math.abs( (triangle[1][0]-point[0])*(triangle[2][1]-point[1]) - (triangle[2][0]-point[0])*(triangle[1][1]-point[1]) );
+        let area3 =    Math.abs( (triangle[2][0]-point[0])*(triangle[0][1]-point[1]) - (triangle[0][0]-point[0])*(triangle[2][1]-point[1]) );
+
+        let areaDiff = Math.abs(area1 + area2 + area3 - triangleArea);
+        // Not sure about the floating point precision,
+        // so we check they are "equal" with some error
+        // like this
         
+        return areaDiff < 0.0001;
     }
 
     
