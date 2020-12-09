@@ -88,6 +88,9 @@ namespace Project {
             .check(0)
             ;
 
+        // Re-center camera button
+        new Util.Button("camera-center", () => camera.setPosition([0,0]));
+
         // Ambient color picker
         new Util.ColorPicker("ambient-color", new Util.Color(0.15, 0.15, 0.15), (newColor) => lightRenderer.setAmbient(newColor));
 
