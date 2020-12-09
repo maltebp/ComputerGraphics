@@ -26,7 +26,7 @@ namespace Project {
                  1, -1
             );
 
-            Util.Texture.createFromImage(gl, "/project/tile.png")
+            Util.Texture.createFromImage(gl, "/project/sprites/tile.png")
                 .setChannels(4)
                 .setFilter(gl.LINEAR, gl.LINEAR)
                 .setWrap(gl.REPEAT, gl.REPEAT)

@@ -114,9 +114,13 @@ namespace Project {
         lightSettings = new LightSettings();
 
         spriteSettings = new SpriteSettings();
-        spriteSettings.addTextureOption("santa.png", "Santa");
-        spriteSettings.addTextureOption("kingpig.png", "Pig King");
-        spriteSettings.addTextureOption("rocket.png", "Space Rocket");   
+        spriteSettings.addTextureOption("/project/sprites/santa.png", "Santa");
+        spriteSettings.addTextureOption("/project/sprites/kingpig.png", "Pig King");
+        spriteSettings.addTextureOption("/project/sprites/rocket.png", "Space Rocket");
+        spriteSettings.addTextureOption("/project/sprites/bomb.png", "Bomb");
+        spriteSettings.addTextureOption("/project/sprites/donut.png", "Donut");
+        spriteSettings.addTextureOption("/project/sprites/box.png", "Box")   
+        spriteSettings.addTextureOption("/project/sprites/dwarf.png", "Dwarf")   
 
         // Mouse Events
         mousePressed = false;
