@@ -117,7 +117,13 @@ void main() {
     float shadowAlpha = texture2D(u_ShadowMap, o_TextureCoordinates).r;
     float diffuseAlpha = texture2D(u_DiffuseMap, o_DiffuseMapCoordinates).g;
 
-    gl_FragColor = vec4(u_Color * (lightAlpha * (shadowAlpha+diffuseAlpha)), 1.0);
+    float finalAlpha;
+    if( diffuseAlpha > 0.01 )
+        finalAlpha = lightAlpha * diffuseAlpha;
+    else
+        finalAlpha = lightAlpha * shadowAlpha;
+
+    gl_FragColor = vec4(u_Color, finalAlpha);
 
  	// gl_FragColor = vec4(1,0,0,1) * vec4(1, 1, 1, sum * alphaFactor );
 

@@ -32,7 +32,7 @@ namespace Project {
 
             Util.Texture.createFromData(gl, null, size, size)
                 .setChannels(3) // TODO: This could be changed to a smaller texture
-                .setFilter(gl.LINEAR, gl.LINEAR)
+                .setFilter(gl.NEAREST, gl.NEAREST)
                 // Note: We can't use REPEAT if we use texture 
                 // which is not a power of 2
                 .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE) // TODO: Probably should be clamp to border
@@ -128,7 +128,7 @@ namespace Project {
                 this.indexBuffer.clear();
             }
 
-            this.gl.disable(gl.BLEND);
+            this.gl.enable(gl.BLEND);
 
             // Clear the target texture
             this.framebuffer.drawTo(() => {

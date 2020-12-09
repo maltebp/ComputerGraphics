@@ -27,6 +27,7 @@ namespace Project {
     declare var quads: Quad[];
 
     declare var drawMode: DrawMode;
+    declare var enableLights: boolean;
     
     // The mouse's position in world coordinates
     declare var mouseWorldPosition: number[];
@@ -41,6 +42,7 @@ namespace Project {
     declare var lightSettings: LightSettings;
     declare var spriteSettings: SpriteSettings;
     
+
     
     function setup() {
 
@@ -54,10 +56,6 @@ namespace Project {
 
         // Initialize WebGL
         gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
-        gl.enable(gl.DEPTH_TEST);
-        gl.enable(gl.BLEND);
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-        gl.depthFunc(gl.ALWAYS); //TODO: Remove this at some point
 
         
         backgroundRenderer = new BackgroundRenderer(gl);
@@ -80,25 +78,17 @@ namespace Project {
         quads.push(new Quad(10, 10, [100,10], 0));
         quads.push(new Quad(5, 200, [-200,-100], 0));
 
-        // Drawing mode radio group
-        // drawMode = DrawMode.NORMAL;
-        // new Util.RadioGroup<DrawMode>((mode) => drawMode = mode )   
-        //     .addOption("draw-mode-normal", DrawMode.NORMAL)
-        //     .addOption("draw-mode-occlusion", DrawMode.OCCLUSION)
-        //     .addOption("draw-mode-rays", DrawMode.RAYS)
-        //     .addOption("draw-mode-shadow", DrawMode.SHADOW)
-        //     .check(0)
-        //     ;
-
         // Re-center camera button
         new Util.Button("camera-center", () => camera.setPosition([0,0]));
 
         // Draw occlusion map
-    
         new Util.Button("draw-occlusionmap", () => drawMode = DrawMode.OCCLUSION );
 
         // Ambient color picker
         new Util.ColorPicker("ambient-color", new Util.Color(0.15, 0.15, 0.15), (newColor) => lightRenderer.setAmbient(newColor));
+
+        // Light toggle checkbox
+        new Util.Checkbox("enable-lights", true, (enable) => enableLights = enable);
 
         // Create sprite button
         new Util.Button("create-sprite", () => {
@@ -205,7 +195,7 @@ namespace Project {
 
 
     function checkCollisions(){
-        for( let i=0; i<lights.length; i++){
+        for( let i=lights.length-1; i>=0; i--){
             let light = lights[i];
             let points = light.getCollisionPoints();
             
@@ -216,7 +206,7 @@ namespace Project {
             if( collision ) return light;
         }
 
-        for( let i=0; i<quads.length; i++){
+        for( let i=quads.length-1; i>=0; i--){
             let quad = quads[i];
             let points = quad.getCollisionPoints();
             
@@ -285,10 +275,10 @@ namespace Project {
         
         quadRenderer.drawQuads(camera, ...quads);
 
-        lightRenderer.draw(camera, quads, lights);
+        if( enableLights)
+            lightRenderer.draw(camera, quads, lights);
 
         gl.disable(gl.BLEND);
-
        
 
         if( hoverSelectable !== null )

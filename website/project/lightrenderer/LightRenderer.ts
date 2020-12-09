@@ -134,7 +134,7 @@ namespace Project {
                 this.vertexBuffer.bind();
 
                 this.gl.enable(gl.BLEND);
-                this.gl.blendFunc(gl.ONE, gl.ONE);
+                this.gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
                 this.lightMap.drawTo(() => {
                     this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );

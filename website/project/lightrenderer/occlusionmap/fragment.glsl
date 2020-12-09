@@ -32,5 +32,5 @@ void main() {
     // Make sure we don't have partially transparent sprites
     textureColor.a = float(int(textureColor.a));
 
-    gl_FragColor = vec4(textureColor.a, textureColor.a, textureColor.a, 1.0) * vec4(1.0, o_Diffuse, 1.0, 1.0);
+    gl_FragColor = vec4(1.0, o_Diffuse, 1.0, textureColor.a);
 }
