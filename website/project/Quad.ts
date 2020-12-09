@@ -28,6 +28,21 @@ namespace Project {
         }
 
 
+        getPositionX(){
+            return this.position[0];
+        }
+
+        getPositionY(){
+            return this.position[1];
+        }
+
+
+        setPosition(position: number[]) {
+            this.position = [position[0], position[1]];
+            this.dirty = true;
+        }
+
+
         /**
          * @returns The model matrix to transform the coordinates corner coordinates (-1,-1)
          *          (-1,1), (1,-1) and (1,1) to world coordinates

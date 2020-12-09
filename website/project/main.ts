@@ -31,11 +31,15 @@ namespace Project {
     declare var quads: Quad[];
     declare var drawMode: DrawMode;
 
+    declare var dragOffset: number[];
+    declare var draggingQuad: Quad;
     
     declare var mousePressed: boolean;    
 
 
     function setup() {
+        dragOffset = [0,0];
+        draggingQuad = null;
 
         gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
         gl.enable(gl.DEPTH_TEST);
@@ -62,9 +66,9 @@ namespace Project {
         camera = new Camera2D(CANVAS_SIZE, [0, 0]);
 
         quads = [];
-        // quads.push(new Quad(100, 100, [0,-120], 0, Util.Color.WHITE));
-        // quads.push(new Quad(30, 40, [50,50], 0, Util.Color.WHITE));
-        // quads.push(new Quad(10, 10, [100,10], 0, Util.Color.WHITE));
+        quads.push(new Quad(100, 100, [0,-120], 0, Util.Color.WHITE));
+        quads.push(new Quad(30, 40, [50,50], 0, Util.Color.WHITE));
+        quads.push(new Quad(10, 10, [100,10], 0, Util.Color.WHITE));
         quads.push(new Quad(5, 200, [-200,-100], 0, Util.Color.WHITE));
 
         // Drawing mode radio group
@@ -85,22 +89,35 @@ namespace Project {
         let canvas = <HTMLCanvasElement> document.getElementById("canvas");
         canvas.onmousedown = (e) => {
             mousePressed = true;
+
+            let collidedQuad = checkQuadCollision();
+            if( collidedQuad !== null ){
+                draggingQuad = collidedQuad;
+                dragOffset = [draggingQuad.getPositionX()-mouseWorldPosition[0], draggingQuad.getPositionY()-mouseWorldPosition[1]];
+            }
+            if( collidedQuad === null ){
+                // Check light quad
+            }
+
             e.preventDefault(); 
         }
         canvas.onmouseleave = (e) => {
             mousePressed = false;
+            draggingQuad = null;
             e.preventDefault();
         }
         canvas.onmouseup = (e) => {
             mousePressed = false;     
+            draggingQuad = null;
             e.preventDefault();
         }
         canvas.onmousemove = (e) => {
             mouseWorldPosition = camera.screenToWorld([e.offsetX,e.offsetY]);
-            checkCollisions();
 
             if( mousePressed ) {
-                if( e.altKey ) {
+                if( draggingQuad !== null )
+                    draggingQuad.setPosition([mouseWorldPosition[0]+dragOffset[0], mouseWorldPosition[1]+dragOffset[1]]);
+                else if( e.altKey ) {
                     camera.adjustZoom(e.movementY  / 100.0);
                 }else{
                     camera.adjustPosition(-e.movementX, e.movementY);
@@ -115,8 +132,7 @@ namespace Project {
 
 
 
-    function checkCollisions() {
-
+    function checkQuadCollision(){
         for( let i=0; i<quads.length; i++){
             let quad = quads[i];
             let points = quad.getPoints();
@@ -125,11 +141,13 @@ namespace Project {
                 pointCollidesWithTriangle(mouseWorldPosition, [points[0], points[1], points[2]]) ||
                 pointCollidesWithTriangle(mouseWorldPosition, [points[0], points[2], points[3]]);
 
-            if( collision )
-                console.log("Collision!");
+            if( collision ) return quad;
         }
-
+        return null;
     }
+
+
+
 
 
     /**
