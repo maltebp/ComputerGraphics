@@ -68,6 +68,10 @@ namespace Util {
 
             callback(this.element.checked);   
         }
+
+        check(toggle: boolean){
+            this.element.checked = toggle;
+        }
     
         isChecked() {
             return this.element.checked;

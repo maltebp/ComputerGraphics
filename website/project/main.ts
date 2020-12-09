@@ -41,6 +41,7 @@ namespace Project {
     declare var selected: Selectable;
 
     declare var lightSettings: LightSettings;
+    declare var spriteSettings: SpriteSettings;
 
     
     declare var mousePressed: boolean;   
@@ -76,14 +77,12 @@ namespace Project {
         // imageRenderer = new Util.ImageRenderer(gl);
         // rayRenderer = new LightRayRenderer(gl, LIGHT_SAMPLES);
 
-
         lights = [];
         lights.push(new Light([-125,-100], 200, Util.Color.BLUE));
         lights.push(new Light([0,0], 300, Util.Color.GREEN));
         lights.push(new Light([150,-75], 200, Util.Color.YELLOW));
         lights.push(new Light([-200, 250], 200, Util.Color.RED));
         lightRenderer = new LightRenderer(gl);
-
 
         quadRenderer = new QuadRenderer(gl);
         camera = new Camera2D(CANVAS_SIZE, [0, 0]);
@@ -122,9 +121,9 @@ namespace Project {
             selectObject(newLight);
         });
 
-        
-        // Light Settings menu
+        // Settings menus
         lightSettings = new LightSettings();
+        spriteSettings = new SpriteSettings();
 
         // Mouse Events
         mousePressed = false;
@@ -234,10 +233,16 @@ namespace Project {
 
     function selectObject(object: Selectable){
         lightSettings.hide(true);
+        spriteSettings.hide(true);
         
         if( object instanceof Light ) {
             lightSettings.hide(false);
             lightSettings.setLight(<Light>object);
+        }
+
+        if( object instanceof Quad ){
+            spriteSettings.hide(false);
+            spriteSettings.setSprite(<Quad>object);
         }
 
         selected = object;
@@ -295,7 +300,7 @@ namespace Project {
     }
 
 
-    // Class to group together html elements fo
+    // Class to group together html elements for light settings
     class LightSettings {
         private htmlGroup: HTMLElement;
         private color: Util.ColorPicker;
@@ -322,6 +327,66 @@ namespace Project {
             this.color.setColor(light.getColor());
             this.radius.setValue(light.getRadius());
             this.light = light;
+        }
+
+        hide(toggle: boolean) {
+            this.htmlGroup.hidden = toggle;
+        }
+    }
+
+
+    // Class to group together html elements for sprite settings
+    class SpriteSettings {
+        private htmlGroup: HTMLElement;
+        private width: Util.Slider;
+        private height: Util.Slider;
+        private rotation: Util.Slider;
+        private color: Util.ColorPicker;
+        private diffuse: Util.Slider;
+        private occluder: Util.Checkbox;
+        
+        private quad: Quad = null;
+
+        constructor(){
+            this.htmlGroup = <HTMLElement>document.getElementById("sprite-settings");
+
+            this.width = new Util.Slider("sprite-settings-width", 2, 1000, 100, 1, width => {
+                if( this.quad !== null ) this.quad.setWidth(width);
+            });
+
+            this.height = new Util.Slider("sprite-settings-height", 2, 1000, 100, 1, height => {
+                if( this.quad !== null ) this.quad.setHeight(height);
+            });
+
+            this.rotation = new Util.Slider("sprite-settings-rotation", 0, 360, 0, 0.25, rotation => {
+                if( this.quad !== null ) this.quad.setRotation(rotation);
+            });
+
+            this.color = new Util.ColorPicker("sprite-settings-color", Util.Color.WHITE, newColor => {
+                if( this.quad !== null ) this.quad.setColor(newColor);
+            });
+
+            this.diffuse = new Util.Slider("sprite-settings-diffuse", 0, 1, 0.8, 0.01, diffuse => {
+                if( this.quad !== null ) this.quad.setDiffuseFactor(diffuse);
+            });
+
+            this.occluder = new Util.Checkbox("sprite-settings-occluder", true, occlude => {
+                if( this.quad !== null ) this.quad.setOccluder(occlude);
+            });
+
+           
+            this.hide(true);
+        }
+
+        setSprite(sprite: Quad){
+            this.quad = null;
+            this.width.setValue(sprite.getWidth());
+            this.height.setValue(sprite.getHeight());
+            this.rotation.setValue(sprite.getRotation());
+            this.color.setColor(sprite.getColor());
+            this.diffuse.setValue(sprite.getDiffuseFactor());
+            this.occluder.check(sprite.isOccluder());
+            this.quad = sprite;
         }
 
         hide(toggle: boolean) {

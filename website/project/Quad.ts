@@ -39,6 +39,38 @@ namespace Project {
         }
 
 
+        setWidth(width: number){
+            this.width = width;
+            this.dirty = true;
+        }
+
+        getWidth(){
+            return this.width;
+        }
+
+
+        setHeight(height: number){
+            this.height = height;
+            this.dirty = true;
+        }
+
+        getHeight(){
+            return this.height;
+        }
+
+        
+        setRotation(rotation: number){
+            let newRotation = rotation % 360;
+            if( newRotation < 0 ) newRotation += 360;
+            this.rotation = newRotation;
+            this.dirty = true;
+        }
+
+        getRotation(){
+            return this.rotation;
+        }
+
+
         setTexture(texture: Util.Texture){
             this.texture = texture;
         }
@@ -49,9 +81,9 @@ namespace Project {
 
 
         setDiffuseFactor(factor: number){
-            this.diffuseFactor = factor;
             if( factor < 0 ) this.diffuseFactor = 0;
-            if( factor > 1 ) this.diffuseFactor = 1;
+            else if( factor > 1 ) this.diffuseFactor = 1;
+            else this.diffuseFactor = factor;
         }
 
         getDiffuseFactor(){
@@ -67,6 +99,10 @@ namespace Project {
             return this.occluder;
         }
 
+
+        setColor(color: Util.Color){
+            this.color = color.copy();
+        }
 
         getColor(){
             return this.color.copy();

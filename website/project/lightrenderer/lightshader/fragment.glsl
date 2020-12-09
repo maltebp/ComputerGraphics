@@ -115,7 +115,7 @@ void main() {
     // float alphaFactor = 1.0-radius;// - smoothstep(0.0, 1.0, radius);
     float lightAlpha = 1.0 - smoothstep(0.0, 1.0, dist);
     float shadowAlpha = texture2D(u_ShadowMap, o_TextureCoordinates).r;
-    float diffuseAlpha = texture2D(u_DiffuseMap, o_DiffuseMapCoordinates).r;
+    float diffuseAlpha = texture2D(u_DiffuseMap, o_DiffuseMapCoordinates).g;
 
     gl_FragColor = vec4(u_Color * (lightAlpha * (shadowAlpha+diffuseAlpha)), 1.0);
 
