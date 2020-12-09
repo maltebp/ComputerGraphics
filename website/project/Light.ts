@@ -48,8 +48,17 @@ namespace Project {
             return [this.position[0], this.position[1]];
         }
 
+        setRadius(radius: number) {
+            this.radius = radius;
+            this.dirty = true;
+        }
+
         getRadius() {
             return this.radius;
+        }
+
+        setColor(color: Util.Color) {
+            this.color = color.copy();
         }
 
         getColor() {

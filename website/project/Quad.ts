@@ -20,11 +20,11 @@ namespace Project {
 
         
         constructor( width: number, height: number, position: number[], rotation: number, color: Util.Color) {
-            this.position = position;
+            this.position = [position[0], position[1]];
             this.width = width;
             this.height = height;
             this.rotation = rotation;
-            this.color = color;
+            this.color = color.copy();
         }
 
 
@@ -36,7 +36,7 @@ namespace Project {
             return this.position[1];
         }
 
-        
+
         getPosition(){
             return [this.position[0], this.position[1]];
         }

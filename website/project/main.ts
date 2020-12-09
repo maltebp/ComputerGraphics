@@ -39,6 +39,9 @@ namespace Project {
     declare var dragSelectable: Selectable;
     declare var hoverSelectable: Selectable;
     declare var selected: Selectable;
+
+    declare var lightSettings: LightSettings;
+
     
     declare var mousePressed: boolean;    
 
@@ -95,7 +98,25 @@ namespace Project {
 
         // Ambient color picker
         new Util.ColorPicker("ambient-color", new Util.Color(0.15, 0.15, 0.15), (newColor) => lightRenderer.setAmbient(newColor));
+
+        // Create sprite button
+        new Util.Button("create-sprite", () => {
+            let newSprite = new Quad(50, 50, camera.screenToWorld([CANVAS_SIZE[0]/2, CANVAS_SIZE[1]/2]), 0, Util.Color.WHITE);
+            quads.push(newSprite);
+            selectObject(newSprite);
+        });
+
+        // Create light button
+        new Util.Button("create-light", () => {
+            let newLight = new Light(camera.screenToWorld([CANVAS_SIZE[0]/2, CANVAS_SIZE[1]/2]), 100, Util.Color.WHITE);
+            lights.push(newLight);
+            selectObject(newLight);
+        });
+
         
+        // Light Settings menu
+        lightSettings = new LightSettings();
+
         // Mouse Events
         mousePressed = false;
         let canvas = <HTMLCanvasElement> document.getElementById("canvas");
@@ -121,9 +142,11 @@ namespace Project {
         canvas.onmouseup = (e) => {
             mousePressed = false;     
             if( dragSelectable !== null && !hasDragged ){
-                selected = dragSelectable;
+                selectObject(dragSelectable);
             } else {
-                hoverSelectable = checkCollisions(); 
+                hoverSelectable = checkCollisions();
+                // Clear selection if clicked on nothing
+                if( hoverSelectable === null ) selectObject(null);
             }
             dragSelectable = null;
             e.preventDefault();
@@ -203,12 +226,23 @@ namespace Project {
         return areaDiff < 0.0001;
     }
 
+
+    function selectObject(object: Selectable){
+        lightSettings.hide(true);
+        
+        if( object instanceof Light ) {
+            lightSettings.hide(false);
+            lightSettings.setLight(<Light>object);
+        }
+
+        selected = object;
+    }
+
     
     function update() {
         gl.clearColor(0.2, 0.2, 0.2, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT);
         FRAME_TIMER.registerFrame();
-        
 
         gl.disable(gl.BLEND);
         backgroundRenderer.drawBackground(camera);
@@ -217,9 +251,6 @@ namespace Project {
 
         lightRenderer.draw(camera, quads, lights);
 
-        // occlusionRenderer.drawOccluders(camera, ...quads);
-        // rayRenderer.draw();
-        
         gl.disable(gl.BLEND);
 
         if( drawMode == DrawMode.OCCLUSION ) {
@@ -256,6 +287,41 @@ namespace Project {
     export function start() {
         setup();
         update();
+    }
+
+
+    // Class to group together html elements fo
+    class LightSettings {
+        private htmlGroup: HTMLElement;
+        private color: Util.ColorPicker;
+        private radius: Util.Slider;
+        
+        private light: Light = null;
+
+        constructor(){
+            this.htmlGroup = <HTMLElement>document.getElementById("light-settings");
+
+            this.color = new Util.ColorPicker("light-settings-color", Util.Color.WHITE, newColor => {
+                if( this.light !== null ) this.light.setColor(newColor);
+            });
+
+            this.radius = new Util.Slider("light-settings-radius", 2, 1000, 100, 1, radius => {
+                if( this.light !== null ) this.light.setRadius(radius);
+            });
+
+            this.hide(true);
+        }
+
+        setLight(light: Light){
+            this.light = null;
+            this.color.setColor(light.getColor());
+            this.radius.setValue(light.getRadius());
+            this.light = light;
+        }
+
+        hide(toggle: boolean) {
+            this.htmlGroup.hidden = toggle;
+        }
     }
 
 }

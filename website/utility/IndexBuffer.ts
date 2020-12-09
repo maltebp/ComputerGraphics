@@ -88,6 +88,7 @@ namespace Util {
             for(var i=0; i<this.numElements; i++)
                 this.list[i] = 0;
             this.numElements = 0;
+            this.dirty = true;
         }
     
     

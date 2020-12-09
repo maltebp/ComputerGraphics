@@ -35,6 +35,10 @@ namespace Util {
             }
         }
     
+        setValue(value: number) {
+            this.element.value = value.toString();
+        }
+
         getValue() {
             return this.element.valueAsNumber;
         }
@@ -90,6 +94,11 @@ namespace Util {
             }
         }
     
+        setColor(color: Util.Color) {
+            this.element.value = color.toHex(false);
+            // TODO: Check that callback is fired
+        }
+
         getColor() {
             return Color.fromHex(this.element.value);
         }
