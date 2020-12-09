@@ -23,13 +23,15 @@ namespace Project {
 
     declare var selectionRenderer: SelectionRenderer;
 
-    // The mouse's position in world coordinates
-    declare var mouseWorldPosition: number[];
 
     declare var lights: Light[];
     declare var quads: Quad[];
-    declare var drawMode: DrawMode;
 
+    declare var drawMode: DrawMode;
+    
+    // The mouse's position in world coordinates
+    declare var mouseWorldPosition: number[];
+    declare var mousePressed: boolean;   
 
     declare var hasDragged: boolean;
     declare var dragOffset: number[];
@@ -39,13 +41,8 @@ namespace Project {
 
     declare var lightSettings: LightSettings;
     declare var spriteSettings: SpriteSettings;
-
     
-    declare var mousePressed: boolean;   
     
-    declare var spriteTextures: Util.Texture[];
-
-
     function setup() {
 
         hasDragged = false;
@@ -60,8 +57,6 @@ namespace Project {
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
         gl.depthFunc(gl.ALWAYS); //TODO: Remove this at some point
 
-
-        spriteTextures = [];         
         
         backgroundRenderer = new BackgroundRenderer(gl);
 
@@ -113,6 +108,7 @@ namespace Project {
         // Settings menus
         lightSettings = new LightSettings();
 
+        // Load sprite textures
         spriteSettings = new SpriteSettings();
         spriteSettings.addTextureOption("/project/sprites/santa.png", "Santa");
         spriteSettings.addTextureOption("/project/sprites/kingpig.png", "Pig King");
@@ -121,6 +117,9 @@ namespace Project {
         spriteSettings.addTextureOption("/project/sprites/donut.png", "Donut");
         spriteSettings.addTextureOption("/project/sprites/box.png", "Box")   
         spriteSettings.addTextureOption("/project/sprites/dwarf.png", "Dwarf")   
+
+
+        
 
         // Mouse Events
         mousePressed = false;
@@ -173,6 +172,19 @@ namespace Project {
                 }
             } else {
                 hoverSelectable = checkCollisions(); 
+            }
+        }
+
+        document.onkeydown = (e) => {
+            if( e.code == "Delete") {
+                if( selected != null ) {
+                    if( selected instanceof Light) lights.splice(lights.indexOf(selected), 1);
+                    if( selected instanceof Quad) quads.splice(quads.indexOf(selected), 1);
+                    
+                    selectObject(null);
+                    hoverSelectable = null;
+                    dragSelectable = null;
+                }
             }
         }
     }
