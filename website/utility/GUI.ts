@@ -171,4 +171,47 @@ namespace Util {
 
     }
 
+
+
+    export class DropdownMenu<T> {
+
+        private element: HTMLSelectElement;
+        private valueMap: Map<string, T> = new Map<string,T>();
+        private labelMap: Map<T, string> = new Map<T, string>();
+
+        constructor(id: string, callback: (value: T) => void = null) {
+            this.element = <HTMLSelectElement> document.getElementById(id);
+            this.element.onchange = (e) => {
+                callback(this.valueMap.get(this.element.value));
+            };
+        }
+
+
+        addOption(label: string, value: T) {
+            let option = document.createElement("option");
+            option.text = label;
+            
+            option.setAttribute("value", label);
+
+            this.labelMap.set(value, label);
+            this.valueMap.set(label, value);
+
+            this.element.add(option);
+        }
+
+
+        /**
+         * Sets the current option to the option which has the given value
+         */
+        setOptionByValue(value: T){
+            this.element.value = this.labelMap.get(value);
+        }
+
+
+        getValue() {
+            return this.valueMap.get(this.element.value);
+        }
+
+    }
+
 }

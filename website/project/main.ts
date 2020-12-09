@@ -12,9 +12,6 @@ namespace Project {
 
     const CANVAS_SIZE = [720, 480];
 
-    const LIGHT_SAMPLES = 1000;
-    const LIGHT_RADIUS = 900;
-    
     const FRAME_TIMER = new Util.FrameTimer("fps-text");
     
     declare var gl: WebGLRenderingContext;
@@ -64,19 +61,12 @@ namespace Project {
         gl.depthFunc(gl.ALWAYS); //TODO: Remove this at some point
 
 
-        spriteTextures = [];
-        loadSpriteTexture("santa.png", "Santa");
-        loadSpriteTexture("kingpig.png", "Pig King");
-        loadSpriteTexture("rocket.png", "Space Rocket");            
+        spriteTextures = [];         
         
         backgroundRenderer = new BackgroundRenderer(gl);
 
         selectionRenderer = new SelectionRenderer(gl);
         
-
-        // imageRenderer = new Util.ImageRenderer(gl);
-        // rayRenderer = new LightRayRenderer(gl, LIGHT_SAMPLES);
-
         lights = [];
         lights.push(new Light([-125,-100], 200, Util.Color.BLUE));
         lights.push(new Light([0,0], 300, Util.Color.GREEN));
@@ -109,7 +99,6 @@ namespace Project {
         // Create sprite button
         new Util.Button("create-sprite", () => {
             let newSprite = new Quad(100, 100, camera.screenToWorld([CANVAS_SIZE[0]/2, CANVAS_SIZE[1]/2]), 0);
-            newSprite.setTexture(spriteTextures[quads.length % 3]);
             quads.push(newSprite);
             selectObject(newSprite);
         });
@@ -123,7 +112,11 @@ namespace Project {
 
         // Settings menus
         lightSettings = new LightSettings();
+
         spriteSettings = new SpriteSettings();
+        spriteSettings.addTextureOption("santa.png", "Santa");
+        spriteSettings.addTextureOption("kingpig.png", "Pig King");
+        spriteSettings.addTextureOption("rocket.png", "Space Rocket");   
 
         // Mouse Events
         mousePressed = false;
@@ -272,13 +265,6 @@ namespace Project {
         if( drawMode == DrawMode.SHADOW ) {
             lightRenderer.drawShadowMap(CANVAS_SIZE);
         }
-        // if( drawMode ==DrawMode.LIGHT ) {
-        //     rayRenderer.bindTexture(0);
-        //     lightRenderer.draw(camera);
-        //     lightRenderer.bindTexture(0);
-        //     // imageRenderer.draw(0, CANVAS_SIZE[0], CANVAS_SIZE[1], LIGHT_RADIUS, LIGHT_RADIUS);
-        // }
-
 
         if( hoverSelectable !== null )
             selectionRenderer.draw(camera, hoverSelectable.getCollisionPoints(), new Util.Color(1,1,1,0.75));
@@ -341,6 +327,7 @@ namespace Project {
         private width: Util.Slider;
         private height: Util.Slider;
         private rotation: Util.Slider;
+        private texture: Util.DropdownMenu<Util.Texture>;
         private color: Util.ColorPicker;
         private diffuse: Util.Slider;
         private occluder: Util.Checkbox;
@@ -362,6 +349,11 @@ namespace Project {
                 if( this.quad !== null ) this.quad.setRotation(rotation);
             });
 
+            this.texture = new Util.DropdownMenu<Util.Texture>("sprite-settings-texture", (texture) => {
+                if( this.quad !== null ) this.quad.setTexture(texture);
+            });
+            this.texture.addOption("None", null);
+
             this.color = new Util.ColorPicker("sprite-settings-color", Util.Color.WHITE, newColor => {
                 if( this.quad !== null ) this.quad.setColor(newColor);
             });
@@ -378,11 +370,22 @@ namespace Project {
             this.hide(true);
         }
 
+
+        addTextureOption(path: string, name: string){
+            Util.Texture.createFromImage(gl, path)
+                .setChannels(4)
+                .setFilter(gl.LINEAR, gl.LINEAR)
+                .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE)
+                .build((texture) => this.texture.addOption(name, texture));
+        }
+
+
         setSprite(sprite: Quad){
             this.quad = null;
             this.width.setValue(sprite.getWidth());
             this.height.setValue(sprite.getHeight());
             this.rotation.setValue(sprite.getRotation());
+            this.texture.setOptionByValue(sprite.getTexture());
             this.color.setColor(sprite.getColor());
             this.diffuse.setValue(sprite.getDiffuseFactor());
             this.occluder.check(sprite.isOccluder());
@@ -392,15 +395,6 @@ namespace Project {
         hide(toggle: boolean) {
             this.htmlGroup.hidden = toggle;
         }
-    }
-
-
-    function loadSpriteTexture(path: string, name: string){
-        Util.Texture.createFromImage(gl, path)
-            .setChannels(4)
-            .setFilter(gl.LINEAR, gl.LINEAR)
-            .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE)
-            .build((texture) => spriteTextures.push(texture));
     }
 
 }

@@ -74,8 +74,8 @@
                 </td></tr>
 
 
-                <!-- Draw mode -->
-                <tr id="light-settings" class="toolbox-row"><td>
+                <!-- Light settings -->
+                <tr id="light-settings" class="toolbox-row"  hidden="true"><td>
                     Color<br>
                     <input id="light-settings-color" type="color"><br>
                     Radius<br>
@@ -83,13 +83,15 @@
                 </td></tr>
 
                 <!-- Sprite settings -->
-                <tr id="sprite-settings" class="toolbox-row"><td>
+                <tr id="sprite-settings" class="toolbox-row" hidden="true"><td>
                     Width<br>
                     <input id="sprite-settings-width" type="range"><br>
                     Height<br>
                     <input id="sprite-settings-height" type="range"><br>
                     Rotation<br>
                     <input id="sprite-settings-rotation" type="range"><br>
+                    Texture<br>
+                    <select id="sprite-settings-texture"></select><br>
                     Color<br>
                     <input id="sprite-settings-color" type="color"><br>
                     Diffuse factor<br>
