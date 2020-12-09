@@ -7,6 +7,7 @@ namespace Project {
         private htmlGroup: HTMLElement;
         private color: Util.ColorPicker;
         private radius: Util.Slider;
+        private blur: Util.Slider;
         
         private light: Light = null;
 
@@ -21,6 +22,10 @@ namespace Project {
                 if( this.light !== null ) this.light.setRadius(radius);
             });
 
+            this.blur = new Util.Slider("light-settings-blur", 0, 1, 0.75, 0.005, blurFactor => {
+                if( this.light !== null ) this.light.setBlurFactor(blurFactor);
+            });
+
             this.hide(true);
         }
 
@@ -33,6 +38,7 @@ namespace Project {
             this.light = null;
             this.color.setColor(light.getColor());
             this.radius.setValue(light.getRadius());
+            this.blur.setValue(light.getBlurFactor());
             this.light = light;
         }
 

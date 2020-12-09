@@ -5,6 +5,7 @@ uniform sampler2D u_SourceTexture;
 uniform sampler2D u_OcclusionMap;
 uniform int u_Horizontal;
 uniform int u_TextureSize;
+uniform float u_BlurFactor;
 
 varying vec2 o_TextureCoordinates;
 
@@ -27,7 +28,7 @@ void main() {
 
     // Distance between texels we sample (in texture coordinates)
     // This increases blur
-    float tex_offset = 8.0 / float(u_TextureSize);
+    float tex_offset = 15.0 / float(u_TextureSize);
     
     // Distance from light (Further away pixels are blurred less)
     float dist = length(o_TextureCoordinates * 2.0 - 1.0);
@@ -41,14 +42,14 @@ void main() {
     if(u_Horizontal == 1)  
         // Horizontal samples     
         for(int i = 1; i < 9; i++ ) {
-            result += texture2D(u_SourceTexture, o_TextureCoordinates + vec2(tex_offset * float(i) * distFactor, 0.0)).rgb * WEIGHTS[i];
-            result += texture2D(u_SourceTexture, o_TextureCoordinates - vec2(tex_offset * float(i) * distFactor, 0.0)).rgb * WEIGHTS[i];
+            result += texture2D(u_SourceTexture, o_TextureCoordinates + vec2(tex_offset * float(i) * distFactor * u_BlurFactor, 0.0)).rgb * WEIGHTS[i];
+            result += texture2D(u_SourceTexture, o_TextureCoordinates - vec2(tex_offset * float(i) * distFactor * u_BlurFactor, 0.0)).rgb * WEIGHTS[i];
         }
     else
         // Vertical samples
         for(int i = 1; i < 9; i++ ) {
-            result += texture2D(u_SourceTexture, o_TextureCoordinates + vec2(0.0, tex_offset * float(i) * distFactor)).rgb * WEIGHTS[i];
-            result += texture2D(u_SourceTexture, o_TextureCoordinates - vec2(0.0, tex_offset * float(i) * distFactor)).rgb * WEIGHTS[i];
+            result += texture2D(u_SourceTexture, o_TextureCoordinates + vec2(0.0, tex_offset * float(i) * distFactor * u_BlurFactor)).rgb * WEIGHTS[i];
+            result += texture2D(u_SourceTexture, o_TextureCoordinates - vec2(0.0, tex_offset * float(i) * distFactor * u_BlurFactor)).rgb * WEIGHTS[i];
         }
    
     gl_FragColor = vec4(result, 1.0);

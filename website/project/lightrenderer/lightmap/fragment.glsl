@@ -4,9 +4,6 @@ precision mediump float;
 // Light map texture (from framebuffer)
 uniform sampler2D u_LightMap;
 
-// Texture to draw combine with light map
-uniform sampler2D u_Texture;
-
 varying vec2 o_TextureCoordinates; 
 
 void main() {

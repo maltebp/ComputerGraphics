@@ -99,7 +99,7 @@ namespace Project {
                 this.rayMap.bindTexture(1);
                 
                 // Draw the shadow map
-                this.shadowMap.draw(1);
+                this.shadowMap.draw(1, light.getBlurFactor());
 
                 // Render the light to the light map
                 this.occlusionMap.bindTexture(0); // Shadow map unbinds the occlusion map 
@@ -117,7 +117,7 @@ namespace Project {
                 this.vertexBuffer.bind();
 
                 this.gl.enable(gl.BLEND);
-                this.gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                this.gl.blendFunc(gl.ONE, gl.ONE);
 
                 this.lightMap.drawTo(() => {
                     this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );

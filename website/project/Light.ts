@@ -8,8 +8,7 @@ namespace Project {
         private position: number[];
         private radius: number;
         private color: Util.Color;
-
-        private matrix: number[]
+        private blurFactor: number;
 
         private collisionPoints: number[][];
 
@@ -19,6 +18,7 @@ namespace Project {
             this.position = position;
             this.radius = radius;
             this.color = color;
+            this.blurFactor = 0.5;
         }
 
 
@@ -39,11 +39,6 @@ namespace Project {
         }
         
 
-        getMatrix() {
-            if( this.dirty ) this.clean();
-            return this.matrix;
-        }
-        
         getPosition() {
             return [this.position[0], this.position[1]];
         }
@@ -61,28 +56,23 @@ namespace Project {
             this.color = color.copy();
         }
 
+
+
         getColor() {
             return this.color.copy();
         }
 
-        private clean(){
-            // TODO: Remove this
-            //@ts-ignore
-            this.matrix = mult(
-                //@ts-ignore
-                mat3(
-                    1, 0, this.position[0],
-                    0, 1, this.position[1],
-                    0, 0,                1
-                ),
-                // @ts-ignore
-                mat3(
-                    this.radius,           0, 0,
-                                0, this.radius, 0,
-                                0,           0, 1
-                )
-            );
 
+        setBlurFactor(factor: number) {
+            this.blurFactor = factor;
+        }
+
+
+        getBlurFactor() {
+            return this.blurFactor;
+        }
+
+        private clean(){
             // Collision box doesn't change size for a point light
             this.collisionPoints = [
                 [this.position[0]-LIGHT_COLLISION_SIZE, this.position[1]-LIGHT_COLLISION_SIZE],

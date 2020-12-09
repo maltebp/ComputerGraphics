@@ -1,7 +1,4 @@
-
-
 namespace Project {
-
 
     /**
      * Renders the shadowmap for a light from a given ray map
@@ -57,7 +54,7 @@ namespace Project {
          * 
          * @param rayMapSlot    The slot which the ray map for this light is bound to
          */
-        draw(rayMapSlot: number) {
+        draw(rayMapSlot: number, blurFactor: number) {
 
             this.shadowShader.bind();
             this.shadowShader.setInteger("u_RayMap", rayMapSlot);
@@ -71,7 +68,7 @@ namespace Project {
             });
 
             // Perform gaussian blur
-            this.gaussianBlur();
+            this.gaussianBlur(blurFactor);
         }
 
 
@@ -84,13 +81,16 @@ namespace Project {
 
 
         // Perform the two pass gaussian blur on the current shadow map
-        private gaussianBlur() {
+        private gaussianBlur(blurFactor: number) {
+            if( blurFactor <= 0 ) return;
+
             this.gl.enable(this.gl.BLEND);
             this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
             
             this.gaussianShader.bind();
             this.gaussianShader.setInteger("u_SourceTexture", 0);
             this.gaussianShader.setInteger("u_TextureSize", this.textureSize);
+            this.gaussianShader.setFloat("u_BlurFactor", blurFactor);
             
             // We can reuse the same vertexbuffer
             this.vertexBuffer.bind();
@@ -111,9 +111,7 @@ namespace Project {
                 this.framebuffer1.drawTo(() => {
                     this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());
                 });
-            }
-            
-            
+            }            
         }
 
       

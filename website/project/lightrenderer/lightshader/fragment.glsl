@@ -5,8 +5,8 @@ uniform sampler2D   u_ShadowMap;
 uniform sampler2D   u_DiffuseMap;
 uniform vec3        u_Color;
 
-varying vec2 o_TextureCoordinates;
-varying vec2 o_DiffuseMapCoordinates;
+varying vec2    o_TextureCoordinates;
+varying vec2    o_DiffuseMapCoordinates;
 
 void main() {
     float dist = length(o_TextureCoordinates*2.0 - 1.0);
@@ -23,6 +23,6 @@ void main() {
         // control the alpha
         finalAlpha = lightAlpha * shadowAlpha;
 
-    gl_FragColor = vec4(u_Color, finalAlpha);
+    gl_FragColor = vec4(u_Color*finalAlpha, 1.0);
 
 }
