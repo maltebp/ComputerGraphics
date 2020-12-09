@@ -53,7 +53,7 @@ namespace Project {
             this.occlusionCamera = new Camera2D([this.occlusionMap.getSize(), this.occlusionMap.getSize()], [0,0]);
 
             // Ray map (calculates distances to occluders)
-            this.rayMap = new RayMap(gl, 256);
+            this.rayMap = new RayMap(gl, 1000);
 
             // Shader
             // this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/vertex.glsl", "/project/lightrenderer/fragment.glsl"); 

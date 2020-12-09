@@ -3,11 +3,10 @@
 namespace Project {
 
     enum DrawMode {
-        NORMAL,
-        OCCLUSION,
-        RAYS,
-        SHADOW,
-        LIGHT
+        NORMAL, // No maps drawn
+        OCCLUSION, // Draws occlusion map for all lights
+        RAYS, // Draws ray map for selected light
+        SHADOW // Draws shadow map for selected light
     }
 
     const CANVAS_SIZE = [720, 480];
@@ -45,12 +44,15 @@ namespace Project {
     
     function setup() {
 
+        // Initialized misc variables
         hasDragged = false;
         dragOffset = [0,0];
         dragSelectable = null;
         hoverSelectable = null;
         selected = null;
+        drawMode = DrawMode.NORMAL;
 
+        // Initialize WebGL
         gl = Util.setupGLCanvas("canvas", CANVAS_SIZE[0], CANVAS_SIZE[1]);
         gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.BLEND);
@@ -79,17 +81,21 @@ namespace Project {
         quads.push(new Quad(5, 200, [-200,-100], 0));
 
         // Drawing mode radio group
-        drawMode = DrawMode.NORMAL;
-        new Util.RadioGroup<DrawMode>((mode) => drawMode = mode )
-            .addOption("draw-mode-normal", DrawMode.NORMAL)
-            .addOption("draw-mode-occlusion", DrawMode.OCCLUSION)
-            .addOption("draw-mode-rays", DrawMode.RAYS)
-            .addOption("draw-mode-shadow", DrawMode.SHADOW)
-            .check(0)
-            ;
+        // drawMode = DrawMode.NORMAL;
+        // new Util.RadioGroup<DrawMode>((mode) => drawMode = mode )   
+        //     .addOption("draw-mode-normal", DrawMode.NORMAL)
+        //     .addOption("draw-mode-occlusion", DrawMode.OCCLUSION)
+        //     .addOption("draw-mode-rays", DrawMode.RAYS)
+        //     .addOption("draw-mode-shadow", DrawMode.SHADOW)
+        //     .check(0)
+        //     ;
 
         // Re-center camera button
         new Util.Button("camera-center", () => camera.setPosition([0,0]));
+
+        // Draw occlusion map
+    
+        new Util.Button("draw-occlusionmap", () => drawMode = DrawMode.OCCLUSION );
 
         // Ambient color picker
         new Util.ColorPicker("ambient-color", new Util.Color(0.15, 0.15, 0.15), (newColor) => lightRenderer.setAmbient(newColor));
@@ -147,13 +153,18 @@ namespace Project {
             e.preventDefault();
         }
         canvas.onmouseup = (e) => {
-            mousePressed = false;     
-            if( dragSelectable !== null && !hasDragged ){
-                selectObject(dragSelectable);
-            } else {
+            mousePressed = false;
+            if( !hasDragged ){
+                // The mouse was clicked on the canvas (no draggin)
+                if( dragSelectable !== null )
+                    // New object selected
+                    selectObject(dragSelectable);
+                else
+                    // Selection cleared
+                    selectObject(null);
+            }else{
+                // "Re-hover" the selectable
                 hoverSelectable = checkCollisions();
-                // Clear selection if clicked on nothing
-                if( hoverSelectable === null ) selectObject(null);
             }
             dragSelectable = null;
             e.preventDefault();
@@ -165,9 +176,9 @@ namespace Project {
             hoverSelectable = null;
 
             if( mousePressed ) {
+                hasDragged = true;
                 if( dragSelectable !== null ){
                     dragSelectable.setPosition([mouseWorldPosition[0]+dragOffset[0], mouseWorldPosition[1]+dragOffset[1]]);
-                    hasDragged = true;
                 }else if( e.altKey ) {
                     camera.adjustZoom(e.movementY  / 100.0);
                 }else{
@@ -244,6 +255,9 @@ namespace Project {
 
 
     function selectObject(object: Selectable){
+        // We reset draw mode when we re-select or de-selct
+        drawMode = DrawMode.NORMAL;
+
         lightSettings.hide(true);
         spriteSettings.hide(true);
         
@@ -275,15 +289,7 @@ namespace Project {
 
         gl.disable(gl.BLEND);
 
-        if( drawMode == DrawMode.OCCLUSION ) {
-            lightRenderer.drawOcclusionMap(CANVAS_SIZE);
-        }
-        if( drawMode ==DrawMode.RAYS ) {
-            lightRenderer.drawRayMap(CANVAS_SIZE);
-        }
-        if( drawMode == DrawMode.SHADOW ) {
-            lightRenderer.drawShadowMap(CANVAS_SIZE);
-        }
+       
 
         if( hoverSelectable !== null )
             selectionRenderer.draw(camera, hoverSelectable.getCollisionPoints(), new Util.Color(1,1,1,0.75));
@@ -294,6 +300,17 @@ namespace Project {
         if( selected !== null )
             selectionRenderer.draw(camera, selected.getCollisionPoints(), Util.Color.WHITE);
 
+        if( drawMode == DrawMode.OCCLUSION ) {
+            lightRenderer.drawOcclusionMap(CANVAS_SIZE);
+        }
+        if( drawMode ==DrawMode.RAYS ) {
+            // Draw ray map of last light in list
+            lightRenderer.drawRayMap(CANVAS_SIZE);
+        }
+        if( drawMode == DrawMode.SHADOW ) {
+            // Draw ray map of last light in list
+            lightRenderer.drawShadowMap(CANVAS_SIZE);
+        }
         
         requestAnimationFrame(update);
     }
@@ -322,6 +339,26 @@ namespace Project {
 
             this.radius = new Util.Slider("light-settings-radius", 2, 1000, 100, 1, radius => {
                 if( this.light !== null ) this.light.setRadius(radius);
+            });
+
+            // Button: Draw ray map for this light on screen
+            new Util.Button("light-settings-raymap", () => {
+                if( this.light!= null ) {
+                    // Light must be last in list.. (bad implementation)
+                    lights.splice(lights.indexOf(this.light), 1);
+                    lights.push(this.light);
+                    drawMode = DrawMode.RAYS;                   
+                }
+            });
+
+            // Button: Draw shadow map for this on the screen
+            new Util.Button("light-settings-shadowmap", () => {
+                if( this.light!= null ) {
+                    // Light must be last in list.. (bad implementation)
+                    lights.splice(lights.indexOf(this.light), 1);
+                    lights.push(this.light);
+                    drawMode = DrawMode.SHADOW;                   
+                }
             });
 
             this.hide(true);

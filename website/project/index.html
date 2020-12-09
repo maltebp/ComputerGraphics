@@ -56,14 +56,11 @@
                     <input id="ambient-color" type="color"> Color<br>
                 </td></tr>
 
-                <!-- Draw mode -->
+                <!-- Other settings -->
                 <tr class="toolbox-row"><td>
-                    <b>Draw mode</b><br>
-                    <input id="draw-mode-normal" type="radio">Normal<br>
-                    <input id="draw-mode-occlusion" type="radio">Occlusion map<br>
-                    <input id="draw-mode-rays" type="radio">Ray map<br>               
-                    <input id="draw-mode-shadow" type="radio">Shadow map<br>               
+                    <br><button id="draw-occlusionmap">Draw occlusion map</button><br>
                 </td></tr>
+
             </table></td>            
 
             <td>
@@ -88,7 +85,10 @@
                     Color<br>
                     <input id="light-settings-color" type="color"><br>
                     Radius<br>
-                    <input id="light-settings-radius" type="range">
+                    <input id="light-settings-radius" type="range"><br>
+                    
+                    <br><button id="light-settings-raymap">Draw ray map</button><br>
+                    <br><button id="light-settings-shadowmap">Draw shadow map</button><br>
                 </td></tr>
 
                 <!-- Sprite settings -->
