@@ -32,5 +32,6 @@ void main() {
     // Make sure we don't have partially transparent sprites
     textureColor.a = float(int(textureColor.a));
 
+    // Diffuse factor is stored in red color channel
     gl_FragColor = vec4(1.0, o_Diffuse, 1.0, textureColor.a);
 }

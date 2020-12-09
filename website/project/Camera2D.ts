@@ -1,6 +1,9 @@
 
 namespace Project {
 
+    /**
+     * Camera which simplifies some things for 2D usage, like ignoring the z-axis
+     */
     export class Camera2D {
 
         private position: number[];
@@ -12,11 +15,16 @@ namespace Project {
         private dirty = true;
 
 
-        constructor(screensize, position) {
+        constructor(screensize: number[], position: number[]) {
             this.screenSize = [screensize[0], screensize[1]];
             this.position = [position[0], position[1]];
         }
 
+
+        /**
+         * @param inversed Whether or not the inversed matrix should be returned
+         * @returns The total camera matrix (view and projection) 
+         */
         getMatrix(inversed = false) {
             if( this.dirty ){
 
@@ -24,6 +32,7 @@ namespace Project {
                 let translationMatrix = mat3( [1, 0, -this.position[0]], [0, 1, -this.position[1]], [0, 0, 1] );
 
 
+                // Negative zoom will zoom out, and positive zoom will zoom in
                 let zoomFactor = this.zoom < 0 ? -1 / (this.zoom-1) : this.zoom + 1;
                 // @ts-ignore
                 let zoomMatrix = mat3(

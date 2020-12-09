@@ -1,6 +1,10 @@
 
 namespace Project {
 
+
+    /**
+     * Renders selection borders
+     */
     export class SelectionRenderer {
 
         private gl: WebGLRenderingContext;
@@ -15,6 +19,10 @@ namespace Project {
         }
         
 
+        /**
+         * Renders a selection border for the given points in world coordinates,
+         * and with the given color
+         */
         draw( camera: Camera2D, points: number[][], color: Util.Color ) {
             this.vertexBuffer.clear();
 

@@ -37,10 +37,14 @@
 </head>
 <body>
 
+    <h1>Project</h1>
+    <a href="../">Back to worksheets</a><br><br>
+
     <table class="program-container">
         <tr>
-            <!-- Right toolbox -->
+            <!-- Left toolbox -->
             <td><table class="toolbox">
+                
                 <!-- Camera -->
                 <tr class="toolbox-row"><td>
                     <b>Camera</b><br><br>
@@ -48,7 +52,6 @@
                     <b>Zoom: </b>Alt + Drag mouse<br><br>
                     <button id="camera-center">Center</button><br>
                 </td></tr>
-                
 
                 <!-- Light renderer -->
                 <tr class="toolbox-row"><td>
@@ -65,14 +68,7 @@
                     <input id="light-renderer-num-ray-samples" type="range"><br>
 
                     <br><button id="draw-occlusionmap">Draw occlusion map</button><br>
-
-
                 </td></tr>
-
-                <!-- Other settings -->
-                <tr class="toolbox-row"><td>
-                </td></tr>
-
             </table></td>            
 
             <td>
@@ -82,17 +78,17 @@
             <!-- Right toolbox -->
             <td><table class="toolbox">
 
+                <!-- Create new -->
                 <tr class="toolbox-row"><td>
                     <b>Create new</b><br><br>
                     <button id="create-sprite" style="margin-right: 10px;">Sprite</button>   <button id="create-light">Light</button>
                 </td></tr>
 
-
                 <!-- Light settings -->
                 <tr id="light-settings" class="toolbox-row"  hidden="true"><td>
                     <b>Selected light</b><br><br>
-                    Color<br>
-                    <input id="light-settings-color" type="color"><br>
+                    
+                    <input id="light-settings-color" type="color"> Color<br><br>
                     Radius<br>
                     <input id="light-settings-radius" type="range"><br>
                     
@@ -117,19 +113,21 @@
                     Occlude light<br>
                     <input id="sprite-settings-occluder" type="checkbox">
                 </td></tr>
-
-
             </table></td>
+
         </tr>
     </table>
     
     <p id="fps-text" class="fps-text">FPS: ?</p>
 
+
+    <!-- Local scripts -->
     <script src="Selectable.js"></script>
     <script src="Sprite.js"></script>
     <script src="Light.js"></script>
     <script src="Camera2D.js"></script>
     <script src="Framebuffer.js"></script>
+    <script src="SettingsMenus.js"></script>
     <script src="background/BackgroundRenderer.js"></script>
     <script src="spriterenderer/SpriteRenderer.js"></script>
     <script src="selectionrenderer/SelectionRenderer.js"></script>
@@ -140,8 +138,6 @@
     <script src="lightrenderer/raymap/RayMap.js"></script>
     <script src="lightrenderer/shadowmap/ShadowMap.js"></script>
 
-
-    <!-- Local scripts -->
     <script src="main.js"></script>
 </body>
 </html>

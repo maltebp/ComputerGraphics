@@ -1,15 +1,11 @@
-/*
-    Set viewport to (0,0,numRays,1)
-
-    Draw quad to entire screen
-
-    We should only be getting fragments with frag coords in the 1-numRays interval
-
-*/
-
-
 namespace Project {
 
+    /**
+     * Casts a number of rays from a given light, and calculate their distance
+     * by using the occlusion map.
+     * The result is stored in this maps output texture, which is a texture
+     * of size numRays*1 (height of 1).
+     */
     export class RayMap {
 
         private gl: WebGLRenderingContext;
@@ -25,7 +21,7 @@ namespace Project {
         constructor(gl: WebGLRenderingContext, numRays: number, numSamples: number) {
             this.gl = gl;
             this.numRays = numRays;
-            this.numSamples = numSamples;
+            this.numSamples = numSamples; // Determines ray step size
 
             // Setup vertex buffer            
             this.vertexBuffer = new Util.VertexBuffer(gl);
@@ -34,7 +30,6 @@ namespace Project {
                 -1, -1,
                 -1,  1, 
                  1, -1,
-
                 -1,  1,
                  1,  1,
                  1, -1
@@ -99,6 +94,9 @@ namespace Project {
         }
 
         
+        /**
+         * Binds the output texture of this ray map to the texture slot
+         */
         bindTexture(textureSlot: number) {
             this.texture.bind(textureSlot); 
         }

@@ -3,6 +3,9 @@
 namespace Project {
 
 
+    /**
+     * Renders the shadowmap for a light from a given ray map
+     */
     export class ShadowMap {
 
         private gl: WebGLRenderingContext;
@@ -12,6 +15,7 @@ namespace Project {
         private shadowShader: Util.ShaderProgram;
         private gaussianShader: Util.ShaderProgram;
         
+        // Two buffers for two-pass gaussian blur
         private framebuffer1: Framebuffer;
         private framebuffer2: Framebuffer;
     
@@ -23,7 +27,6 @@ namespace Project {
             this.textureSize = textureSize;
 
             // Vertex buffer: Two triangles filling entire screen           
-            // TODO: Create global vertex buffer for this
             this.vertexBuffer = new Util.VertexBuffer(gl);
             this.vertexBuffer.addAttribute("a_Position", 2);
             this.vertexBuffer .push(
@@ -49,7 +52,8 @@ namespace Project {
 
 
         /**
-         * Renders the light's shadows to a framebuffer, and apply gaussian blur to it
+         * Renders the light's shadows to a framebuffer by using the 
+         * calculated ray distances (from ray map)
          * 
          * @param rayMapSlot    The slot which the ray map for this light is bound to
          */
@@ -66,60 +70,21 @@ namespace Project {
                 this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );    
             });
 
+            // Perform gaussian blur
             this.gaussianBlur();
-
         }
 
 
-        // private drawLight(camera: Camera2D, light: Light, occlusionMatrix: number[]) {
-        //     this.gl.clearColor(0,0,0,0);
-
-
-        //     this.framebuffer2.drawTo(() => {
-        //         this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-        //     })
-        //     this.currentFramebuffer.drawTo(() => {
-        //         this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-
-        //         this.shadowShader.bind();
-        //         this.shadowShader.setFloat("u_Radius", radius);
-        //         // this.shader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
-        //         this.shadowShader.setInteger("u_RayMap", 0);
-    
-        //         this.vertexBuffer.bind();
-    
-        //         this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
-        //     });
-
-        //     this.gaussianBlur();
-
-        //     // this.gl.enable(gl.BLEND);
-
-        //     this.framebuffer1.getTexture().bind(0);
-
-
-            
-        //     this.lightShader.bind();
-        //     this.lightShader.setInteger("u_ShadowTexture", 0);
-        //     this.lightShader.setFloatVector3("u_Color", [0,1,0]); 
-
-        //     // this.lightShader.setFloat("u_LightSize", this.lightSize);
-        //     // this.lightShader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
-
-        //     this.vertexBuffer.bind();
-        //     this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
-
-        //     // this.gl.disable(gl.BLEND);
-
-        // }
-
-
+        /**
+         * Binds the shadowmap's output texture to the given slot
+         */
         bindTexture(textureSlot: number) {
             this.framebuffer1.getTexture().bind(textureSlot);
         }
 
-        private gaussianBlur() {
 
+        // Perform the two pass gaussian blur on the current shadow map
+        private gaussianBlur() {
             this.gl.enable(this.gl.BLEND);
             this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
             
@@ -130,13 +95,17 @@ namespace Project {
             // We can reuse the same vertexbuffer
             this.vertexBuffer.bind();
             
-            for(let i=0; i<1; i++){
+            let blurCount = 1;
+            for(let i=0; i<blurCount; i++){
+
+                // Vertical blur (from framebuffer 1 to framebuffer 2)
                 this.framebuffer1.getTexture().bind(0);
                 this.gaussianShader.setInteger("u_Horizontal", 0);
                 this.framebuffer2.drawTo(() => {
                     this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
                 });
     
+                // Horizontal blur (from framebuffer 2 to framebuffer 1)
                 this.framebuffer2.getTexture().bind(0);
                 this.gaussianShader.setInteger("u_Horizontal", 1);
                 this.framebuffer1.drawTo(() => {

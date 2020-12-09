@@ -1,7 +1,10 @@
 
 namespace Project {
 
-
+    /**
+     * Contains the sum of all lights rendered, and can be rendered
+     * on top of existing screen.
+     */
     export class LightMap {
 
         private gl: WebGLRenderingContext;
@@ -10,6 +13,7 @@ namespace Project {
         private framebuffer: Framebuffer;
         private ambient: Util.Color;
 
+        
         constructor(gl: WebGLRenderingContext, size: number[]) {
             this.gl = gl;
             this.vertexBuffer = new Util.VertexBuffer(gl);
@@ -18,7 +22,6 @@ namespace Project {
                 -1, -1,
                 -1,  1,
                  1, -1,
-
                 -1,  1,
                  1,  1,
                  1, -1
@@ -28,15 +31,41 @@ namespace Project {
 
             // Create light map (texture + framebuffer)
             Util.Texture.createFromData(gl, null, size[0], size[1])
-            .setChannels(3)
-            .setFilter(gl.LINEAR, gl.LINEAR)
-            .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE)
-            .build((texture) => this.framebuffer =  new Framebuffer(gl, texture));
+                .setChannels(3)
+                .setFilter(gl.LINEAR, gl.LINEAR)
+                .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE)
+                .build((texture) => this.framebuffer =  new Framebuffer(gl, texture));
 
             this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/lightmap/vertex.glsl", "/project/lightrenderer/lightmap/fragment.glsl");          
         }
 
 
+        // Binds the light map frame buffer, call the given function
+        // and unbinds the buffer again
+        drawTo(drawCallback: () => void) {
+            this.framebuffer.drawTo(drawCallback);
+        }
+        
+
+        /**
+         * Draws the lightmap to the screen (on top of sprites)
+         */
+        draw() {
+            this.gl.enable(this.gl.BLEND);
+            // Multiply source color with destination color 
+            this.gl.blendFunc(this.gl.DST_COLOR, this.gl.ZERO);
+            
+            this.shader.bind();
+            
+            this.framebuffer.getTexture().bind(0);
+            this.shader.setInteger("u_LightMap", 0);
+            
+            this.vertexBuffer.bind();
+            
+            this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());
+        }
+
+        
         setAmbient(color: Util.Color){
             this.ambient = color.copy();
         }
@@ -51,35 +80,5 @@ namespace Project {
             });
         }
 
-
-        drawTo(drawCallback: () => void) {
-            this.framebuffer.drawTo(drawCallback);
-        }
-        
-
-        draw() {
-            this.gl.enable(this.gl.BLEND);
-            this.gl.blendFunc(this.gl.DST_COLOR, this.gl.ZERO);
-            
-            this.shader.bind();
-            
-            this.framebuffer.getTexture().bind(0);
-            this.shader.setInteger("u_LightMap", 0);
-            
-            this.vertexBuffer.bind();
-            
-            this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices());
-
-        }
-
-
-        bindTexture(slot: number) {
-            return this.framebuffer.getTexture().bind(slot);
-        }
-
-
     }
-
-
-
 }

@@ -1,8 +1,6 @@
 precision mediump float;
 
-
 uniform mat3    u_CameraMatrix;
-
 uniform vec2    u_LightPosition;
 uniform float   u_LightRadius;
 
@@ -14,6 +12,7 @@ attribute vec2 a_Position;
 
 varying vec2 o_DiffuseMapCoordinates;
 varying vec2 o_TextureCoordinates;
+
 
 void main() {
 

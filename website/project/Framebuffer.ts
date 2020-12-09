@@ -1,11 +1,15 @@
 
 namespace Project {
 
+    /**
+     * Generalization of a Framebuffer with a Texture as its drawing target
+     */
     export class Framebuffer {
 
         private buffer: WebGLFramebuffer;
         private gl: WebGLRenderingContext;
         private texture: Util.Texture;
+
 
         constructor(gl: WebGLRenderingContext, texture: Util.Texture){
             this.gl = gl;
@@ -27,6 +31,10 @@ namespace Project {
         } 
 
 
+        /**
+         * Binds this framebuffer, call the given draw callback and then unbind the Framebuffer again
+         * This is to ensure that the state is always correctly cleared back to the previous
+         */
         drawTo(drawFunction: () => void) {
             let originalFramebuffer = <WebGLFramebuffer> this.gl.getParameter(this.gl.FRAMEBUFFER_BINDING);
             let originalViewport = this.gl.getParameter(this.gl.VIEWPORT);
@@ -39,6 +47,7 @@ namespace Project {
             this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, originalFramebuffer);
             this.gl.viewport(originalViewport[0], originalViewport[1], originalViewport[2], originalViewport[3]);
         }
+
 
         getTexture() {
             return this.texture;

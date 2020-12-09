@@ -1,6 +1,14 @@
 
 namespace Project {
 
+
+    /**
+     * Basic renderer to draw textured quads (Sprites in this project)
+     * to the screen.
+     * 
+     * The renderer uses multi-texturing to batch together multiple sprites
+     * in one draw call.
+     */
     export class SpriteRenderer {
 
         private gl: WebGLRenderingContext;
@@ -21,9 +29,12 @@ namespace Project {
         }
         
 
+        /**
+         * Draws the given sprites to the screen
+         */
         drawQuads( camera: Camera2D, ...sprites: Sprite[] ) {
             
-            // Utility function to flush the drawing buffers,
+            // Function to flush the drawing buffers,
             // effectively drawing everything
             let flush = () => {
                 this.vertexBuffer.bind();
@@ -46,7 +57,7 @@ namespace Project {
             // Cleanup buffers
             let textures = new Map<Util.Texture, number>();
 
-            // Push sprites' data
+            // Draw each Sprite
             let numQuads = 0; // Number of sprites added to buffer
             for( let i=0; i<sprites.length; i++ ){
                 let sprite = sprites[i];
