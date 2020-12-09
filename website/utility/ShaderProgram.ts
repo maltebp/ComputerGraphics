@@ -5,7 +5,7 @@ namespace Util {
     export class ShaderProgram {
 
         private program;
-        private gl;
+        private gl: WebGLRenderingContext;
     
     
         constructor(gl, vertexShader: string, fragmentShader: string){
@@ -28,6 +28,15 @@ namespace Util {
                 throw "Uniform " + name + " is not an integer in the shader";
     
             this.gl.uniform1i(location, integer);
+        }
+
+        
+        setIntegerArray(name: string, arr: number[]) {
+            let location = this.getUniformLocation(name);
+    
+            // Note: Not sure how to make type check
+    
+            this.gl.uniform1iv(location, arr);
         }
 
 
@@ -136,7 +145,7 @@ namespace Util {
          * Retrieves the location of the uniform with the given name in the program.
          * An exception is thrown if the uniform doesn't exist.
          */
-        private getUniformLocation(name: string) : string {
+        private getUniformLocation(name: string) : WebGLUniformLocation {
             var location = this.gl.getUniformLocation(this.program, name);
             
             if( location == null )

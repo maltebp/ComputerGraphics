@@ -43,7 +43,9 @@ namespace Project {
     declare var lightSettings: LightSettings;
 
     
-    declare var mousePressed: boolean;    
+    declare var mousePressed: boolean;   
+    
+    declare var spriteTextures: Util.Texture[];
 
 
     function setup() {
@@ -59,6 +61,12 @@ namespace Project {
         gl.enable(gl.BLEND);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
         gl.depthFunc(gl.ALWAYS); //TODO: Remove this at some point
+
+
+        spriteTextures = [];
+        loadSpriteTexture("santa.png", "Santa");
+        loadSpriteTexture("kingpig.png", "Pig King");
+        loadSpriteTexture("rocket.png", "Space Rocket");            
         
         backgroundRenderer = new BackgroundRenderer(gl);
 
@@ -81,10 +89,10 @@ namespace Project {
         camera = new Camera2D(CANVAS_SIZE, [0, 0]);
 
         quads = [];
-        quads.push(new Quad(100, 100, [0,-120], 0, Util.Color.WHITE));
-        quads.push(new Quad(30, 40, [50,50], 0, Util.Color.WHITE));
-        quads.push(new Quad(10, 10, [100,10], 0, Util.Color.WHITE));
-        quads.push(new Quad(5, 200, [-200,-100], 0, Util.Color.WHITE));
+        quads.push(new Quad(100, 100, [0,-120], 0));
+        quads.push(new Quad(30, 40, [50,50], 0));
+        quads.push(new Quad(10, 10, [100,10], 0));
+        quads.push(new Quad(5, 200, [-200,-100], 0));
 
         // Drawing mode radio group
         drawMode = DrawMode.NORMAL;
@@ -101,7 +109,8 @@ namespace Project {
 
         // Create sprite button
         new Util.Button("create-sprite", () => {
-            let newSprite = new Quad(50, 50, camera.screenToWorld([CANVAS_SIZE[0]/2, CANVAS_SIZE[1]/2]), 0, Util.Color.WHITE);
+            let newSprite = new Quad(100, 100, camera.screenToWorld([CANVAS_SIZE[0]/2, CANVAS_SIZE[1]/2]), 0);
+            newSprite.setTexture(spriteTextures[quads.length % 3]);
             quads.push(newSprite);
             selectObject(newSprite);
         });
@@ -170,10 +179,6 @@ namespace Project {
                 hoverSelectable = checkCollisions(); 
             }
         }
-        // canvas.onwheel = (e) =>{
-        //     camera.adjustDistance(e.deltaY);
-        //     e.preventDefault();
-        // }
     }
 
 
@@ -322,6 +327,15 @@ namespace Project {
         hide(toggle: boolean) {
             this.htmlGroup.hidden = toggle;
         }
+    }
+
+
+    function loadSpriteTexture(path: string, name: string){
+        Util.Texture.createFromImage(gl, path)
+            .setChannels(4)
+            .setFilter(gl.LINEAR, gl.LINEAR)
+            .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE)
+            .build((texture) => spriteTextures.push(texture));
     }
 
 }

@@ -1,17 +1,29 @@
-// Position
-// Width
-// Height
-// Rotation
 
 namespace Project {
 
     export class Quad implements Selectable {
         
+        public position: number[];
+
         public width: number;
         public height: number;
-        public position: number[];
+        
         public rotation: number;
-        public color: Util.Color;
+
+        // Texture of this sprite
+        // If null, it's just quad colored with the color below
+        private texture: Util.Texture = null;
+
+        // The tinting color of this sprite, which is multiplied to
+        // the base texture.
+        // If the object has no texture, it will have this color
+        public color: Util.Color = Util.Color.WHITE.copy();
+
+        // How much the object is lit up by lights
+        private diffuseFactor: number = 0.80;
+
+        // Whether or not this object should occlude lights (cause shadows)
+        private occluder: boolean = true;
 
         // The 4 world coordinates describing this quad
         private worldPoints: number[][];
@@ -19,14 +31,46 @@ namespace Project {
         private dirty = true;
 
         
-        constructor( width: number, height: number, position: number[], rotation: number, color: Util.Color) {
+        constructor( width: number, height: number, position: number[], rotation: number) {
             this.position = [position[0], position[1]];
             this.width = width;
             this.height = height;
             this.rotation = rotation;
-            this.color = color.copy();
         }
 
+
+        setTexture(texture: Util.Texture){
+            this.texture = texture;
+        }
+
+        getTexture() {
+            return this.texture;
+        }
+
+
+        setDiffuseFactor(factor: number){
+            this.diffuseFactor = factor;
+            if( factor < 0 ) this.diffuseFactor = 0;
+            if( factor > 1 ) this.diffuseFactor = 1;
+        }
+
+        getDiffuseFactor(){
+            return this.diffuseFactor;
+        }
+
+
+        setOccluder(toggle: boolean){
+            this.occluder = toggle;
+        }
+
+        isOccluder() {
+            return this.occluder;
+        }
+
+
+        getColor(){
+            return this.color.copy();
+        }
 
         getPositionX(){
             return this.position[0];

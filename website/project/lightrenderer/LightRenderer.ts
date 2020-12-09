@@ -114,16 +114,17 @@ namespace Project {
                 this.occlusionMap.bindTexture(0);
 
                 this.rayMap.draw(light, 0, occlusionMatrix);
-                this.rayMap.bindTexture(0);
+                this.rayMap.bindTexture(1);
                 
-                this.shadowMap.draw(0);
+                this.shadowMap.draw(1);
 
-                this.shadowMap.bindTexture(0);
-                this.occlusionMap.bindTexture(1);
+                // Shadow map unbinds the occlusion map
+                this.occlusionMap.bindTexture(0);
+                this.shadowMap.bindTexture(1);
 
                 this.lightShader.bind();
-                this.lightShader.setInteger("u_ShadowMap", 0);
-                this.lightShader.setInteger("u_DiffuseMap", 1);
+                this.lightShader.setInteger("u_DiffuseMap", 0); // Diffuse map = occlusion map
+                this.lightShader.setInteger("u_ShadowMap", 1);
                 this.lightShader.setFloatVector3("u_Color", light.getColor().asList(false) );
                 this.lightShader.setFloatMatrix3("u_CameraMatrix", camera.getMatrix());
                 this.lightShader.setFloatVector2("u_LightPosition", light.getPosition());
@@ -137,7 +138,11 @@ namespace Project {
 
                 this.lightMap.drawTo(() => {
                     this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexBuffer.getNumVertices() );
-                });                
+                });  
+                
+                // Primitive way of unbinding occlusion map from slot 0
+                this.gl.activeTexture(this.gl.TEXTURE0);
+                this.gl.bindTexture(this.gl.TEXTURE_2D, null);
             });
 
             this.lightMap.draw();
