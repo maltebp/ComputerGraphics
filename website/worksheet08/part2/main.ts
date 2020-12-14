@@ -28,7 +28,7 @@ namespace Sheet8.Part2 {
 
         pointLight = new Util.PointLight([40, 100, 0], Util.Color.WHITE);
         renderer = new QuadRenderer(gl, pointLight);
-        pointLightRenderer = new Util.PointLightRenderer(gl);
+        pointLightRenderer = new Util.PointLightRenderer(gl, "../../");
 
         // Ground quad
         renderer.addQuad(new Quad(

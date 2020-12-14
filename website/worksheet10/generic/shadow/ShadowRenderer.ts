@@ -46,7 +46,7 @@ namespace Sheet10 {
             }
 
             this.framebuffer = new ShadowMapBuffer(gl, 1024, 1024);
-            this.shader = new Util.ShaderProgram(gl, "/worksheet10/generic/shadow/vertex.glsl", "/worksheet10/generic/shadow/fragment.glsl");
+            this.shader = new Util.ShaderProgram(gl, "../generic/shadow/vertex.glsl", "../generic/shadow/fragment.glsl");
         }
         
 

@@ -49,12 +49,12 @@ namespace Sheet7.Part3 {
         gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
         var cubemap = [
-            '/worksheet07/textures/cm_left.png',     // POSITIVE_X
-            '/worksheet07/textures/cm_right.png',    // NEGATIVE_X
-            '/worksheet07/textures/cm_top.png',      // POSITIVE_Y
-            '/worksheet07/textures/cm_bottom.png',   // NEGATIVE_Y
-            '/worksheet07/textures/cm_back.png',     // POSITIVE_Z
-            '/worksheet07/textures/cm_front.png'     // NEGATIVE_Z
+            '../textures/cm_left.png',     // POSITIVE_X
+            '../textures/cm_right.png',    // NEGATIVE_X
+            '../textures/cm_top.png',      // POSITIVE_Y
+            '../textures/cm_bottom.png',   // NEGATIVE_Y
+            '../textures/cm_back.png',     // POSITIVE_Z
+            '../textures/cm_front.png'     // NEGATIVE_Z
         ];
         
         for(let i = 0; i < 6; ++i) {

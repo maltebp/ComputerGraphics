@@ -48,14 +48,14 @@ namespace Sheet10.Part1 {
         // Creating point light
         pointLight = new Util.PointLight([175, 100, 175], Util.Color.WHITE);
         rotateLight = false;
-        pointLightRenderer = new Util.PointLightRenderer(gl);
+        pointLightRenderer = new Util.PointLightRenderer(gl, "../../");
 
         // Ground renderer
         groundRenderer = new GroundRenderer(gl, "../generic/xamp23.png", GROUND_SIZE[0], GROUND_SIZE[1]);
 
         // Load Model
         model = null;
-        Util.loadObjFile("/models/teapot/teapot.obj", 1.0, false, (obj) => {
+        Util.loadObjFile("../../models/teapot/teapot.obj", 1.0, false, (obj) => {
             model = new Model(gl, obj, [0,0,0], 25);
         });
 

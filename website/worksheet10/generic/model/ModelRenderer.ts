@@ -16,7 +16,7 @@ namespace Sheet10 {
 
         constructor(gl){
             this.gl = gl;            
-            this.shader = new Util.ShaderProgram(gl, "/worksheet10/generic/model/vertex.glsl", "/worksheet10/generic/model/fragment.glsl");
+            this.shader = new Util.ShaderProgram(gl, "../generic/model/vertex.glsl", "../generic/model/fragment.glsl");
         }
 
         

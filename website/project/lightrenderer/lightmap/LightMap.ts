@@ -6,6 +6,7 @@ namespace Project {
      * on top of existing screen.
      */
     export class LightMap {
+      
 
         private gl: WebGLRenderingContext;
         private shader: Util.ShaderProgram;
@@ -36,7 +37,7 @@ namespace Project {
                 .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE)
                 .build((texture) => this.framebuffer =  new Framebuffer(gl, texture));
 
-            this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/lightmap/vertex.glsl", "/project/lightrenderer/lightmap/fragment.glsl");          
+            this.shader = new Util.ShaderProgram(gl, "lightrenderer/lightmap/vertex.glsl", "lightrenderer/lightmap/fragment.glsl");          
         }
 
 
@@ -78,6 +79,11 @@ namespace Project {
             this.framebuffer.drawTo(() => { 
                 gl.clear(gl.COLOR_BUFFER_BIT);
             });
+        }
+
+
+        bindTexture(textureSlot: number) {
+            this.framebuffer.getTexture().bind(textureSlot);
         }
 
     }

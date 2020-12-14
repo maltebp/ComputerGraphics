@@ -13,11 +13,13 @@ namespace Util {
 
     
     export class Slider {
+        private valueDisplay: HTMLParagraphElement = null;
         private element: HTMLInputElement;
 
         constructor(id: string, min: number, max: number, initial: number, step: number, callback: (value: number) => void = null ) {
 
             this.element = <HTMLInputElement> document.getElementById(id);
+            this.addValueDisplay();
 
             if( this.element.getAttribute("type") !== "range" )
                 throw "Slider must be an HTMLInputElement with type='range'"
@@ -29,14 +31,29 @@ namespace Util {
             
             if( callback !== null){
                 this.element.oninput = (e) => {
+                    this.updateValueDisplay();
                     callback(this.element.valueAsNumber);
                 }
                 callback(this.element.valueAsNumber);
+            }else{
+                this.element.oninput = (e) => {
+                    this.updateValueDisplay();
+                }
             }
+
+            this.updateValueDisplay();
+        }
+
+        // Adds a text which displays the value of the given slider
+        addValueDisplay(){
+            this.valueDisplay = document.createElement('p');
+            this.valueDisplay.style.margin = "0px";
+            this.element.parentElement.insertBefore(this.valueDisplay, this.element.nextSibling);
         }
     
         setValue(value: number) {
             this.element.value = value.toString();
+            this.updateValueDisplay();
         }
 
         getValue() {
@@ -45,6 +62,12 @@ namespace Util {
 
         disable(toggle: boolean) {
             this.element.disabled = toggle;
+        }
+
+        private updateValueDisplay(){
+            if( this.valueDisplay === null ) return;
+            let decimalValue = Number.parseFloat(this.element.step) < 1.0;
+            this.valueDisplay.innerText = this.element.valueAsNumber.toFixed(decimalValue ? 2 : 0);
         }
     }
 
@@ -100,7 +123,6 @@ namespace Util {
     
         setColor(color: Util.Color) {
             this.element.value = color.toHex(false);
-            // TODO: Check that callback is fired
         }
 
         getColor() {

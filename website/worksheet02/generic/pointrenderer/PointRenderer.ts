@@ -18,7 +18,7 @@ namespace Sheet2 {
             this.vertexBuffer.addAttribute("a_Size", 1);
             this.vertexBuffer.addAttribute("a_Color", 4);
     
-            this.shader = new Util.ShaderProgram(gl, "/worksheet02/generic/pointrenderer/vertex.shader", "/worksheet02/generic/generic_fragment.shader");
+            this.shader = new Util.ShaderProgram(gl, "../generic/pointrenderer/vertex.shader", "../generic/generic_fragment.shader");
         }
     
     

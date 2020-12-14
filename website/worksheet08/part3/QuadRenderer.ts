@@ -77,7 +77,7 @@ namespace Sheet8.Part3 {
 
             // @ts-ignore
             let shadow = mult(translationBack, mult(modelLight, mult(translation, model)));
-
+            
             this.gl.depthFunc(this.gl.GREATER);
             this.shader.setInteger("u_Shadows", 1);
             this.shader.setFloatMatrix4("u_Model", shadow);        

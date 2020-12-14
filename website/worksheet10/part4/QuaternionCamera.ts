@@ -30,7 +30,6 @@ namespace Sheet10.Part4 {
             this.rotation = new Quaternion().make_rot_vec2vec([0,0,1], normalizedEye);
             
             // Up vector
-            // TODO: Should this be inverted?
             this.up = this.rotation.apply([0,1,0]);
         }
 

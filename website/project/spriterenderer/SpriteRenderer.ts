@@ -25,7 +25,7 @@ namespace Project {
             this.vertexBuffer.addAttribute("a_TextureSlot", 1);
             this.vertexBuffer.addAttribute("a_TextureCoordinates", 2);
             this.indexBuffer = new Util.IndexBuffer(gl);
-            this.shader = new Util.ShaderProgram(gl, "/project/spriterenderer/vertex.glsl", "/project/spriterenderer/fragment.glsl");                  
+            this.shader = new Util.ShaderProgram(gl, "spriterenderer/vertex.glsl", "spriterenderer/fragment.glsl");                  
         }
         
 

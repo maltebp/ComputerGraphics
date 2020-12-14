@@ -17,7 +17,6 @@ varying vec3 o_SurfaceNormal;
 varying vec3 o_TextureCoordinates;
 
 
-
 vec3 rotate_to_normal(vec3 normal, vec3 v) {
     float a = 1.0/(1.0 + normal.z);
     float b = -normal.x*normal.y*a;

@@ -6,7 +6,8 @@ namespace Project {
         NORMAL, // No maps drawn
         OCCLUSION, // Draws occlusion map for all lights
         RAYS, // Draws ray map for selected light
-        SHADOW // Draws shadow map for selected light
+        SHADOW,
+        LIGHTMAP // Draws shadow map for selected light
     }
 
     const CANVAS_SIZE = [720, 480];
@@ -89,13 +90,13 @@ namespace Project {
 
         // Load sprite textures
         spriteSettings = new SpriteSettings();
-        spriteSettings.addTextureOption("/project/sprites/santa.png", "Santa");
-        spriteSettings.addTextureOption("/project/sprites/kingpig.png", "Pig King");
-        spriteSettings.addTextureOption("/project/sprites/rocket.png", "Space Rocket");
-        spriteSettings.addTextureOption("/project/sprites/bomb.png", "Bomb"); 
-        spriteSettings.addTextureOption("/project/sprites/donut.png", "Donut");
-        spriteSettings.addTextureOption("/project/sprites/box.png", "Box")   
-        spriteSettings.addTextureOption("/project/sprites/dwarf.png", "Dwarf")
+        spriteSettings.addTextureOption("sprites/santa.png", "Santa");
+        spriteSettings.addTextureOption("sprites/kingpig.png", "Pig King");
+        spriteSettings.addTextureOption("sprites/rocket.png", "Space Rocket");
+        spriteSettings.addTextureOption("sprites/bomb.png", "Bomb"); 
+        spriteSettings.addTextureOption("sprites/donut.png", "Donut");
+        spriteSettings.addTextureOption("sprites/box.png", "Box")   
+        spriteSettings.addTextureOption("sprites/dwarf.png", "Dwarf")
 
         // Settings menus
         lightSettings = new LightSettings();
@@ -118,8 +119,11 @@ namespace Project {
         // Samples per ray 
         new Util.Slider("light-renderer-num-ray-samples", 20, 2000, 300, 1, (numSamples) => lightRenderer.setNumRaySamples(numSamples));
 
-        // Draw occlusion map
+        // View occlusion map
         new Util.Button("draw-occlusionmap", () => drawMode = DrawMode.OCCLUSION );
+
+        // View light map
+        new Util.Button("draw-lightmap", () => drawMode = DrawMode.LIGHTMAP );
      
         // Create sprite button
         new Util.Button("create-sprite", () => {
@@ -288,6 +292,10 @@ namespace Project {
         if( drawMode == DrawMode.SHADOW ) {
             // Draw ray map of last light in list
             lightRenderer.drawShadowMap(CANVAS_SIZE);
+        }
+        if( drawMode == DrawMode.LIGHTMAP ) {
+            // Draw ray map of last light in list
+            lightRenderer.drawLightMap(CANVAS_SIZE);
         }
         
         requestAnimationFrame(update);

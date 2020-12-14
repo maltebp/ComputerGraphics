@@ -22,7 +22,7 @@ namespace Sheet3 {
             this.indexBuffer = new Util.IndexBuffer(gl);
     
             // @ts-ignore
-            this.program = initShaders(gl, "/worksheet03/generic/cuberenderer/vertex.shader", "/worksheet03/generic/cuberenderer/fragment.shader");
+            this.program = initShaders(gl, "../generic/cuberenderer/vertex.shader", "../generic/cuberenderer/fragment.shader");
         }
         
     

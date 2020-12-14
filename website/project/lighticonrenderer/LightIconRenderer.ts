@@ -18,13 +18,13 @@ namespace Project {
             this.vertexBuffer.addAttribute("a_Position", 2);
             this.vertexBuffer.addAttribute("a_TextureCoordinates", 2);
 
-            Util.Texture.createFromImage(gl, "/project/sprites/lighticon.png")
+            Util.Texture.createFromImage(gl, "sprites/lighticon.png")
                 .setChannels(4)
                 .setFilter(gl.LINEAR_MIPMAP_LINEAR, gl.LINEAR)
                 .setWrap(gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE)
                 .build((texture) => this.texture = texture);
 
-            this.shader = new Util.ShaderProgram(gl, "/project/lighticonrenderer/vertex.glsl", "/project/lighticonrenderer/fragment.glsl");          
+            this.shader = new Util.ShaderProgram(gl, "lighticonrenderer/vertex.glsl", "lighticonrenderer/fragment.glsl");          
         }
         
 

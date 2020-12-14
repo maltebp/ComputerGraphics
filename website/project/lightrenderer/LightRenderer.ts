@@ -51,10 +51,10 @@ namespace Project {
             this.shadowMap = new ShadowMap(gl, 1080);
 
             // Light shader (renders lights to lightmap)
-            this.lightShader = new Util.ShaderProgram(gl, "/project/lightrenderer/lightshader/vertex.glsl", "/project/lightrenderer/lightshader/fragment.glsl");
+            this.lightShader = new Util.ShaderProgram(gl, "lightrenderer/lightshader/vertex.glsl", "lightrenderer/lightshader/fragment.glsl");
             this.lightMap = new LightMap(gl, screenSize);
 
-            this.imageRenderer = new Util.ImageRenderer(gl);
+            this.imageRenderer = new Util.ImageRenderer(gl, "../");
         }
       
 
@@ -168,6 +168,13 @@ namespace Project {
         drawShadowMap(screenSize: number[]) {
             this.shadowMap.bindTexture(0);
             this.imageRenderer.draw(0, screenSize[0], screenSize[1], screenSize[1]*0.9, screenSize[1]*0.9 );
+        }
+
+        // Draws the accumulated light map
+        drawLightMap(screenSize: number[]) {
+            this.lightMap.bindTexture(0);
+            // Render lightmap to full screen (should be same size as camera view)
+            this.imageRenderer.draw(0, screenSize[0], screenSize[1], screenSize[0], screenSize[1] );
         }
     }
 

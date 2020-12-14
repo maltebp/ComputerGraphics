@@ -141,7 +141,7 @@ namespace Util {
 
         createProjectionMatrix(){
             // @ts-ignore
-            this.projectionMatrix = ortho(-this.screensize[0]/2.0, this.screensize[0]/2.0, -this.screensize[1]/2.0, this.screensize[1]/2.0, nearPlane,  farPlane);
+            this.projectionMatrix = ortho(-this.screensize[0]/2.0, this.screensize[0]/2.0, -this.screensize[1]/2.0, this.screensize[1]/2.0, this.nearPlane,  this.farPlane);
         };
     }
 

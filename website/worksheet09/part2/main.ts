@@ -49,13 +49,13 @@ namespace Sheet9.Part2 {
         // Creating point light
         pointLight = new Util.PointLight([175, 100, 175], Util.Color.WHITE);
         rotateLight = false;
-        pointLightRenderer = new Util.PointLightRenderer(gl);
+        pointLightRenderer = new Util.PointLightRenderer(gl, "../../");
 
         groundRenderer = new GroundRenderer(gl, "../generic/xamp23.png", GROUND_SIZE[0], GROUND_SIZE[1]);
 
         // Load Model
         model = null;
-        Util.loadObjFile("/models/teapot/teapot.obj", 1.0, false, (obj) => {
+        Util.loadObjFile("../../models/teapot/teapot.obj", 1.0, false, (obj) => {
             model = new Model(gl, obj, [0,0,0], 25);
         });
 
@@ -69,7 +69,7 @@ namespace Sheet9.Part2 {
         shadowRenderer = new ShadowRenderer(gl, GROUND_SIZE[0], GROUND_SIZE[1]);
 
         // Screen renderer to render shadow map as an image to screen
-        imageRenderer = new Util.ImageRenderer(gl);
+        imageRenderer = new Util.ImageRenderer(gl, "../../");
     
         // Camera distance
         new Util.Slider("camera-distance", 25, 600, 350, 1, (value) => camera.setDistance(value) );

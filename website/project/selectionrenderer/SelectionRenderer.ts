@@ -15,7 +15,7 @@ namespace Project {
             this.gl = gl;
             this.vertexBuffer = new Util.VertexBuffer(gl);
             this.vertexBuffer.addAttribute("a_Position", 2);
-            this.shader = new Util.ShaderProgram(gl, "/project/selectionrenderer/vertex.glsl", "/project/selectionrenderer/fragment.glsl");          
+            this.shader = new Util.ShaderProgram(gl, "selectionrenderer/vertex.glsl", "selectionrenderer/fragment.glsl");          
         }
         
 

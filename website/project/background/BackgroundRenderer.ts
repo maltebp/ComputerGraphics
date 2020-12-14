@@ -35,14 +35,14 @@ namespace Project {
             );
 
             // Load the sprite tile
-            Util.Texture.createFromImage(gl, "/project/sprites/tile.png")
+            Util.Texture.createFromImage(gl, "sprites/tile.png")
                 .setChannels(4)
                 .setFilter(gl.LINEAR, gl.LINEAR)
                 .setWrap(gl.REPEAT, gl.REPEAT)
                 .build((texture) => this.texture = texture) 
                 ;
 
-            this.shader = new Util.ShaderProgram(gl, "/project/background/vertex.glsl", "/project/background/fragment.glsl");          
+            this.shader = new Util.ShaderProgram(gl, "background/vertex.glsl", "background/fragment.glsl");          
         }
         
 
@@ -58,22 +58,22 @@ namespace Project {
             // to the texture coordinates, such that we
             // get the correctly sized tiles
             // @ts-ignore 
-            let worldToTexture = mult(
-                // Translation matrix
-                // @ts-ignore
-                mat3(
-                    1, 0, 0.5,
-                    0, 1, 0.5,
-                    0, 0,   1
-                ),
-                // Scaling matrix
-                // @ts-ignore
-                mat3(
-                    1/this.tileSize,                0, 0,
-                                  0,  1/this.tileSize, 0,
-                                  0,                0, 1
-                )
-            );
+            let worldToTexture = mat3(
+                1/this.tileSize,                0, 0,
+                              0,  1/this.tileSize, 0,
+                              0,                0, 1
+            )
+            
+            // mult(
+            //     // Translation matrix
+            //     // @ts-ignore
+            //     mat3(
+            //         1, 0, 0.5,
+            //         0, 1, 0.5,
+            //         0, 0,   1
+            //     ),
+               
+            // );
 
             // Combine to total matrix, which transforms the NDC coordinates
             // to correct texture coordinates

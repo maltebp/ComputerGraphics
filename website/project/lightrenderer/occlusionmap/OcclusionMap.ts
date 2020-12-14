@@ -34,7 +34,7 @@ namespace Project {
             this.vertexBuffer.addAttribute("a_TextureSlot", 1);
             this.vertexBuffer.addAttribute("a_TextureCoordinates", 2);
             this.indexBuffer = new Util.IndexBuffer(gl);
-            this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/occlusionmap/vertex.glsl", "/project/lightrenderer/occlusionmap/fragment.glsl");    
+            this.shader = new Util.ShaderProgram(gl, "lightrenderer/occlusionmap/vertex.glsl", "lightrenderer/occlusionmap/fragment.glsl");    
 
             Util.Texture.createFromData(gl, null, size, size)
                 .setChannels(3) // This could be changed to a smaller texture

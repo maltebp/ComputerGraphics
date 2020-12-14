@@ -37,10 +37,10 @@ namespace Project {
             );
 
             // Shadow shader
-            this.shadowShader = new Util.ShaderProgram(gl, "/project/lightrenderer/shadowmap/vertex.glsl", "/project/lightrenderer/shadowmap/fragment.glsl"); 
+            this.shadowShader = new Util.ShaderProgram(gl, "lightrenderer/shadowmap/vertex.glsl", "lightrenderer/shadowmap/fragment.glsl"); 
             
             // Gaussian blur shader
-            this.gaussianShader = new Util.ShaderProgram(gl, "/project/lightrenderer/shadowmap/gaussian/vertex.glsl", "/project/lightrenderer/shadowmap/gaussian/fragment.glsl");
+            this.gaussianShader = new Util.ShaderProgram(gl, "lightrenderer/shadowmap/gaussian/vertex.glsl", "lightrenderer/shadowmap/gaussian/fragment.glsl");
 
             // Double framebuffers for Gaussian blur 
             this.framebuffer1 = new Framebuffer(gl, this.createTexture());

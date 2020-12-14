@@ -1,6 +1,6 @@
 
 namespace Util {
-
+    
     /**
      *  Simple renderer to render flat 2D images onto the screen
      */
@@ -10,7 +10,7 @@ namespace Util {
         private vertices: VertexBuffer;
         private shader: ShaderProgram;
 
-        constructor(gl: WebGLRenderingContext) {
+        constructor(gl: WebGLRenderingContext, utilityPath: string) {
             this.gl = gl;
 
             this.vertices = new VertexBuffer(gl);
@@ -27,7 +27,7 @@ namespace Util {
                  1, -1,  1, 0
             );
 
-            this.shader = new Util.ShaderProgram(gl, "/utility/imagerenderer/vertex.glsl", "/utility/imagerenderer/fragment.glsl");            
+            this.shader = new Util.ShaderProgram(gl, utilityPath + "utility/imagerenderer/vertex.glsl", utilityPath + "utility/imagerenderer/fragment.glsl");            
         }
 
 

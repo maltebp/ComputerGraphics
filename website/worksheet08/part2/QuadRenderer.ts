@@ -61,7 +61,7 @@ namespace Sheet8.Part2 {
             // Render shadows
             let lightPosition = this.pointLight.getPosition();
             
-            // @ts-ignore
+            // @ts-ignore   
             let modelLight = mat4();
             let d = -lightPosition[1];
             modelLight[3][1] = 1/d;

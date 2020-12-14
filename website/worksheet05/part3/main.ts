@@ -23,7 +23,7 @@ namespace Sheet5.Part3 {
 
         // Load Model
         model = null;
-        Util.loadObjFile("/models/Tree.obj", 1.0, false, (obj) => {
+        Util.loadObjFile("../../models/Tree.obj", 1.0, false, (obj) => {
             console.log(obj.getDrawingInfo());
             model = new Model(gl, obj, [0,0,0], 1.0);
         });

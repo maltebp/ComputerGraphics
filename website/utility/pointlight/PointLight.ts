@@ -69,7 +69,7 @@ namespace Util {
         private shader: Util.ShaderProgram;
         private texture: WebGLTexture = null;
         
-        constructor(gl: WebGLRenderingContext){    
+        constructor(gl: WebGLRenderingContext, utilityPath: string){    
             this.gl = gl;
     
             // Quad vertices
@@ -85,7 +85,7 @@ namespace Util {
                  0.5,  0.5,     1.0, 1.0
             );
         
-            this.shader = new Util.ShaderProgram(gl, "/utility/pointlight/vertex.glsl", "/utility/pointlight/fragment.glsl");
+            this.shader = new Util.ShaderProgram(gl, utilityPath+"utility/pointlight/vertex.glsl", utilityPath+"utility/pointlight/fragment.glsl");
 
             
             // Loading light texture
@@ -109,8 +109,7 @@ namespace Util {
                     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
         
                 };
-                image.src = '/utility/pointlight/light.png';
-                // image.src = '../xamp23.png';
+                image.src = utilityPath+"utility/pointlight/light.png";
             }    
         }
     

@@ -36,7 +36,7 @@ namespace Project {
             );
 
             // Shader
-            this.shader = new Util.ShaderProgram(gl, "/project/lightrenderer/raymap/vertex.glsl", "/project/lightrenderer/raymap/fragment.glsl");  
+            this.shader = new Util.ShaderProgram(gl, "lightrenderer/raymap/vertex.glsl", "lightrenderer/raymap/fragment.glsl");  
 
             // Frame buffer
             this.createTexture();

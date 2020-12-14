@@ -34,7 +34,7 @@ namespace Sheet10 {
                 );
             }
 
-            this.shader = new Util.ShaderProgram(gl, "/worksheet10/generic/ground/vertex.glsl", "/worksheet10/generic/ground/fragment.glsl");
+            this.shader = new Util.ShaderProgram(gl, "../generic/ground/vertex.glsl", "../generic/ground/fragment.glsl");
 
             // Load texture
             let _this = this;

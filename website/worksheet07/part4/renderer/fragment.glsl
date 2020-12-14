@@ -15,15 +15,5 @@ varying vec3 o_SurfaceNormal;
 varying vec3 o_TextureCoordinates;
 
 void main(){
-
     gl_FragColor = textureCube(u_TextureSampler, o_TextureCoordinates);
-
-    // if( u_Reflection == 1 ){
-    //     float u = 1.0 - atan(surfaceNormal.z, surfaceNormal.x)/(2.0 * PI);
-    //     float v = acos(surfaceNormal.y)/(PI);
-    //     gl_FragColor = texture2D(u_NormalMap, vec2(u, v));
-
-    // }else{
-
-    // }
 }
