@@ -104,7 +104,7 @@ namespace Project {
 
         private createTexture() {
             Util.Texture.createFromData(gl, null, this.numRays, 1)
-                .setChannels(3) // TODO: This could be changed to a smaller texture
+                .setChannels(3) // This could be changed to a smaller texture
                 .setFilter(gl.NEAREST, gl.NEAREST)
 
                 // Note: We can't use REPEAT if we use texture 

@@ -1,3 +1,6 @@
+# Bash script to build the compiled TypeScript, all html
+# and css into the target 'out' folder.
+
 # Stop script if any command fails
 set -e
 
